@@ -1,0 +1,12 @@
+%[inform]('training':'4')
+    ~[it is?] @[type] 
+
+@[type]
+    ~[PICK_UP]
+    ~[DELIVERY]
+
+~[PICK_UP]
+    pick up
+
+~[DELIVERY]
+    delivery

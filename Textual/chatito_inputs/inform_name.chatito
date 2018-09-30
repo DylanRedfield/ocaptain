@@ -1,0 +1,15 @@
+%[inform]('training':'20')
+    #~[it is?] @[name] 
+    I
+
+@[name]
+    Dylan
+    Kim
+    James
+    John
+    Robert
+    Michael
+    Mary
+    Jennifer
+    Linda
+    Elizabeth

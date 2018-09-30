@@ -1,0 +1,100 @@
+%YAML 1.1
+---
+actions:
+- utter_greet
+- utter_goodbye
+- utter_your_welcome
+- utter_ask_address
+- utter_ask_name
+- utter_thank
+- utter_ask_is_all
+- utter_ask_order_contents
+- utter_ask_confirmation_pick_up
+- utter_ask_confirmation_delivery
+- utter_ask_type
+- utter_after_order
+- action_place_order
+- action_check_time_close
+- action_check_is_open
+- action_start_order
+- action_start_order_with_inputs
+- action_check_is_open_on_day
+- action_check_time_close_on_day
+- action_set_content
+- action_set_type
+- action_set_name
+- action_set_address
+- action_update_order
+- action_reset_slots
+config:
+  store_entities_as_slots: true
+entities:
+- type
+- contents
+- address
+- name
+- scheduledTime
+- date
+intents:
+- greet:
+    use_entities: true
+- thank:
+    use_entities: true
+- goodbye:
+    use_entities: true
+- start_order:
+    use_entities: true
+- inform:
+    use_entities: true
+- affirm:
+    use_entities: true
+- deny:
+    use_entities: true
+- check_is_open:
+    use_entities: true
+- check_time_close:
+    use_entities: true
+- check_menu_item:
+    use_entities: true
+slots:
+  address:
+    initial_value: null
+    type: rasa_core.slots.TextSlot
+  contents:
+    initial_value: null
+    type: rasa_core.slots.TextSlot
+  date:
+    initial_value: null
+    type: rasa_core.slots.TextSlot
+  name:
+    initial_value: null
+    type: rasa_core.slots.TextSlot
+  scheduledTime:
+    initial_value: null
+    type: rasa_core.slots.TextSlot
+  type:
+    initial_value: null
+    type: custom_slots.TypeSlot
+templates:
+  utter_after_order:
+  - text: Great it will be ready in about 30 minutes
+  utter_ask_address:
+  - text: What is the address for devliery?
+  utter_ask_confirmation:
+  - text: Is this correct?
+  utter_ask_name:
+  - text: What's the name for the order?
+  utter_ask_order_contents:
+  - text: What is the order?
+  utter_ask_type:
+  - text: Is that pick up or delivery
+  utter_goodbye:
+  - text: Goodbye
+  utter_greet:
+  - text: Hey, how can I help you?
+  utter_restart:
+  - text: Restarted
+  utter_thank:
+  - text: Thanks
+  utter_your_welcome:
+  - text: Your welcome

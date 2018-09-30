@@ -1,0 +1,23 @@
+%[inform]('training':'20')
+    ~[verb?] for @[type] to @[address] with @[contents]
+    ~[verb?] to @[address] for @[type] for @[name]
+    ~[verb?] with @[contents] to @[address] for @[name]
+    ~[verb?] with @[contents] for @[name] to @[address]
+
+~[verb]
+    start order
+    place order
+    I'd like order
+    order
+
+@[type]
+    PICK_UP
+
+@[address]
+    2651 Deer Path
+
+@[contents]
+    two sesame chickens
+
+@[name]
+    Dylan

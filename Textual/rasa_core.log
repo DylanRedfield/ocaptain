@@ -1,0 +1,202 @@
+/home/dylan/.local/lib/python2.7/site-packages/h5py/__init__.py:36: RuntimeWarning: numpy.dtype size changed, may indicate binary incompatibility. Expected 96, got 88
+  from ._conv import register_converters as _register_converters
+
+/home/dylan/.local/lib/python2.7/site-packages/h5py/__init__.py:45: RuntimeWarning: numpy.dtype size changed, may indicate binary incompatibility. Expected 96, got 88
+  from . import h5a, h5d, h5ds, h5f, h5fd, h5g, h5r, h5s, h5t, h5p, h5z
+
+/home/dylan/.local/lib/python2.7/site-packages/h5py/_hl/group.py:22: RuntimeWarning: numpy.dtype size changed, may indicate binary incompatibility. Expected 96, got 88
+  from .. import h5g, h5i, h5o, h5r, h5t, h5l, h5p
+
+/home/dylan/.local/lib/python2.7/site-packages/scipy/ndimage/measurements.py:36: RuntimeWarning: numpy.dtype size changed, may indicate binary incompatibility. Expected 96, got 88
+  from . import _ni_label
+
+/usr/local/lib/python2.7/dist-packages/thinc/neural/train.py:3: RuntimeWarning: numpy.dtype size changed, may indicate binary incompatibility. Expected 96, got 88
+  from .optimizers import Adam, SGD, linear_decay
+
+/usr/local/lib/python2.7/dist-packages/thinc/neural/train.py:3: RuntimeWarning: numpy.ufunc size changed, may indicate binary incompatibility. Expected 192, got 176
+  from .optimizers import Adam, SGD, linear_decay
+
+/usr/local/lib/python2.7/dist-packages/spacy/cli/train.py:12: RuntimeWarning: numpy.dtype size changed, may indicate binary incompatibility. Expected 96, got 88
+  from ..gold import GoldCorpus, minibatch
+
+/usr/local/lib/python2.7/dist-packages/spacy/cli/train.py:12: RuntimeWarning: numpy.ufunc size changed, may indicate binary incompatibility. Expected 192, got 176
+  from ..gold import GoldCorpus, minibatch
+
+/usr/local/lib/python2.7/dist-packages/spacy/tokens/__init__.py:1: RuntimeWarning: numpy.dtype size changed, may indicate binary incompatibility. Expected 96, got 88
+  from .doc import Doc
+
+/usr/local/lib/python2.7/dist-packages/spacy/tokens/__init__.py:1: RuntimeWarning: numpy.ufunc size changed, may indicate binary incompatibility. Expected 192, got 176
+  from .doc import Doc
+
+/usr/local/lib/python2.7/dist-packages/spacy/_ml.py:14: RuntimeWarning: numpy.dtype size changed, may indicate binary incompatibility. Expected 96, got 88
+  from thinc.linear.linear import LinearModel
+
+/usr/local/lib/python2.7/dist-packages/spacy/_ml.py:14: RuntimeWarning: numpy.ufunc size changed, may indicate binary incompatibility. Expected 192, got 176
+  from thinc.linear.linear import LinearModel
+
+/usr/local/lib/python2.7/dist-packages/spacy/language.py:15: RuntimeWarning: numpy.dtype size changed, may indicate binary incompatibility. Expected 96, got 88
+  from .tokenizer import Tokenizer
+
+/usr/local/lib/python2.7/dist-packages/spacy/language.py:15: RuntimeWarning: numpy.ufunc size changed, may indicate binary incompatibility. Expected 192, got 176
+  from .tokenizer import Tokenizer
+
+/usr/local/lib/python2.7/dist-packages/spacy/language.py:18: RuntimeWarning: numpy.dtype size changed, may indicate binary incompatibility. Expected 96, got 88
+  from .pipeline import DependencyParser, Tensorizer, Tagger, EntityRecognizer
+
+/usr/local/lib/python2.7/dist-packages/spacy/language.py:18: RuntimeWarning: numpy.ufunc size changed, may indicate binary incompatibility. Expected 192, got 176
+  from .pipeline import DependencyParser, Tensorizer, Tagger, EntityRecognizer
+
+/home/dylan/.local/lib/python2.7/site-packages/pykwalify/core.py:99: UnsafeLoaderWarning: 
+The default 'Loader' for 'load(stream)' without further arguments can be unsafe.
+Use 'load(stream, Loader=ruamel.yaml.Loader)' explicitly if that is OK.
+Alternatively include the following in your code:
+
+  import warnings
+  warnings.simplefilter('ignore', ruamel.yaml.error.UnsafeLoaderWarning)
+
+In most other cases you should consider using 'safe_load(stream)'
+  data = yaml.load(stream)
+
+/home/dylan/.local/lib/python2.7/site-packages/h5py/__init__.py:36: RuntimeWarning: numpy.dtype size changed, may indicate binary incompatibility. Expected 96, got 88
+  from ._conv import register_converters as _register_converters
+
+/home/dylan/.local/lib/python2.7/site-packages/h5py/__init__.py:45: RuntimeWarning: numpy.dtype size changed, may indicate binary incompatibility. Expected 96, got 88
+  from . import h5a, h5d, h5ds, h5f, h5fd, h5g, h5r, h5s, h5t, h5p, h5z
+
+/home/dylan/.local/lib/python2.7/site-packages/h5py/_hl/group.py:22: RuntimeWarning: numpy.dtype size changed, may indicate binary incompatibility. Expected 96, got 88
+  from .. import h5g, h5i, h5o, h5r, h5t, h5l, h5p
+
+/home/dylan/.local/lib/python2.7/site-packages/scipy/ndimage/measurements.py:36: RuntimeWarning: numpy.dtype size changed, may indicate binary incompatibility. Expected 96, got 88
+  from . import _ni_label
+
+/home/dylan/.local/lib/python2.7/site-packages/pykwalify/core.py:99: UnsafeLoaderWarning: 
+The default 'Loader' for 'load(stream)' without further arguments can be unsafe.
+Use 'load(stream, Loader=ruamel.yaml.Loader)' explicitly if that is OK.
+Alternatively include the following in your code:
+
+  import warnings
+  warnings.simplefilter('ignore', ruamel.yaml.error.UnsafeLoaderWarning)
+
+In most other cases you should consider using 'safe_load(stream)'
+  data = yaml.load(stream)
+
+/home/dylan/.local/lib/python2.7/site-packages/h5py/__init__.py:36: RuntimeWarning: numpy.dtype size changed, may indicate binary incompatibility. Expected 96, got 88
+  from ._conv import register_converters as _register_converters
+
+/home/dylan/.local/lib/python2.7/site-packages/h5py/__init__.py:45: RuntimeWarning: numpy.dtype size changed, may indicate binary incompatibility. Expected 96, got 88
+  from . import h5a, h5d, h5ds, h5f, h5fd, h5g, h5r, h5s, h5t, h5p, h5z
+
+/home/dylan/.local/lib/python2.7/site-packages/h5py/_hl/group.py:22: RuntimeWarning: numpy.dtype size changed, may indicate binary incompatibility. Expected 96, got 88
+  from .. import h5g, h5i, h5o, h5r, h5t, h5l, h5p
+
+/home/dylan/.local/lib/python2.7/site-packages/scipy/ndimage/measurements.py:36: RuntimeWarning: numpy.dtype size changed, may indicate binary incompatibility. Expected 96, got 88
+  from . import _ni_label
+
+/home/dylan/.local/lib/python2.7/site-packages/pykwalify/core.py:99: UnsafeLoaderWarning: 
+The default 'Loader' for 'load(stream)' without further arguments can be unsafe.
+Use 'load(stream, Loader=ruamel.yaml.Loader)' explicitly if that is OK.
+Alternatively include the following in your code:
+
+  import warnings
+  warnings.simplefilter('ignore', ruamel.yaml.error.UnsafeLoaderWarning)
+
+In most other cases you should consider using 'safe_load(stream)'
+  data = yaml.load(stream)
+
+/home/dylan/.local/lib/python2.7/site-packages/h5py/__init__.py:36: RuntimeWarning: numpy.dtype size changed, may indicate binary incompatibility. Expected 96, got 88
+  from ._conv import register_converters as _register_converters
+
+/home/dylan/.local/lib/python2.7/site-packages/h5py/__init__.py:45: RuntimeWarning: numpy.dtype size changed, may indicate binary incompatibility. Expected 96, got 88
+  from . import h5a, h5d, h5ds, h5f, h5fd, h5g, h5r, h5s, h5t, h5p, h5z
+
+/home/dylan/.local/lib/python2.7/site-packages/h5py/_hl/group.py:22: RuntimeWarning: numpy.dtype size changed, may indicate binary incompatibility. Expected 96, got 88
+  from .. import h5g, h5i, h5o, h5r, h5t, h5l, h5p
+
+/home/dylan/.local/lib/python2.7/site-packages/scipy/ndimage/measurements.py:36: RuntimeWarning: numpy.dtype size changed, may indicate binary incompatibility. Expected 96, got 88
+  from . import _ni_label
+
+/home/dylan/.local/lib/python2.7/site-packages/pykwalify/core.py:99: UnsafeLoaderWarning: 
+The default 'Loader' for 'load(stream)' without further arguments can be unsafe.
+Use 'load(stream, Loader=ruamel.yaml.Loader)' explicitly if that is OK.
+Alternatively include the following in your code:
+
+  import warnings
+  warnings.simplefilter('ignore', ruamel.yaml.error.UnsafeLoaderWarning)
+
+In most other cases you should consider using 'safe_load(stream)'
+  data = yaml.load(stream)
+
+Rasa process starting
+/home/dylan/.local/lib/python2.7/site-packages/h5py/__init__.py:36: RuntimeWarning: numpy.dtype size changed, may indicate binary incompatibility. Expected 96, got 88
+  from ._conv import register_converters as _register_converters
+
+/home/dylan/.local/lib/python2.7/site-packages/h5py/__init__.py:45: RuntimeWarning: numpy.dtype size changed, may indicate binary incompatibility. Expected 96, got 88
+  from . import h5a, h5d, h5ds, h5f, h5fd, h5g, h5r, h5s, h5t, h5p, h5z
+
+/home/dylan/.local/lib/python2.7/site-packages/h5py/_hl/group.py:22: RuntimeWarning: numpy.dtype size changed, may indicate binary incompatibility. Expected 96, got 88
+  from .. import h5g, h5i, h5o, h5r, h5t, h5l, h5p
+
+/home/dylan/.local/lib/python2.7/site-packages/scipy/ndimage/measurements.py:36: RuntimeWarning: numpy.dtype size changed, may indicate binary incompatibility. Expected 96, got 88
+  from . import _ni_label
+
+/home/dylan/.local/lib/python2.7/site-packages/pykwalify/core.py:99: UnsafeLoaderWarning: 
+The default 'Loader' for 'load(stream)' without further arguments can be unsafe.
+Use 'load(stream, Loader=ruamel.yaml.Loader)' explicitly if that is OK.
+Alternatively include the following in your code:
+
+  import warnings
+  warnings.simplefilter('ignore', ruamel.yaml.error.UnsafeLoaderWarning)
+
+In most other cases you should consider using 'safe_load(stream)'
+  data = yaml.load(stream)
+
+Finished loading agent, starting input channel & server.
+Creating a new tracker for id 'default'.
+Received user message 'is_open' with intent '{u'confidence': 1.0, u'name': u'is_open'}' and entities '[]'
+Logged UserUtterance - tracker now has 2 events
+Current slot values: 
+	name: None
+	scheduledTime: None
+	address: None
+	date: None
+	type: None
+	contents: None
+Current tracker state [None, {}, {u'prev_action_listen': 1.0, u'intent_is_open': 1.0}]
+There is no memorised next action
+Feature 'intent_is_open' (value: '1.0') could not be found in feature map. Make sure you added all intents and entities to the domain
+Predicted next action using policy_1_KerasPolicy
+Predicted next action 'action_check_time_close' with prob 0.64.
+Action 'action_check_time_close' ended with events '[]'
+Current tracker state [{}, {u'prev_action_listen': 1.0, u'intent_is_open': 1.0}, {u'prev_action_check_time_close': 1.0, u'intent_is_open': 1.0}]
+There is no memorised next action
+Feature 'intent_is_open' (value: '1.0') could not be found in feature map. Make sure you added all intents and entities to the domain
+Feature 'intent_is_open' (value: '1.0') could not be found in feature map. Make sure you added all intents and entities to the domain
+Predicted next action using policy_1_KerasPolicy
+Predicted next action 'action_listen' with prob 1.00.
+Action 'action_listen' ended with events '[]'
+Recreating tracker for id 'default'
+Received user message 'Are you open?' with intent '{u'confidence': 1.0, u'name': u'Are you open?'}' and entities '[]'
+Logged UserUtterance - tracker now has 5 events
+Current slot values: 
+	name: None
+	scheduledTime: None
+	address: None
+	date: None
+	type: None
+	contents: None
+Current tracker state [{u'prev_action_listen': 1.0, u'intent_is_open': 1.0}, {u'prev_action_check_time_close': 1.0, u'intent_is_open': 1.0}, {u'intent_Are you open?': 1.0, u'prev_action_listen': 1.0}]
+There is no memorised next action
+Feature 'intent_is_open' (value: '1.0') could not be found in feature map. Make sure you added all intents and entities to the domain
+Feature 'intent_is_open' (value: '1.0') could not be found in feature map. Make sure you added all intents and entities to the domain
+Feature 'intent_Are you open?' (value: '1.0') could not be found in feature map. Make sure you added all intents and entities to the domain
+Predicted next action using policy_1_KerasPolicy
+Predicted next action 'action_check_time_close' with prob 0.74.
+Action 'action_check_time_close' ended with events '[]'
+Current tracker state [{u'prev_action_check_time_close': 1.0, u'intent_is_open': 1.0}, {u'intent_Are you open?': 1.0, u'prev_action_listen': 1.0}, {u'prev_action_check_time_close': 1.0, u'intent_Are you open?': 1.0}]
+There is no memorised next action
+Feature 'intent_is_open' (value: '1.0') could not be found in feature map. Make sure you added all intents and entities to the domain
+Feature 'intent_Are you open?' (value: '1.0') could not be found in feature map. Make sure you added all intents and entities to the domain
+Feature 'intent_Are you open?' (value: '1.0') could not be found in feature map. Make sure you added all intents and entities to the domain
+Predicted next action using policy_1_KerasPolicy
+Predicted next action 'action_listen' with prob 1.00.
+Action 'action_listen' ended with events '[]'

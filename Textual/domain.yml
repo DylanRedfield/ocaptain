@@ -1,0 +1,88 @@
+intents:
+  - greet
+  - thank
+  - goodbye
+  - start_order
+  - inform
+  - affirm
+  - deny
+  - check_is_open
+  - check_time_close
+  - check_menu_item
+
+entities:
+  - type
+  - contents
+  - address
+  - name
+  - scheduledTime
+  - date
+
+slots:
+  type: 
+    type: custom_slots.TypeSlot
+  contents:
+    type: text
+  address:
+    type: text
+  name:
+    type: text
+  scheduledTime:
+    type: text
+  date:
+    type: text
+  business_id:
+    type: text
+  recipient_contact:
+    type: text
+
+templates:
+  utter_greet:
+    - "Hey, how can I help you?"
+  utter_goodbye:
+    - "Goodbye"
+  utter_ask_type:
+    - "Is that pick up or delivery"
+  utter_ask_name:
+    - "What's the name for the order?"
+  utter_ask_address:
+    - "What is the address for devliery?"
+  utter_ask_order_contents:
+    - "What is the order?"
+  utter_your_welcome:
+    - "Your welcome"
+  utter_thank:
+    - "Thanks"
+  utter_ask_confirmation:
+    - "Is this correct?"
+  utter_after_order:
+    - "Great it will be ready in about 30 minutes"
+  utter_restart:
+    - "Restarted"
+
+actions:
+  - utter_greet
+  - utter_goodbye
+  - utter_your_welcome
+  - utter_ask_address
+  - utter_ask_name
+  - utter_thank
+  - utter_ask_is_all
+  - utter_ask_order_contents
+  - utter_ask_confirmation_pick_up
+  - utter_ask_confirmation_delivery
+  - utter_ask_type
+  - utter_after_order
+  - action_place_order
+  - action_check_time_close
+  - action_check_is_open
+  - action_start_order
+  - action_start_order_with_inputs
+  - action_check_is_open_on_day
+  - action_check_time_close_on_day
+  - action_set_content
+  - action_set_type
+  - action_set_name
+  - action_set_address
+  - action_update_order
+  - action_reset_slots
