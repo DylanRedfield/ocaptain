@@ -406,7 +406,7 @@ func HandleBusinessInput(ctx context.Context, reqObj BusinessRequest) BusinessRe
 } */
 func HandleAction(req *RasaResponse) {
 	action := req.NextAction
-
+  log.Println(action)
 		switch action {
 		case ACTION_START_ORDER:
 			ActionStartOrder(req)
@@ -513,6 +513,8 @@ func (bot Bot) ActionStartOrderWithInputs(req OutsideRequest, resp RasaResponse)
 func (bot Bot) saveOrder(req *RasaResponse, order *Order) {
   businessId := req.Tracker.Slots["business_id"]
   recipientId := req.Tracker.Slots["recipient_id"]
+
+  log.Println(businessId)
 
 	ordersRef := bot.Client.Collection(Businesses).Doc(businessId).Collection(Orders)
 

@@ -38,6 +38,8 @@ func actionInput(w http.ResponseWriter, req *http.Request) {
     log.Println(err)
 	}
 
+  HandleAction(&reqObj)
+
 }
 
 // Recieves a BotRequest as HTTP payload,
@@ -68,7 +70,6 @@ func outsideSmsInput(w http.ResponseWriter, req *http.Request) {
 	reqObj := TwilioRequest{To: req.URL.Query()["To"][0], Body: req.URL.Query()["Body"][0], From: req.URL.Query()["From"][0]}
 
 	outsideReq := ToOutsideRequest(reqObj)
-  log.Println("Phone", outsideReq.Recipient.Contact)
 	HandleOutsideInput(ctx, outsideReq)
 }
 

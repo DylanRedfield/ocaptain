@@ -32,7 +32,8 @@ class TextualOutput(OutputChannel):
         recipient_id = self.req["recipient"]["Id"]
         self.sms_client.messages.create(body=text, from_= business_phone, to = contact)
 
-        message = {u'content': text, u'didBotCreate':True, u'hasBusinessRead':False,u'isBusinessSender':True, u'recipientId': recipient_id, u'timeSent':time.time()} 
+        message = {u'content': text, u'didBotCreate':True, u'hasBusinessRead':False,u'isBusinessSender':True,
+                u'recipientId': recipient_id, u'timeSent':round(time.time() * 1000)} 
 
 
         self.db.collection(u'businesses').document(business_id).collection(u'messages').add(message)
