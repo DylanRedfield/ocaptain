@@ -22,6 +22,7 @@ func main() {
 	mux.Handle("/PizzaBot/outsideSmsInput", http.HandlerFunc(outsideSmsInput))
 	mux.Handle("/PizzaBot/sendSelf", http.HandlerFunc(sendSelf))
   mux.Handle("/ocaptain", http.HandlerFunc(actionInput))
+  mux.Handle("/ocaptain/sendAndSave", http.HandlerFunc(sendAndSave))
 	log.Println(http.ListenAndServe(":8080", mux))
 }
 
@@ -37,7 +38,6 @@ func actionInput(w http.ResponseWriter, req *http.Request) {
     log.Println(err)
 	}
 
-  
 }
 
 // Recieves a BotRequest as HTTP payload,
@@ -78,6 +78,60 @@ func sendSelf(w http.ResponseWriter, req *http.Request) {
 	HandleOutsideInput(ctx, outsideReq)
 }
 
+func sendAndSave(w http.ResponseWriter, req *http.Request) {
+  log.Println("UGHHH")
+	body, err := ioutil.ReadAll(req.Body)
+
+  if err != nil {
+    log.Println(err)
+  }
+
+	var reqObj OutsideRequest
+	if err := json.Unmarshal(body, &reqObj); err != nil {
+    log.Println(err)
+	}
+
+	twilioClient := TwilioClient{
+		AccountSid: "AC9dfbda388f3ee10353bbc001694f5c27",
+		AuthToken:  "e3429e06cc27740f1c859d2bfc9964ae"}
+
+  to := reqObj.Recipient.Contact
+  from := reqObj.Business.PhoneNumber
+  text := reqObj.Message.Content
+
+  twilioClient.SendSMS(SMSRequest{to, from, text})
+
+	ctx = context.Background()
+
+	sa := option.WithCredentialsFile("firebase-config.json")
+
+	app, err := firebase.NewApp(ctx, nil, sa)
+
+	if err != nil {
+		log.Println(err)
+	}
+
+	client, err := app.Firestore(ctx)
+
+	if err != nil {
+		log.Println(err)
+	}
+
+  log.Println(reqObj.Business.Id)
+	messagesRef := client.Collection(Businesses).Doc(reqObj.Business.Id).Collection(Messages)
+  _, _, err = messagesRef.Add(ctx, reqObj.Message)
+
+  if err != nil {
+    log.Println(err)
+  }
+
+  personRef := client.Collection(Businesses).Doc(reqObj.Business.Id).Collection(Recipients).Doc(reqObj.Recipient.Id)
+  personRef.Update(ctx, []firestore.Update{
+    {Path: RecentMessage, Value: reqObj.Message},
+  })
+
+
+}
 func initFirebase() Bot {
 	ctx = context.Background()
 	bot, err := NewBot(ctx)
