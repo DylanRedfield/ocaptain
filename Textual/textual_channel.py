@@ -11,6 +11,7 @@ import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
 import requests
+import threading
 
 class TextualOutput(OutputChannel):
 
@@ -18,32 +19,52 @@ class TextualOutput(OutputChannel):
     def name(cls):
         return "textual"
     
-    def __init__(self, req, firebase_client, sms_client):
+    def __init__(self, req, sms_client):
         self.req = req
-        self.firebase_client = firebase_client
         self.sms_client = sms_client
+        cred = credentials.Certificate('firebase-config.json')
+        firebase_admin.initialize_app(cred)
+        self.firebase_client = firestore.client()
+
 
     def send_text_message(self, recipient_id, text):
-        sms_client.messages.create(body=text, from_=req["recipient"]["contact"],to=req["business"]["phoneNumber"])
-        ref = firebase_client.collection(u'bussinesses').docuemnt(req["business"]["id"]).collection("messages")
+        contact = self.req["recipient"]["Contact"]
+        business_phone = self.req["business"]["PhoneNumber"]
+        business_id = self.req["business"]["Id"]
+        recipient_id = self.req["recipient"]["Id"]
+        self.sms_client.messages.create(body=text, from_= business_phone, to = contact)
 
-        message = {'content':text, 'didBotCreate':True, 'hasBusinessRead':False,'isBusinessSender':True, 'recipientId':req["recipient"]["id"], 'timeSent':time.time()} 
-        ref.add(message)
+        print("before")
+        firestore_thread = threading.Thread(target=save_to_db, args = (self, recipient_id, text))
+        #firestore.daemon = True
+        firestore_thread.start()
+        print("after")
 
-        recipient_ref = firebase_client.collection(u'bussinesses').docuemnt(req["business"]["id"]).collection("recipients").document(req["recipient"]["id"])
+    def save_to_db(args):
+        print("FUCK YOU")
+        (self, recipient_id, text) = args
+
+        message = {u'content': unicode(text), u'didBotCreate':True, u'hasBusinessRead':False,u'isBusinessSender':True, u'recipientId': unicode(recipient_id), u'timeSent':time.time()} 
+
+        firebase_client.collection(u'businesses').document(unicode(business_id)).collection(u'messages').add(message)
+        recipient_ref = self.firebase_client.collection(u'businesses').document(unicode(business_id))\
+                .collection(u'recipients').document(unicode(recipient_id))
+
+        print(recipient_ref.get())
 
         recipient_ref.update({'recentMessage': message})
 
+
 class TextualInput(InputChannel):
+
+    def __init__(self, agent):
+        self.agent = agent
 
     @classmethod
     def name(cls):
         return "textual"
 
     def blueprint(self, on_new_message):
-        cred = credentials.Certificate('firebase-config.json')
-        firebase_admin.initialize_app(cred)
-        db = firestore.client()
 
         account_sid = 'AC9dfbda388f3ee10353bbc001694f5c27'
         auth_token = 'e3429e06cc27740f1c859d2bfc9964ae'
@@ -57,14 +78,23 @@ class TextualInput(InputChannel):
 
         @textual_webhook.route("/webhook", methods=['POST'])
         def message():
-            req = request.form.to_dict()
-            requests.post("http://localhost:5005/conversations/{}/tracker/events".format(req["recipient"]["id"]),
-                    data = {'event':'slot','name':'business_id', 'value': req["business"]["id"]
-            requests.post("http://localhost:5005/conversations/{}/tracker/events".format(req["recipient"]["id"]),
-                    data = {'event':'slot','name':'recipient_contact', 'value': req["recipient"]["contact"]
+            req = request.get_json()
 
-            out_channel = TextualOutput(request.form.to_dict(), db, sms_client)
+            text = req["message"]["Content"]
+            sender = req["recipient"]["Id"]
 
-            on_new_message(UserMessage(request.form.to_dict()["message"]["content"], out_channel, sender))
+            tracker = self.agent.tracker_store.get_or_create_tracker(sender)
+
+            if tracker.slots['business_id'] == "" or tracker.slots['recipient_contact'] == "":
+                tracker._set_slot('business_id', req["business"]["Id"])
+                tracker._set_slot('recipient_contact', req["recipient"]["Contact"])
+                self.agent.tracker_store.save(tracker)
+
+            out_channel = TextualOutput(req, sms_client)
+
+            user = UserMessage(text, output_channel = out_channel, sender_id = sender)
+
+            print(user)
+            on_new_message(user)
             return "success"
         return textual_webhook

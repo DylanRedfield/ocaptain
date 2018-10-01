@@ -21,8 +21,23 @@ func main() {
 	mux.Handle("/PizzaBot/businessInput", http.HandlerFunc(businessInput))
 	mux.Handle("/PizzaBot/outsideSmsInput", http.HandlerFunc(outsideSmsInput))
 	mux.Handle("/PizzaBot/sendSelf", http.HandlerFunc(sendSelf))
-  mux.Handle("/Textual/startOrder", http.HandlerFunc(ActionStartOrder))
+  mux.Handle("/ocaptain", http.HandlerFunc(actionInput))
 	log.Println(http.ListenAndServe(":8080", mux))
+}
+
+func actionInput(w http.ResponseWriter, req *http.Request) {
+	body, err := ioutil.ReadAll(req.Body)
+
+  if err != nil {
+    log.Println(err)
+  }
+
+	var reqObj RasaResponse
+	if err := json.Unmarshal(body, &reqObj); err != nil {
+    log.Println(err)
+	}
+
+  
 }
 
 // Recieves a BotRequest as HTTP payload,

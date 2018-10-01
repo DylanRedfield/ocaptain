@@ -8,7 +8,6 @@ import (
 	firebase "firebase.google.com/go"
 	"fmt"
 	"google.golang.org/api/option"
-	"io/ioutil"
 	"log"
 	"math/rand"
 	"net/http"
@@ -48,6 +47,8 @@ var bot Bot
 
 func init() {
 	ctx = context.Background()
+
+  var err *BotError
   bot, err = NewBot(ctx)
 
   if err != nil {
@@ -169,10 +170,10 @@ type Message struct {
 }
 
 type OutsideRequest struct {
-	Id        string
-	Recipient *Recipient
-	Message   *Message
-	Business  *Business
+	Id        string `json:"id"`
+	Recipient *Recipient `json:"recipient"`
+	Message   *Message `json:"message"`
+	Business  *Business `json:"business"`
 }
 
 type OutsideResponse struct {
@@ -280,7 +281,8 @@ func HandleBusinessInput(ctx context.Context, reqObj BusinessRequest) BusinessRe
 */
 // Recieves outside input, saves to firebase, processes and potentially responds, and returns response
 // Only the Phone number and platform field of recipient are garunteed to be set
-func HandleOutsideInput(ctx context.Context, reqObj OutsideRequest) OutsideResponse {
+
+/*func HandleOutsideInput(ctx context.Context, reqObj OutsideRequest) OutsideResponse {
 
 	rasaUrl := fmt.Sprintf("http://localhost:5005/conversations/%s/respond", reqObj.Recipient.Id)
 	body := []byte(fmt.Sprintf(`{"query":"%s"}`, reqObj.Message.Content))
@@ -343,7 +345,7 @@ func HandleOutsideInput(ctx context.Context, reqObj OutsideRequest) OutsideRespo
     case UTTER_ASK_IS_ALL:
       bot.ActionUtterAskIsAll(reqObj)
 		case ACTION_START_ORDER:
-			ActionStartOrder(reqObj)
+			//ActionStartOrder(reqObj)
 		case ACTION_START_ORDER_WITH_INPUTS:
 			bot.ActionStartOrderWithInputs(reqObj, rasaResp)
     case ACTION_UPDATE_ORDER:
@@ -401,129 +403,78 @@ func HandleOutsideInput(ctx context.Context, reqObj OutsideRequest) OutsideRespo
 
 	}
 	return OutsideResponse{}
+} */
+func HandleAction(req *RasaResponse) {
+	action := req.NextAction
+
+		switch action {
+		case ACTION_START_ORDER:
+			ActionStartOrder(req)
+		/*case ACTION_START_ORDER_WITH_INPUTS:
+			bot.ActionStartOrderWithInputs(reqObj, rasaResp)
+    case ACTION_UPDATE_ORDER:
+      bot.ActionUpdateOrder(reqObj, rasaResp)
+    case ACTION_CHECK_IS_OPEN:
+      bot.actionUtter(reqObj, "Yes")
+    case ACTION_CHECK_IS_OPEN_ON_DAY:
+      bot.actionUtter(reqObj, "Yes")
+    case ACTION_CHECK_TIME_CLOSE:
+      bot.actionUtter(reqObj, "Yes")
+    case ACTION_CHECK_TIME_CLOSE_ON_DAY:
+      bot.actionUtter(reqObj, "Yes")
+    case ACTION_RESET_SLOTS:
+      bot.ActionResetSlots(reqObj)*/
+		}
+
 }
+func HandleOutsideInput(ctx context.Context, reqObj OutsideRequest) OutsideResponse {
+  // Send a http request that will be handled in the textual_input_channel
+  // The body is the OutsideRequest object
 
-func (bot Bot) ActionUtterGreet(req OutsideRequest) {
-	choices := []string{"Hey, how can I help you?", "Hello, what can I do for you?"}
+	rasaUrl := fmt.Sprintf("http://localhost:5005/webhooks/textual/webhook")
+	body, err := json.Marshal(reqObj)
 
-	greeting := randomItem(choices)
+  if err != nil {
+    log.Println(err)
+  }
 
-	bot.actionUtter(req, greeting)
-}
 
-func (bot Bot) ActionUtterGoodbye(req OutsideRequest) {
-	choices := []string{"Goodbye", "Seeya"}
-
-	choice := randomItem(choices)
-
-	bot.actionUtter(req, choice)
-}
-
-func (bot Bot) ActionUtterYourWelcome(req OutsideRequest) {
-	choices := []string{"Your welcome", "No problem"}
-
-	choice := randomItem(choices)
-
-	bot.actionUtter(req, choice)
-}
-
-func (bot Bot) ActionUtterAskAddress(req OutsideRequest) {
-	choices := []string{"What's your address?", "What's the address for the delivery?"}
-
-	choice := randomItem(choices)
-
-	bot.actionUtter(req, choice)
-}
-
-func (bot Bot) ActionUtterAskName(req OutsideRequest) {
-	choices := []string{"What's your name?", "What's the name for the order?"}
-
-	choice := randomItem(choices)
-
-	bot.actionUtter(req, choice)
-}
-
-func (bot Bot) ActionUtterThank(req OutsideRequest) {
-	choices := []string{"Thank you!", "Thanks!"}
-
-	choice := randomItem(choices)
-
-	bot.actionUtter(req, choice)
-}
-
-func (bot Bot) ActionUtterAskOrderContents(req OutsideRequest) {
-	choices := []string{"What would you like in the order?", "What's your order?"}
-
-	choice := randomItem(choices)
-
-	bot.actionUtter(req, choice)
-}
-
-func (bot Bot) ActionUtterAskType(req OutsideRequest) {
-	choices := []string{"Is that for pick up or delivery?"}
-
-	choice := randomItem(choices)
-
-	bot.actionUtter(req, choice)
-}
-
-func (bot Bot) ActionUtterAskConfirmationPickUp(req OutsideRequest, resp RasaResponse) {
-	address := resp.Tracker.Slots["name"]
-	contents := resp.Tracker.Slots["contents"]
-
-	choices := []string{fmt.Sprintf("%s\n\n To: %s\nIs this correct?", contents, address)}
-
-	choice := randomItem(choices)
-
-	bot.actionUtter(req, choice)
-}
-
-func (bot Bot) ActionUtterAskIsAll(req OutsideRequest) {
-	choices := []string{"Is that all?", "Anything else?"}
-
-	choice := randomItem(choices)
-
-	bot.actionUtter(req, choice)
-}
-
-func (bot Bot) ActionUtterAskConfirmationDelivery(req OutsideRequest, resp RasaResponse) {
-	name := resp.Tracker.Slots["address"]
-	contents := resp.Tracker.Slots["contents"]
-
-	choices := []string{fmt.Sprintf("%s\n\n For %s\nIs this correct?", contents, name)}
-
-	choice := randomItem(choices)
-
-	bot.actionUtter(req, choice)
-}
-
-func (bot Bot) ActionUtterAfterOrder(req OutsideRequest) {
-	choices := []string{"Great that'll be ready in about half an hour"}
-
-	choice := randomItem(choices)
-
-	bot.actionUtter(req, choice)
-}
-
-func ActionStartOrder(w http.ResponseWriter, req *http.Request) {
-	body, err := ioutil.ReadAll(req.Body)
+	req, err := http.NewRequest("POST", rasaUrl, bytes.NewBuffer(body))
+	req.Header.Set("Content-Type", "application/json")
 
 	if err != nil {
-		// TODO handle error
+		log.Println(err)
 	}
 
-	var reqObj RasaResponse
+	http.DefaultClient.Do(req)
 
-	if err := json.Unmarshal(body, &reqObj); err != nil {
-		// TODO handle error
-	}
+  return OutsideResponse{}
+}
 
+func ActionStartOrder(req *RasaResponse) {
 	order := Order{
-		RecipientId:          reqObj.SenderId,
-    RecipientContact: reqObj.Tracker.Slots["recipient_contact"],
+		RecipientId:          req.SenderId,
+    RecipientContact: req.Tracker.Slots["recipient_contact"],
 		StartTime:            currentTime(),
 		LastModificationTime: currentTime(),
 		IsVisible:            true,
+	}
+
+	slots := req.Tracker.Slots
+	if slots["address"] != "" {
+		order.Address = slots["address"]
+	}
+
+	if slots["name"] != "" {
+		order.Name = slots["name"]
+	}
+
+	if slots["type"] != "" {
+		order.Type = slots["type"]
+	}
+
+	if slots["content"] != "" {
+		order.Content = slots["content"]
 	}
 
 	bot.saveOrder(req, &order)
@@ -556,10 +507,10 @@ func (bot Bot) ActionStartOrderWithInputs(req OutsideRequest, resp RasaResponse)
 		order.Content = slots["content"]
 	}
 
-	bot.saveOrder(req, &order)
+	//bot.saveOrder(req, &order)
 }
 
-func (bot Bot) saveOrder(req RasaResponse, order *Order) {
+func (bot Bot) saveOrder(req *RasaResponse, order *Order) {
   businessId := req.Tracker.Slots["business_id"]
   recipientId := req.Tracker.Slots["recipient_id"]
 
@@ -573,7 +524,7 @@ func (bot Bot) saveOrder(req RasaResponse, order *Order) {
 
 	order.Id = docRef.ID
 
-	recipientRef := bot.Client.Collection(Businesses).Doc(req.Business.Id).Collection(Recipients).Doc(req.Recipient.Id)
+	recipientRef := bot.Client.Collection(Businesses).Doc(businessId).Collection(Recipients).Doc(recipientId)
 	recipientRef.Update(ctx, []firestore.Update{
 		{Path: RecentOrderId, Value: order.Id},
 	})
@@ -621,9 +572,13 @@ func (bot Bot) ActionUpdateOrder(req OutsideRequest, resp RasaResponse) {
 
 func (bot Bot) ActionResetSlots(req OutsideRequest) {
 	rasaUrl := fmt.Sprintf("http://localhost:5005/conversations/%s/tracker/events", req.Recipient.Id)
-	body := []byte(`{"event":"reset_slots"}`)
+	body, err := json.Marshal(req)
 
-	_, err := http.NewRequest("POST", rasaUrl, bytes.NewBuffer(body))
+  if err != nil {
+    log.Println(err)
+  }
+
+	_, err = http.NewRequest("POST", rasaUrl, bytes.NewBuffer(body))
 
   if err != nil {
     log.Println(err)
