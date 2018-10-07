@@ -293,6 +293,10 @@ func (bot *Bot) ActionCheckIsOpenOnDay(req *RasaRequest, resp *RasaResponse) {
   resp.Responses = append(resp.Responses, Response{Text: reply})
 }
 
+func (bot *Bot) ActionReset(req *RasaRequest, resp *RasaResponse) {
+  resp.Events = appeend(resp.Events, Event{Event:"restart"})
+}
+
 func (bot Bot) saveOrder(req *RasaRequest, order *Order) {
   businessId := req.Tracker.Slots["business_id"]
   recipientId := req.Tracker.Slots["recipient_id"]

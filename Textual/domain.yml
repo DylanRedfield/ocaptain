@@ -9,6 +9,7 @@ intents:
   - check_is_open
   - check_time_close
   - check_menu_item
+  - restart
 
 entities:
   - type
