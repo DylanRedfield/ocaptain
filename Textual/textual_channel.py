@@ -78,6 +78,8 @@ class TextualInput(InputChannel):
             if tracker.slots['business_id'] == "" or tracker.slots['recipient_contact'] == "":
                 tracker._set_slot('business_id', req["business"]["Id"])
                 tracker._set_slot('recipient_contact', req["recipient"]["Contact"])
+                print("In the method")
+                print(req["recipient"]["Contact"])
                 self.agent.tracker_store.save(tracker)
 
             out_channel = TextualOutput(req, db, sms_client)
