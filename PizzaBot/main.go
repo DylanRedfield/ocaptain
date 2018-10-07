@@ -46,6 +46,8 @@ func actionInput(w http.ResponseWriter, req *http.Request) {
     log.Println(err)
   }
 
+  log.Printf("%s", body)
+
 	var reqObj RasaRequest
 	if err := json.Unmarshal(body, &reqObj); err != nil {
     log.Println(err)
@@ -223,11 +225,10 @@ func businessFromPhone(phoneNumber string) (*Business, error) {
 		}
 
 		err = doc.DataTo(business)
-		business.Id = doc.Ref.ID
-
 		if err != nil {
 			log.Println(err)
 		}
+		business.Id = doc.Ref.ID
 	}
 
 	if business.Id == "" {

@@ -3,236 +3,13 @@ package main
 import (
 	"bytes"
 	"cloud.google.com/go/firestore"
-	"context"
 	"encoding/json"
-	firebase "firebase.google.com/go"
 	"fmt"
-	"google.golang.org/api/option"
 	"log"
-	"math/rand"
 	"net/http"
 	"time"
+	"google.golang.org/api/iterator"
 )
-
-type Bot struct {
-	Client    *firestore.Client
-	Ctx       context.Context
-	SmsClient TwilioClient
-}
-
-
-func NewBot(ctx context.Context) (*Bot, error) {
-	sa := option.WithCredentialsFile("firebase-config.json")
-
-	app, err := firebase.NewApp(ctx, nil, sa)
-
-	if err != nil {
-		log.Println(err)
-    return nil, err
-	}
-
-	client, err := app.Firestore(ctx)
-
-	if err != nil {
-		log.Println(err)
-    return nil, err
-	}
-
-	twilioClient := TwilioClient{
-		AccountSid: "AC9dfbda388f3ee10353bbc001694f5c27",
-		AuthToken:  "e3429e06cc27740f1c859d2bfc9964ae"}
-
-	return &Bot{Client: client, Ctx: ctx, SmsClient: twilioClient}, nil
-}
-
-
-
-type BusinessRequest struct {
-	BusinessId string
-	Business   Business
-	Message    string
-	Recipient  Recipient
-	IsPhone    bool
-}
-
-type BusinessResponse struct {
-	BusinessId  string
-	Message     string
-	RecipientId string
-	Error       *BotError
-}
-
-type BotError struct {
-	Type                     BotErrorType
-	Message                  string
-	ShouldDisplayErrorInChat bool
-}
-
-func (err *BotError) Error() string {
-	return err.Message
-}
-
-type BotErrorType string
-
-const (
-	Connection  BotErrorType = "Connection"
-	Firebase                 = "Firebase"
-	DialogFlow               = "DialogFlow"
-	Application              = "Application"
-)
-
-// Business
-const (
-	PhoneNumber string = "phoneNumber"
-)
-
-// Recipient
-const (
-	Contact       string = "contact"
-	RecentMessage        = "recentMessage"
-	RecentOrderId        = "recentOrderId"
-)
-
-// Order
-const (
-	Type     string = "type"
-	Contents        = "contents"
-	Name            = "name"
-	Address         = "address"
-)
-
-// Collections
-const (
-	Businesses string = "businesses"
-	Recipients        = "recipients"
-	Messages          = "messages"
-	Orders            = "orders"
-)
-
-// Actions
-const (
-	UTTER_GREET                     string = "utter_greet"
-	UTTER_GOODBYE                          = "utter_goodbye"
-	UTTER_YOUR_WELCOME                     = "utter_your_welcome"
-	UTTER_ASK_ADDRESS                      = "utter_ask_address"
-	UTTER_ASK_NAME                         = "utter_ask_name"
-	UTTER_THANK                            = "utter_thank"
-	UTTER_ASK_ORDER_CONTENTS               = "utter_ask_order_contents"
-	UTTER_ASK_CONFIRMATION_DELIVERY        = "utter_ask_confirmation_delivery"
-	UTTER_ASK_CONFIRMATION_PICK_UP         = "utter_ask_confirmation_pick_up"
-	UTTER_ASK_TYPE                         = "utter_ask_type"
-	UTTER_AFTER_ORDER                      = "utter_after_order"
-  UTTER_ASK_IS_ALL = "utter_ask_is_all"
-	ACTION_LISTEN                          = "action_listen"
-	ACTION_START_ORDER                     = "action_start_order"
-	ACTION_START_ORDER_WITH_INPUTS          = "action_start_order_with_inputs"
-	ACTION_SET_TYPE                        = "action_set_type"
-	ACTION_SET_ADDRESS                     = "action_set_address"
-	ACTION_SET_CONTENT                     = "action_set_content"
-	ACTION_SET_NAME                        = "action_set_name"
-	ACTION_CHECK_IS_OPEN                   = "action_check_is_open"
-	ACTION_CHECK_IS_OPEN_ON_DAY            = "action_check_is_open_on_day"
-	ACTION_CHECK_TIME_CLOSE                = "action_check_time_close"
-	ACTION_CHECK_TIME_CLOSE_ON_DAY         = "action_check_time_close_on_DAY"
-  ACTION_UPDATE_ORDER = "action_update_order"
-  ACTION_RESET_SLOTS = "action_reset_slots"
-)
-
-type Recipient struct {
-	Id            string   `firestore:"-"`
-	Name          string   `firestore:"name,omitempty"`
-	Address       string   `firestore:"name,omitempty"`
-	Contact       string   `firestore:"contact"`
-	Platform      Platform `firestore:"platform,omitempty"`
-	RecentMessage *Message `firestore:"recentMessage,omitempty"`
-	RecentOrderId string   `firestore:"recentOrderId,omitempty"`
-}
-
-type Platform string
-
-type Message struct {
-	Id               string `firestore:"-"`
-	Content          string `firestore:"content"`
-	IsBusinessSender bool   `firestore:"isBusinessSender"`
-	TimeSent         int64  `firestore:"timeSent"`
-	DidBotCreate     bool   `firestore:"didBotCreate"`
-	HasBusinessRead  bool   `firestore:"hasBusinessRead"`
-	RecipientId      string `firestore:"recipientId"`
-}
-
-type OutsideRequest struct {
-	Id        string `json:"id"`
-	Recipient *Recipient `json:"recipient"`
-	Message   *Message `json:"message"`
-	Business  *Business `json:"business"`
-}
-
-type OutsideResponse struct {
-}
-
-func NewBotError(message string, errorType BotErrorType, shouldDisplayErrorInChat bool) BotError {
-	return BotError{Type: errorType, Message: message, ShouldDisplayErrorInChat: shouldDisplayErrorInChat}
-}
-
-type Order struct {
-	Id                   string `firestore:"-"`
-	Address              string `firestore:"address"`
-	Name                 string `firestore:"name"`
-	Content              string `firestore:"content"`
-	StartTime            int64  `firestore:"startTime"`
-	CompleteTime         int64  `firestore:"completeTime"`
-	ScheduledTime        int64  `firestore:"scheduledTime"`
-	LastModificationTime int64  `firestore:"lastModificationTime"`
-	Type                 string `firestore:"type"`
-	IsVisible            bool   `firestore:"visible"`
-	RecipientId          string `firestore:"recipientId"`
-	RecipientContact     string `firestore:"recipientContact"`
-}
-
-type Business struct {
-	Id          string `firestore:"-"`
-	Approved    bool   `firestore:"approved"`
-	Password    string `firestore:"password"`
-	PhoneNumber string `firestore:"phoneNumber"`
-}
-
-func (business Business) TimeClose() string {
-  // TODO implelemt and stop returning string
-  return "9:00pm"
-}
-
-type Tracker struct {
-	Slots    map[string]string `json:"slots"`
-	SenderId string            `json:"sender_id"`
-	// LatestMessage LatestMessage
-}
-
-type RasaRequest struct {
-	NextAction string  `json:"next_action"`
-  SenderId string `json:"sender_id"`
-	Tracker    Tracker `json:"tracker"`
-}
-
-type RasaResponse struct {
-  Events []Event `json:"events"`
-  Responses []Response `json:"responses"`
-}
-func NewRasaResponse() *RasaResponse {
-  return &RasaResponse{
-    Events: []Event{},
-    Responses: []Response{},
-  }
-}
-
-type Response struct {
-  Text string `json:"text"`
-}
-
-type Event struct {
-  Event string `json:"event"`
-  Name string `json:"name"`
-  Value []map[string]string
-}
 
 // Recieves Botrequest, saves message to firebase, sends to recipient, and returns reponse
 func (bot *Bot) HandleBusinessInput(reqObj BusinessRequest) BusinessResponse {
@@ -271,34 +48,7 @@ func (bot *Bot) HandleBusinessInput(reqObj BusinessRequest) BusinessResponse {
 	return BusinessResponse{}
 }
 
-func (bot *Bot) HandleAction(req *RasaRequest) (*RasaResponse, error) {
-  resp := NewRasaResponse()
 
-	action := req.NextAction
-  log.Println(action)
-		switch action {
-		case ACTION_START_ORDER:
-			ActionStartOrder(req, resp)
-    case ACTION_CHECK_TIME_CLOSE:
-      bot.ActionCheckTimeClose(req, resp)
-		/*case ACTION_START_ORDER_WITH_INPUTS:
-			bot.ActionStartOrderWithInputs(reqObj, rasaResp)
-    case ACTION_UPDATE_ORDER:
-      bot.ActionUpdateOrder(reqObj, rasaResp)
-    case ACTION_CHECK_IS_OPEN:
-      bot.actionUtter(reqObj, "Yes")
-    case ACTION_CHECK_IS_OPEN_ON_DAY:
-      bot.actionUtter(reqObj, "Yes")
-    case ACTION_CHECK_TIME_CLOSE:
-      bot.actionUtter(reqObj, "Yes")
-    case ACTION_CHECK_TIME_CLOSE_ON_DAY:
-      bot.actionUtter(reqObj, "Yes")
-    case ACTION_RESET_SLOTS:
-      bot.ActionResetSlots(reqObj)*/
-		}
-
-    return resp, nil
-}
 func (bot *Bot) HandleOutsideInput(reqObj OutsideRequest) OutsideResponse {
 
   // Need to save the new message to firebase
@@ -349,21 +99,37 @@ func (bot *Bot) HandleOutsideInput(reqObj OutsideRequest) OutsideResponse {
   return OutsideResponse{}
 }
 
-func (bot *Bot) saveMessage(business *Business, recipeint *Recipient, message *Message) error {
-	messagesRef := bot.Client.Collection(Businesses).Doc(business.Id).Collection(Messages)
-	docRef, _, err := messagesRef.Add(bot.Ctx, message)
+func (bot *Bot) HandleAction(req *RasaRequest) (*RasaResponse, error) {
+  resp := NewRasaResponse()
 
-	if err != nil {
-		return err
-	}
+	action := req.NextAction
+  log.Println(action)
+		switch action {
+		case ACTION_START_ORDER:
+			ActionStartOrder(req, resp)
+    case ACTION_CHECK_TIME_CLOSE:
+      bot.ActionCheckTimeClose(req, resp)
+		/*case ACTION_START_ORDER_WITH_INPUTS:
+			bot.ActionStartOrderWithInputs(reqObj, rasaResp)
+    case ACTION_UPDATE_ORDER:
+      bot.ActionUpdateOrder(reqObj, rasaResp)
+    case ACTION_CHECK_IS_OPEN:
+      bot.actionUtter(reqObj, "Yes")
+    case ACTION_CHECK_IS_OPEN_ON_DAY:
+      bot.actionUtter(reqObj, "Yes")
+    case ACTION_CHECK_TIME_CLOSE:
+      bot.actionUtter(reqObj, "Yes")
+    case ACTION_CHECK_TIME_CLOSE_ON_DAY:
+      bot.actionUtter(reqObj, "Yes")
+    case ACTION_RESET_SLOTS:
+      bot.ActionResetSlots(reqObj)*/
+		}
 
-	message.Id = docRef.ID
-	return nil
+    return resp, nil
 }
 
-func ActionStartOrder(req *RasaRequest, resp *RasaResponse) {
 
-  log.Println(req)
+func ActionStartOrder(req *RasaRequest, resp *RasaResponse) {
 	order := Order{
 		RecipientId:          req.SenderId,
     RecipientContact: req.Tracker.Slots["recipient_contact"],
@@ -392,6 +158,57 @@ func ActionStartOrder(req *RasaRequest, resp *RasaResponse) {
 	bot.saveOrder(req, &order)
 }
 
+func (bot *Bot) ActionUpdateOrder(req *RasaRequest, resp *RasaResponse) {
+  businessId := req.Tracker.Slots["business_id"]
+  recipientId := req.Tracker.Slots["recipient_id"]
+
+	orderQuery := bot.Client.Collection(Businesses).Doc(businessId).Collection(Orders).Where("recipientId", "==", recipientId)
+  orderQuery = orderQuery.Where("visible", "==", true).OrderBy("lastModificationTime", firestore.Desc)
+
+  order := &Order{}
+	iter := orderQuery.Documents(bot.Ctx)
+	for {
+		doc, err := iter.Next()
+
+		if err == iterator.Done {
+			break
+		}
+
+		if err != nil {
+			log.Println(err)
+			// TODO handle error
+			break
+		}
+
+		err = doc.DataTo(order)
+		if err != nil {
+			log.Println(err)
+		}
+
+		order.Id = doc.Ref.ID
+  }
+
+  if order.Id == "" {
+    // TODO No order, so will make a new one
+    reply := fmt.Sprintf("")
+    resp.Responses = append(resp.Responses, Response{Text: reply})
+  } else {
+    orderRef := bot.Client.Collection(Businesses).Doc(businessId).Collection(Orders).Doc(order.Id)
+
+    // Now we have our order and can update it
+    orderRef.Update(bot.Ctx, []firestore.Update{
+      {Path: "address", Value: req.Tracker.Slots["address"]},
+      {Path: "name", Value: req.Tracker.Slots["name"]},
+      {Path: "type", Value: req.Tracker.Slots["type"]},
+      {Path: "content", Value: req.Tracker.Slots["content"]},
+      {Path: "lastModifiedTime", Value: currentTime()},
+    })
+
+  }
+
+
+}
+
 func (bot *Bot) ActionCheckTimeClose(req *RasaRequest, resp *RasaResponse) {
   // Need to check the database to see if business is closed or not
   // Then modifies the RasaResponse with the correct RasaResponse
@@ -413,11 +230,30 @@ func (bot *Bot) ActionCheckTimeClose(req *RasaRequest, resp *RasaResponse) {
   // TODO make the response dynamic
   reply := fmt.Sprintf("We close at %s", business.TimeClose())
   resp.Responses = append(resp.Responses, Response{Text: reply})
-
-  log.Println("In Action")
 }
 
+func (bot *Bot) ActionCheckTimeCloseOnDay(req *RasaRequest, resp *RasaResponse) {
+  // Need to check the database to see if business is closed or not
+  // Then modifies the RasaResponse with the correct RasaResponse
+  businessId := req.Tracker.Slots["business_id"]
+  dataSnap, err := bot.Client.Collection(Businesses).Doc(businessId).Get(bot.Ctx)
 
+  if err != nil {
+    log.Println(err)
+  }
+
+  var business Business
+  err = dataSnap.DataTo(&business)
+
+  if err != nil {
+    log.Println(err)
+  }
+
+  //paramTime = req.Tracker.LatestMessage.Entites
+  // TODO make the response dynamic
+  reply := fmt.Sprintf("Ons we close at %s", business.TimeClose())
+  resp.Responses = append(resp.Responses, Response{Text: reply})
+}
 
 func (bot Bot) saveOrder(req *RasaRequest, order *Order) {
   businessId := req.Tracker.Slots["business_id"]
@@ -445,26 +281,14 @@ func currentTime() int64 {
 	return time.Now().UnixNano() / 1000000
 }
 
-func randomItem(choices []string) string {
-	randomIndex := rand.Int31n(int32(len(choices)))
-
-	return choices[randomIndex]
-}
-
-func (bot Bot) saveSms(recipient *Recipient, business Business, message *Message) {
+func (bot *Bot) saveMessage(business *Business, recipeint *Recipient, message *Message) error {
 	messagesRef := bot.Client.Collection(Businesses).Doc(business.Id).Collection(Messages)
+	docRef, _, err := messagesRef.Add(bot.Ctx, message)
 
-	docRef, _, _ := messagesRef.Add(bot.Ctx, message)
+	if err != nil {
+		return err
+	}
 
 	message.Id = docRef.ID
-
-	log.Println(fmt.Sprintf("Recipient: %s business: %s message %s", recipient.Id, business.Id, message.Id))
-
-	recipientRef := bot.Client.Collection(Businesses).Doc(business.Id).Collection(Recipients).Doc(recipient.Id)
-	recipientRef.Update(ctx, []firestore.Update{
-		{Path: RecentMessage, Value: message},
-	})
-
-	recipient.RecentMessage = message
-
+	return nil
 }
