@@ -46,11 +46,11 @@
     - export
 
 ## Generated Story -804095739377607763
-* inform{"number": 2651, "address": "2651 deer path"}
+* inform{"address": "2651 deer path"}
     - utter_ask_order_contents
     - slot{"address": "2651 deer path"}
     - action_update_order
-* inform{"number": 2, "contents": "two fried rice"}
+* inform{"contents": "two fried rice"}
     - utter_ask_is_all
     - slot{"contents": "two fried rice"}
     - action_update_order

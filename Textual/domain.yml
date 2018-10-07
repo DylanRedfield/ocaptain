@@ -45,9 +45,9 @@ templates:
   utter_ask_name:
     - "What's the name for the order?"
   utter_ask_address:
-    - "What is the address for devliery?"
+    - "What's the address for devliery?"
   utter_ask_order_contents:
-    - "What is the order?"
+    - "What's the order?"
   utter_your_welcome:
     - "Your welcome"
   utter_thank:
@@ -58,20 +58,16 @@ templates:
     - "Great it will be ready in about 30 minutes"
   utter_restart:
     - "Restarted"
+  utter_ask_is_all:
+    - "Is that all?"
+  utter_ask_confirmation_pick_up:
+    - "Is this correct?"
+  utter_ask_confirmation_delivery:
+    - "Is this correct?"
+  utter_after_order:
+    - "That'll be a few minutes"
 
 actions:
-  - utter_greet
-  - utter_goodbye
-  - utter_your_welcome
-  - utter_ask_address
-  - utter_ask_name
-  - utter_thank
-  - utter_ask_is_all
-  - utter_ask_order_contents
-  - utter_ask_confirmation_pick_up
-  - utter_ask_confirmation_delivery
-  - utter_ask_type
-  - utter_after_order
   - action_place_order
   - action_check_time_close
   - action_check_is_open
