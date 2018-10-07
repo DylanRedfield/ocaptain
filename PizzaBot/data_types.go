@@ -201,7 +201,16 @@ type Tracker struct {
 type LatestMessage struct {
   Text string `json:"text"`
   Intent string `json:"intent"`
-  Entities []map[string]string `json:"entities"`
+  Entities []Entity `json:"entities"`
+}
+
+type Entity struct {
+  Start int32 `json:"start"`
+  End int32 `json:"end"`
+  Value string `json:"value"`
+  Text string `json:"text"`
+  Confidence float64 `json:"confidence"`
+  Entity string `json:"entity"`
 }
 
 type RasaRequest struct {

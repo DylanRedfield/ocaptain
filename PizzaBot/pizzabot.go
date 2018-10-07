@@ -249,9 +249,22 @@ func (bot *Bot) ActionCheckTimeCloseOnDay(req *RasaRequest, resp *RasaResponse) 
     log.Println(err)
   }
 
-  //paramTime = req.Tracker.LatestMessage.Entites
+  var entity Entity
+  for _, v := range req.Tracker.LatestMessage.Entities {
+    if v.Entity == "time" {
+      entity = v
+      break
+    }
+  }
+
+  t, err := time.Parse(time.RFC3339, entity.Value)
+
+  if err != nil {
+    log.Println(err)
+  }
+
   // TODO make the response dynamic
-  reply := fmt.Sprintf("Ons we close at %s", business.TimeClose())
+  reply := fmt.Sprintf("On %d/%d we close at %s", t.Month(), t.Day(), business.TimeClose())
   resp.Responses = append(resp.Responses, Response{Text: reply})
 }
 
