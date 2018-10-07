@@ -13,11 +13,11 @@
     - utter_ask_address
     - slot{"type": "DELIVERY"}
     - action_update_order
-* inform{"number": 2651, "address": "2651 deer path , scotch plains"}
+* inform{"address": "2651 deer path , scotch plains"}
     - utter_ask_order_contents
     - slot{"address": "2651 deer path , scotch plains"}
     - action_update_order
-* inform{"number": 2, "contents": "two fried rice"}
+* inform{"contents": "two fried rice"}
     - utter_ask_is_all
     - slot{"contents": "two fried rice"}
     - action_update_order
@@ -34,7 +34,7 @@
     - slot{"address": "2651 deer path"}
     - slot{"type": "DELIVERY"}
     - action_update_order
-* inform{"number": 2, "contents": "two fried rice"}
+* inform{"contents": "two fried rice"}
     - utter_ask_is_all
     - slot{"contents": "two fried rice"}
     - action_update_order
@@ -49,6 +49,7 @@
 * inform{"address": "2651 deer path"}
     - utter_ask_order_contents
     - slot{"address": "2651 deer path"}
+    - slot{"type": "DELIVERY"}
     - action_update_order
 * inform{"contents": "two fried rice"}
     - utter_ask_is_all
@@ -73,7 +74,7 @@
     - utter_ask_order_contents
     - slot{"name": "dylan"}
     - action_update_order
-* inform{"number": 2, "contents": "two fried rice"}
+* inform{"contents": "two fried rice"}
     - utter_ask_is_all
     - slot{"contents": "two fried rice"}
     - action_update_order
@@ -95,7 +96,7 @@
     - export
 
 ## Generated Story -4687692339477607813
-* inform{"number": 2, "contents": "two fried rice"}
+* inform{"contents": "two fried rice"}
     - utter_ask_type
     - slot{"contents": "two fried rice"}
     - action_update_order
@@ -112,7 +113,7 @@
     - slot{"name": "dylan"}
     - slot{"type": "DELIVERY"}
     - action_update_order
-* inform{"number": 2, "contents": "two fried rice"}
+* inform{"contents": "two fried rice"}
     - utter_ask_is_all
     - slot{"contents": "two fried rice"}
     - action_update_order
@@ -132,7 +133,7 @@
     - utter_ask_order_contents
     - slot{"type": "PICK_UP"}
     - action_update_order
-* inform{"number": 2, "contents": "two fried rice"}
+* inform{contents": "two fried rice"}
     - utter_ask_is_all
     - slot{"contents": "two fried rice"}
     - action_update_order
