@@ -105,58 +105,21 @@ func (bot *Bot) HandleAction(req *RasaRequest) (*RasaResponse, error) {
 	action := req.NextAction
   log.Println(action)
 		switch action {
-		case ACTION_START_ORDER:
-			ActionStartOrder(req, resp)
+    case ACTION_UPDATE_ORDER:
+      bot.ActionUpdateOrder(req, resp)
+    case ACTION_CHECK_IS_OPEN:
+      bot.ActionCheckIsOpen(req, resp)
+    case ACTION_CHECK_IS_OPEN_ON_DAY:
+      bot.ActionCheckIsOpenOnDay(req, resp)
     case ACTION_CHECK_TIME_CLOSE:
       bot.ActionCheckTimeClose(req, resp)
-		/*case ACTION_START_ORDER_WITH_INPUTS:
-			bot.ActionStartOrderWithInputs(reqObj, rasaResp)
-    case ACTION_UPDATE_ORDER:
-      bot.ActionUpdateOrder(reqObj, rasaResp)
-    case ACTION_CHECK_IS_OPEN:
-      bot.actionUtter(reqObj, "Yes")
-    case ACTION_CHECK_IS_OPEN_ON_DAY:
-      bot.actionUtter(reqObj, "Yes")
-    case ACTION_CHECK_TIME_CLOSE:
-      bot.actionUtter(reqObj, "Yes")
     case ACTION_CHECK_TIME_CLOSE_ON_DAY:
-      bot.actionUtter(reqObj, "Yes")
-    case ACTION_RESET_SLOTS:
-      bot.ActionResetSlots(reqObj)*/
+      bot.ActionCheckTimeCloseOnDay(req, resp)
 		}
 
     return resp, nil
 }
 
-
-func ActionStartOrder(req *RasaRequest, resp *RasaResponse) {
-	order := Order{
-		RecipientId:          req.SenderId,
-    RecipientContact: req.Tracker.Slots["recipient_contact"],
-		StartTime:            currentTime(),
-		LastModificationTime: currentTime(),
-		IsVisible:            true,
-	}
-
-	slots := req.Tracker.Slots
-	if slots["address"] != "" {
-		order.Address = slots["address"]
-	}
-
-	if slots["name"] != "" {
-		order.Name = slots["name"]
-	}
-
-	if slots["type"] != "" {
-		order.Type = slots["type"]
-	}
-
-	if slots["content"] != "" {
-		order.Content = slots["content"]
-	}
-
-	bot.saveOrder(req, &order)
-}
 
 func (bot *Bot) ActionUpdateOrder(req *RasaRequest, resp *RasaResponse) {
   businessId := req.Tracker.Slots["business_id"]
@@ -189,9 +152,32 @@ func (bot *Bot) ActionUpdateOrder(req *RasaRequest, resp *RasaResponse) {
   }
 
   if order.Id == "" {
-    // TODO No order, so will make a new one
-    reply := fmt.Sprintf("")
-    resp.Responses = append(resp.Responses, Response{Text: reply})
+    order := Order{
+      RecipientId:          req.SenderId,
+      RecipientContact: req.Tracker.Slots["recipient_contact"],
+      StartTime:            currentTime(),
+      LastModificationTime: currentTime(),
+      IsVisible:            true,
+    }
+
+    slots := req.Tracker.Slots
+    if slots["address"] != "" {
+      order.Address = slots["address"]
+    }
+
+    if slots["name"] != "" {
+      order.Name = slots["name"]
+    }
+
+    if slots["type"] != "" {
+      order.Type = slots["type"]
+    }
+
+    if slots["content"] != "" {
+      order.Content = slots["content"]
+    }
+	  bot.saveOrder(req, &order)
+
   } else {
     orderRef := bot.Client.Collection(Businesses).Doc(businessId).Collection(Orders).Doc(order.Id)
 
@@ -266,13 +252,46 @@ func (bot *Bot) ActionCheckIsOpen(req *RasaRequest, resp *RasaResponse) {
   // TODO make dynamic
   reply := ""
   if business.IsOpen() {
-    reply := "Yes, we're open"
+    reply = "Yes, we're open"
   } else {
-    reply := "Sorry, no we're not"
+    reply = "Sorry, no we're not"
   }
   resp.Responses = append(resp.Responses, Response{Text: reply})
 }
 
+func (bot *Bot) ActionCheckIsOpenOnDay(req *RasaRequest, resp *RasaResponse) {
+  businessId := req.Tracker.Slots["business_id"]
+  business, err := bot.getBusinessFromId(businessId)
+
+  if err != nil {
+    log.Println(err)
+  }
+
+  var entity Entity
+  for _, v := range req.Tracker.LatestMessage.Entities {
+    if v.Entity == "time" {
+      entity = v
+      break
+    }
+  }
+
+  t, err := time.Parse(time.RFC3339, entity.Value)
+
+  if err != nil {
+    log.Println(err)
+  }
+
+  // TODO make dynamic
+  reply := ""
+  if business.IsOpen() {
+    reply = "Yes, we're open"
+  } else {
+    reply = "Sorry, no we're not"
+  }
+
+  reply = fmt.Sprint("%s on %d/%d", reply, t.Month(), t.Day())
+  resp.Responses = append(resp.Responses, Response{Text: reply})
+}
 
 func (bot Bot) saveOrder(req *RasaRequest, order *Order) {
   businessId := req.Tracker.Slots["business_id"]
@@ -313,13 +332,13 @@ func (bot *Bot) saveMessage(business *Business, recipeint *Recipient, message *M
 }
 
 func (bot *Bot) getBusinessFromId(businessId string) (Business, error) {
+  var business Business
   dataSnap, err := bot.Client.Collection(Businesses).Doc(businessId).Get(bot.Ctx)
 
   if err != nil {
     return business, err
   }
 
-  var business Business
   err = dataSnap.DataTo(&business)
 
   if err != nil {

@@ -8,7 +8,7 @@
 ## Generated Story 5839377152582597870
 * inform
     - utter_ask_type
-    - action_start_order
+    - action_update_order
 * inform{"type": "DELIVERY"}
     - utter_ask_address
     - slot{"type": "DELIVERY"}
@@ -64,7 +64,7 @@
 ## Generated Story 4605506271822198985
 * inform
     - utter_ask_type
-    - action_start_order
+    - action_update_order
 * inform{"type": "PICK_UP"}
     - utter_ask_name
     - slot{"type": "PICK_UP"}
@@ -91,14 +91,13 @@
     - utter_greet
 * inform
     - utter_ask_type
-    - action_start_order
+    - action_update_order
     - export
 
 ## Generated Story -4687692339477607813
 * inform{"number": 2, "contents": "two fried rice"}
     - utter_ask_type
     - slot{"contents": "two fried rice"}
-    - action_start_order
     - action_update_order
 * inform{"type": "DELIVERY"}
     - utter_ask_address
