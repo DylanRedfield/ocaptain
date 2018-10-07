@@ -214,14 +214,7 @@ func (bot *Bot) ActionCheckTimeClose(req *RasaRequest, resp *RasaResponse) {
   // Then modifies the RasaResponse with the correct RasaResponse
 
   businessId := req.Tracker.Slots["business_id"]
-  dataSnap, err := bot.Client.Collection(Businesses).Doc(businessId).Get(bot.Ctx)
-
-  if err != nil {
-    log.Println(err)
-  }
-
-  var business Business
-  err = dataSnap.DataTo(&business)
+  business, err := bot.getBusinessFromId(businessId)
 
   if err != nil {
     log.Println(err)
@@ -236,14 +229,7 @@ func (bot *Bot) ActionCheckTimeCloseOnDay(req *RasaRequest, resp *RasaResponse) 
   // Need to check the database to see if business is closed or not
   // Then modifies the RasaResponse with the correct RasaResponse
   businessId := req.Tracker.Slots["business_id"]
-  dataSnap, err := bot.Client.Collection(Businesses).Doc(businessId).Get(bot.Ctx)
-
-  if err != nil {
-    log.Println(err)
-  }
-
-  var business Business
-  err = dataSnap.DataTo(&business)
+  business, err := bot.getBusinessFromId(businessId)
 
   if err != nil {
     log.Println(err)
@@ -267,6 +253,26 @@ func (bot *Bot) ActionCheckTimeCloseOnDay(req *RasaRequest, resp *RasaResponse) 
   reply := fmt.Sprintf("On %d/%d we close at %s", t.Month(), t.Day(), business.TimeClose())
   resp.Responses = append(resp.Responses, Response{Text: reply})
 }
+
+
+func (bot *Bot) ActionCheckIsOpen(req *RasaRequest, resp *RasaResponse) {
+  businessId := req.Tracker.Slots["business_id"]
+  business, err := bot.getBusinessFromId(businessId)
+
+  if err != nil {
+    log.Println(err)
+  }
+
+  // TODO make dynamic
+  reply := ""
+  if business.IsOpen() {
+    reply := "Yes, we're open"
+  } else {
+    reply := "Sorry, no we're not"
+  }
+  resp.Responses = append(resp.Responses, Response{Text: reply})
+}
+
 
 func (bot Bot) saveOrder(req *RasaRequest, order *Order) {
   businessId := req.Tracker.Slots["business_id"]
@@ -305,3 +311,22 @@ func (bot *Bot) saveMessage(business *Business, recipeint *Recipient, message *M
 	message.Id = docRef.ID
 	return nil
 }
+
+func (bot *Bot) getBusinessFromId(businessId string) (Business, error) {
+  dataSnap, err := bot.Client.Collection(Businesses).Doc(businessId).Get(bot.Ctx)
+
+  if err != nil {
+    return business, err
+  }
+
+  var business Business
+  err = dataSnap.DataTo(&business)
+
+  if err != nil {
+    return business, err
+  }
+
+  return business, nil
+
+}
+

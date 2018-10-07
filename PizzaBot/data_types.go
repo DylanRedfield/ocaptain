@@ -192,6 +192,11 @@ func (business Business) TimeClose() string {
   return "9:00pm"
 }
 
+func (business Business) IsOpen() bool {
+  // TODO implement
+  return true
+}
+
 type Tracker struct {
 	Slots    map[string]string `json:"slots"`
 	SenderId string            `json:"sender_id"`
