@@ -2,22 +2,27 @@
   "action_fingerprints": {
     "action_listen": {
       "slots": [
-        "address",
         "contents",
-        "name",
-        "type"
+        "type",
+        "address",
+        "name"
       ]
     },
     "utter_after_order": {
       "slots": []
     },
-    "utter_ask_address": {
-      "slots": []
-    },
     "utter_ask_is_all": {
       "slots": []
     },
+    "action_start_order": {
+      "slots": []
+    },
     "utter_ask_type": {
+      "slots": [
+        "contents"
+      ]
+    },
+    "utter_ask_address": {
       "slots": []
     },
     "action_check_is_open": {

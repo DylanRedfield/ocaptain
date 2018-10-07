@@ -7,6 +7,7 @@ from twilio.rest import Client
 
 from rasa_core.channels import UserMessage, OutputChannel
 from rasa_core.channels import InputChannel
+from rasa_core.events import SlotSet
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
@@ -32,7 +33,6 @@ class TextualOutput(OutputChannel):
         recipient_id = self.req["recipient"]["Id"]
         self.sms_client.messages.create(body=text, from_= business_phone, to = contact)
 
-        print("God help me through this trying time")
         message = {u'content': text, u'didBotCreate':True, u'hasBusinessRead':False,u'isBusinessSender':True,
                 u'recipientId': recipient_id, u'timeSent':round(time.time() * 1000)} 
 
@@ -74,20 +74,22 @@ class TextualInput(InputChannel):
             text = req["message"]["Content"]
             sender = req["recipient"]["Id"]
 
+            print (type(self.agent.tracker_store))
             tracker = self.agent.tracker_store.get_or_create_tracker(sender)
 
-            if tracker.slots['business_id'] == "" or tracker.slots['recipient_contact'] == "":
-                tracker._set_slot('business_id', req["business"]["Id"])
-                tracker._set_slot('recipient_contact', req["recipient"]["Contact"])
-                print("In the method")
-                print(req["recipient"]["Contact"])
+            print(tracker.slots['business_id'].value)
+
+            if tracker.get_slot('business_id') == None or tracker.get_slot('recipient_contact') == None:
+                event = SlotSet('business_id', req["business"]["Id"])
+                tracker.update(event)
+                event = SlotSet('recipient_contact', req["recipient"]["Contact"])
+                tracker.update(event)
                 self.agent.tracker_store.save(tracker)
 
             out_channel = TextualOutput(req, db, sms_client)
 
             user = UserMessage(text, output_channel = out_channel, sender_id = sender)
 
-            print(user)
             on_new_message(user)
             return "success"
         return textual_webhook
