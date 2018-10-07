@@ -16,6 +16,19 @@ import (
 
 var ctx context.Context
 
+var bot *Bot
+
+func init() {
+	ctx = context.Background()
+
+  var err error
+  bot, err = NewBot(ctx)
+
+  if err != nil {
+    log.Println("Error initiating bot")
+  }
+}
+
 func main() {
 	mux := http.NewServeMux()
 	mux.Handle("/PizzaBot/businessInput", http.HandlerFunc(businessInput))
@@ -38,7 +51,7 @@ func actionInput(w http.ResponseWriter, req *http.Request) {
     log.Println(err)
 	}
 
-  HandleAction(&reqObj)
+  bot.HandleAction(&reqObj)
 
 }
 
@@ -57,7 +70,7 @@ func businessInput(w http.ResponseWriter, req *http.Request) {
 		// TODO handle error
 	}
 
-	HandleBusinessInput(ctx, reqObj)
+	bot.HandleBusinessInput(reqObj)
 }
 
 // Recieves input from SMS service like Twilio
@@ -69,14 +82,14 @@ func outsideSmsInput(w http.ResponseWriter, req *http.Request) {
 
 	reqObj := TwilioRequest{To: req.URL.Query()["To"][0], Body: req.URL.Query()["Body"][0], From: req.URL.Query()["From"][0]}
 
-	outsideReq := ToOutsideRequest(reqObj)
-	HandleOutsideInput(ctx, outsideReq)
+	outsideReq := toOutsideRequest(reqObj)
+	bot.HandleOutsideInput(outsideReq)
 }
 
 func sendSelf(w http.ResponseWriter, req *http.Request) {
 	reqObj := TwilioRequest{To: "+12027593168", Body: "Default message", From: "+12027593168"}
-	outsideReq := ToOutsideRequest(reqObj)
-	HandleOutsideInput(ctx, outsideReq)
+	outsideReq := toOutsideRequest(reqObj)
+	bot.HandleOutsideInput(outsideReq)
 }
 
 func sendAndSave(w http.ResponseWriter, req *http.Request) {
@@ -133,7 +146,7 @@ func sendAndSave(w http.ResponseWriter, req *http.Request) {
 
 
 }
-func initFirebase() Bot {
+func initFirebase() *Bot {
 	ctx = context.Background()
 	bot, err := NewBot(ctx)
 
@@ -145,7 +158,7 @@ func initFirebase() Bot {
 }
 
 // Turns TwilioRequest into standard OutsideRequest object
-func ToOutsideRequest(twilReq TwilioRequest) OutsideRequest {
+func toOutsideRequest(twilReq TwilioRequest) OutsideRequest {
 
 	timeInMil := time.Now().UnixNano() / 1000000
 	message := &Message{
@@ -156,61 +169,28 @@ func ToOutsideRequest(twilReq TwilioRequest) OutsideRequest {
     TimeSent: timeInMil,
   }
 
-	//recipient := &Recipient{Contact: twilReq.From, Platform: "SMS"}
-
-	sa := option.WithCredentialsFile("firebase-config.json")
-
-	app, err := firebase.NewApp(ctx, nil, sa)
+	business, err := businessFromPhone(twilReq.To)
 
 	if err != nil {
 		log.Println(err)
 	}
 
-	client, err := app.Firestore(ctx)
+	recipient, err := recipientFromNumber(twilReq.From, business.Id)
 
 	if err != nil {
 		log.Println(err)
 	}
 
-	business, err := businessFromPhone(client, ctx, twilReq.To)
-
-	if err != nil {
-		log.Println(err)
-	}
-
-	recipient, err := recipientFromNumber(client, ctx, message, twilReq.From, business.Id)
-
-	if err != nil {
-		log.Println(err)
-	}
 
 	message.RecipientId = recipient.Id
-
-	err = saveMessage(client, ctx, business, recipient, message)
-
-	if err != nil {
-		log.Println(err)
-	}
 
 	return OutsideRequest{Recipient: recipient, Message: message, Business: business}
 }
 
-func saveMessage(client *firestore.Client, ctx context.Context, business *Business, recipeint *Recipient,
-	message *Message) error {
-	messagesRef := client.Collection(Businesses).Doc(business.Id).Collection(Messages)
-	docRef, _, err := messagesRef.Add(ctx, message)
 
-	if err != nil {
-		return err
-	}
-
-	message.Id = docRef.ID
-	return nil
-}
-
-func businessFromPhone(client *firestore.Client, ctx context.Context, phoneNumber string) (*Business, error) {
+func businessFromPhone(phoneNumber string) (*Business, error) {
 	business := &Business{}
-	iter := client.Collection(Businesses).Where(PhoneNumber, "==", phoneNumber).Documents(ctx)
+	iter := bot.Client.Collection(Businesses).Where(PhoneNumber, "==", phoneNumber).Documents(bot.Ctx)
 
 	for {
 		doc, err := iter.Next()
@@ -241,12 +221,12 @@ func businessFromPhone(client *firestore.Client, ctx context.Context, phoneNumbe
 
 }
 
-// Takes in recipientId
-func recipientFromNumber(client *firestore.Client, ctx context.Context, message *Message, recipientNumber string, businessId string) (*Recipient, error) {
+// Takes in recipientId and returns recipient or error if none is found or there was an error retrieving data
+func recipientFromNumber(recipientNumber string, businessId string) (*Recipient, error) {
 
-	query := client.Collection(Businesses).Doc(businessId).Collection(Recipients).Where(Contact, "==", recipientNumber)
+	query := bot.Client.Collection(Businesses).Doc(businessId).Collection(Recipients).Where(Contact, "==", recipientNumber)
 
-	iter := query.Documents(ctx)
+	iter := query.Documents(bot.Ctx)
 
 	recipient := &Recipient{}
 
@@ -267,25 +247,19 @@ func recipientFromNumber(client *firestore.Client, ctx context.Context, message 
 
 		if err != nil {
 			log.Println(err)
+      break
 		}
 
 		recipient.Id = doc.Ref.ID
 	}
 
-	if recipient.Id == "" {
-		recipient.RecentMessage = message
+
+  // Check if recipient was found, because ID (or any value) will be empty
+  if recipient.Id == "" {
+    // No recipient found, so return error
+    return recipient, errors.New("No matching recipient founder")
+  } else {
     recipient.Contact = recipientNumber
-
-		// No recipient was found in firebase, so need to construct a new one
-		personRef, _, err := client.Collection(Businesses).Doc(businessId).Collection(Recipients).Add(ctx, recipient)
-		recipient.Id = personRef.ID
-		return recipient, err
-	} else {
-		personRef := client.Collection(Businesses).Doc(businessId).Collection(Recipients).Doc(recipient.Id)
-		personRef.Update(ctx, []firestore.Update{
-			{Path: RecentMessage, Value: message},
-		})
-		return recipient, nil
-	}
-
+    return recipient, nil
+  }
 }

@@ -21,40 +21,31 @@ type Bot struct {
 }
 
 
-func NewBot(ctx context.Context) (Bot, *BotError) {
+func NewBot(ctx context.Context) (*Bot, error) {
 	sa := option.WithCredentialsFile("firebase-config.json")
 
 	app, err := firebase.NewApp(ctx, nil, sa)
 
 	if err != nil {
 		log.Println(err)
+    return nil, err
 	}
 
 	client, err := app.Firestore(ctx)
 
 	if err != nil {
 		log.Println(err)
+    return nil, err
 	}
 
 	twilioClient := TwilioClient{
 		AccountSid: "AC9dfbda388f3ee10353bbc001694f5c27",
 		AuthToken:  "e3429e06cc27740f1c859d2bfc9964ae"}
 
-	return Bot{Client: client, Ctx: ctx, SmsClient: twilioClient}, nil
+	return &Bot{Client: client, Ctx: ctx, SmsClient: twilioClient}, nil
 }
 
-var bot Bot
 
-func init() {
-	ctx = context.Background()
-
-  var err *BotError
-  bot, err = NewBot(ctx)
-
-  if err != nil {
-    log.Println("Error initiating bot")
-  }
-}
 
 type BusinessRequest struct {
 	BusinessId string
@@ -218,7 +209,7 @@ type RasaResponse struct {
 }
 
 // Recieves Botrequest, saves message to firebase, sends to recipient, and returns reponse
-func HandleBusinessInput(ctx context.Context, reqObj BusinessRequest) BusinessResponse {
+func (bot *Bot) HandleBusinessInput(reqObj BusinessRequest) BusinessResponse {
 	messageRef := bot.Client.Collection(Businesses).Doc(reqObj.Business.Id).Collection(Messages).NewDoc()
 
 	timeInMil := time.Now().UnixNano() / 1000000
@@ -231,10 +222,10 @@ func HandleBusinessInput(ctx context.Context, reqObj BusinessRequest) BusinessRe
 		DidBotCreate:     false,
 		RecipientId:      reqObj.Recipient.Id}
 
-	_, err := messageRef.Set(ctx, message)
+	_, err := messageRef.Set(bot.Ctx, message)
 
 	personRef := bot.Client.Collection(Businesses).Doc(reqObj.BusinessId).Collection(Recipients).Doc(reqObj.Recipient.Id)
-	personRef.Update(ctx, []firestore.Update{
+	personRef.Update(bot.Ctx, []firestore.Update{
 		{Path: RecentMessage, Value: message},
 	})
 
@@ -254,157 +245,7 @@ func HandleBusinessInput(ctx context.Context, reqObj BusinessRequest) BusinessRe
 	return BusinessResponse{}
 }
 
-/*
-*actions:
-  - utter_greet
-  - utter_goodbye
-  - utter_your_welcome
-  - utter_ask_address
-  - utter_ask_name
-  - utter_thank
-  - utter_ask_order_contents
-  - utter_ask_confirmation_pick_up
-  - utter_ask_confirmation_delivery
-  - utter_ask_type
-  - utter_after_order
-  - action_place_order
-  - action_check_time_close
-  - action_check_is_open
-  - action_start_order
-  - action_start_order_with_inputs
-  - action_check_is_open_on_day
-  - action_check_time_close_on_day
-  - action_set_content
-  - action_set_type
-  - action_set_name
-  - action_set_address
-*/
-// Recieves outside input, saves to firebase, processes and potentially responds, and returns response
-// Only the Phone number and platform field of recipient are garunteed to be set
-
-/*func HandleOutsideInput(ctx context.Context, reqObj OutsideRequest) OutsideResponse {
-
-	rasaUrl := fmt.Sprintf("http://localhost:5005/conversations/%s/respond", reqObj.Recipient.Id)
-	body := []byte(fmt.Sprintf(`{"query":"%s"}`, reqObj.Message.Content))
-
-	req, err := http.NewRequest("POST", rasaUrl, bytes.NewBuffer(body))
-
-	if err != nil {
-		log.Println(err)
-	}
-
-	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-
-	resp, err := http.DefaultClient.Do(req)
-
-	if err != nil {
-		log.Println(err)
-	}
-
-	defer resp.Body.Close()
-
-	body, err = ioutil.ReadAll(resp.Body)
-
-	if err != nil {
-		log.Println(err)
-	}
-
-	var rasaResp RasaResponse
-
-	if err := json.Unmarshal(body, &rasaResp); err != nil {
-		log.Println(err)
-	}
-
-	nextAction := rasaResp.NextAction
-
-	log.Println(fmt.Sprintf("Next Action %s", nextAction))
-	for nextAction != ACTION_LISTEN {
-		switch nextAction {
-		case UTTER_GREET:
-			bot.ActionUtterGreet(reqObj)
-		case UTTER_GOODBYE:
-			bot.ActionUtterGoodbye(reqObj)
-		case UTTER_YOUR_WELCOME:
-			bot.ActionUtterYourWelcome(reqObj)
-		case UTTER_ASK_ADDRESS:
-			bot.ActionUtterAskAddress(reqObj)
-		case UTTER_ASK_NAME:
-			bot.ActionUtterAskName(reqObj)
-		case UTTER_THANK:
-			bot.ActionUtterThank(reqObj)
-		case UTTER_ASK_ORDER_CONTENTS:
-			bot.ActionUtterAskOrderContents(reqObj)
-		case UTTER_ASK_CONFIRMATION_PICK_UP:
-			bot.ActionUtterAskConfirmationPickUp(reqObj, rasaResp)
-		case UTTER_ASK_CONFIRMATION_DELIVERY:
-			bot.ActionUtterAskConfirmationDelivery(reqObj, rasaResp)
-		case UTTER_ASK_TYPE:
-			bot.ActionUtterAskType(reqObj)
-		case UTTER_AFTER_ORDER:
-			bot.ActionUtterAfterOrder(reqObj)
-    case UTTER_ASK_IS_ALL:
-      bot.ActionUtterAskIsAll(reqObj)
-		case ACTION_START_ORDER:
-			//ActionStartOrder(reqObj)
-		case ACTION_START_ORDER_WITH_INPUTS:
-			bot.ActionStartOrderWithInputs(reqObj, rasaResp)
-    case ACTION_UPDATE_ORDER:
-      bot.ActionUpdateOrder(reqObj, rasaResp)
-		case ACTION_SET_NAME:
-			bot.ActionSetName(reqObj, rasaResp)
-		case ACTION_SET_TYPE:
-			bot.ActionSetType(reqObj, rasaResp)
-		case ACTION_SET_ADDRESS:
-			bot.ActionSetAddress(reqObj, rasaResp)
-		case ACTION_SET_CONTENT:
-			bot.ActionSetContent(reqObj, rasaResp)
-    case ACTION_CHECK_IS_OPEN:
-      bot.actionUtter(reqObj, "Yes")
-    case ACTION_CHECK_IS_OPEN_ON_DAY:
-      bot.actionUtter(reqObj, "Yes")
-    case ACTION_CHECK_TIME_CLOSE:
-      bot.actionUtter(reqObj, "Yes")
-    case ACTION_CHECK_TIME_CLOSE_ON_DAY:
-      bot.actionUtter(reqObj, "Yes")
-    case ACTION_RESET_SLOTS:
-      bot.ActionResetSlots(reqObj)
-		}
-
-		rasaUrl := fmt.Sprintf("http://localhost:5005/conversations/%s/continue", reqObj.Recipient.Id)
-		body := []byte(fmt.Sprintf(`{"executed_action":"%s"}`, rasaResp.NextAction))
-
-		req, err := http.NewRequest("POST", rasaUrl, bytes.NewBuffer(body))
-
-		if err != nil {
-			log.Println(err)
-		}
-
-		req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-
-		resp, err := http.DefaultClient.Do(req)
-
-		if err != nil {
-			log.Println(err)
-		}
-
-		defer resp.Body.Close()
-
-		body, err = ioutil.ReadAll(resp.Body)
-
-		if err != nil {
-			log.Println(err)
-		}
-
-		if err := json.Unmarshal(body, &rasaResp); err != nil {
-			log.Println(err)
-		}
-
-		nextAction = rasaResp.NextAction
-
-	}
-	return OutsideResponse{}
-} */
-func HandleAction(req *RasaResponse) {
+func (bot *Bot) HandleAction(req *RasaResponse) {
 	action := req.NextAction
   log.Println(action)
 		switch action {
@@ -427,11 +268,36 @@ func HandleAction(req *RasaResponse) {
 		}
 
 }
-func HandleOutsideInput(ctx context.Context, reqObj OutsideRequest) OutsideResponse {
+func (bot *Bot) HandleOutsideInput(reqObj OutsideRequest) OutsideResponse {
+
+  // Need to save the new message to firebase
+  err := bot.saveMessage(reqObj.Business, reqObj.Recipient, reqObj.Message)
+
+  if err != nil {
+    log.Println(err)
+  }
+
+  businessId := reqObj.Business.Id
+
+  // Need to check if a recipient was found, and if not create one, and if so update the recent message
+	if reqObj.Recipient.Id == "" {
+		reqObj.Recipient.RecentMessage = reqObj.Message
+
+		personRef, _, err := bot.Client.Collection(Businesses).Doc(businessId).Collection(Recipients).Add(bot.Ctx, reqObj.Recipient)
+		reqObj.Recipient.Id = personRef.ID
+
+    if err != nil {
+      log.Println(err)
+    }
+	} else {
+		personRef := bot.Client.Collection(Businesses).Doc(businessId).Collection(Recipients).Doc(reqObj.Recipient.Id)
+		personRef.Update(ctx, []firestore.Update{
+			{Path: RecentMessage, Value: reqObj.Message},
+		})
+	}
+
   // Send a http request that will be handled in the textual_input_channel
   // The body is the OutsideRequest object
-
-	rasaUrl := fmt.Sprintf("http://localhost:5005/webhooks/textual/webhook")
 	body, err := json.Marshal(reqObj)
 
   if err != nil {
@@ -439,6 +305,7 @@ func HandleOutsideInput(ctx context.Context, reqObj OutsideRequest) OutsideRespo
   }
 
 
+	rasaUrl := fmt.Sprintf("http://localhost:5005/webhooks/textual/webhook")
 	req, err := http.NewRequest("POST", rasaUrl, bytes.NewBuffer(body))
 	req.Header.Set("Content-Type", "application/json")
 
@@ -449,6 +316,18 @@ func HandleOutsideInput(ctx context.Context, reqObj OutsideRequest) OutsideRespo
 	http.DefaultClient.Do(req)
 
   return OutsideResponse{}
+}
+
+func (bot *Bot) saveMessage(business *Business, recipeint *Recipient, message *Message) error {
+	messagesRef := bot.Client.Collection(Businesses).Doc(business.Id).Collection(Messages)
+	docRef, _, err := messagesRef.Add(bot.Ctx, message)
+
+	if err != nil {
+		return err
+	}
+
+	message.Id = docRef.ID
+	return nil
 }
 
 func ActionStartOrder(req *RasaResponse) {
