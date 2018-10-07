@@ -46,8 +46,6 @@ func actionInput(w http.ResponseWriter, req *http.Request) {
     log.Println(err)
   }
 
-  log.Printf("%s", body)
-
 	var reqObj RasaRequest
 	if err := json.Unmarshal(body, &reqObj); err != nil {
     log.Println(err)
