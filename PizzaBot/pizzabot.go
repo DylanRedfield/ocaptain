@@ -214,8 +214,14 @@ type RasaRequest struct {
 }
 
 type RasaResponse struct {
-  Events []Event `json:"responses"`
+  Events []Event `json:"events"`
   Responses []Response `json:"responses"`
+}
+func NewRasaResponse() *RasaResponse {
+  return &RasaResponse{
+    Events: []Event{},
+    Responses: []Response{},
+  }
 }
 
 type Response struct {
@@ -266,7 +272,7 @@ func (bot *Bot) HandleBusinessInput(reqObj BusinessRequest) BusinessResponse {
 }
 
 func (bot *Bot) HandleAction(req *RasaRequest) (*RasaResponse, error) {
-  resp := &RasaResponse{}
+  resp := NewRasaResponse()
 
 	action := req.NextAction
   log.Println(action)
@@ -407,6 +413,8 @@ func (bot *Bot) ActionCheckTimeClose(req *RasaRequest, resp *RasaResponse) {
   // TODO make the response dynamic
   reply := fmt.Sprintf("We close at %s", business.TimeClose())
   resp.Responses = append(resp.Responses, Response{Text: reply})
+
+  log.Println("In Action")
 }
 
 

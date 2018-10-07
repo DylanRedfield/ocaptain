@@ -27,6 +27,7 @@ class TextualOutput(OutputChannel):
 
 
     def send_text_message(self, recipient_id, text):
+        print("--- Output Text ---")
         contact = self.req["recipient"]["Contact"]
         business_phone = self.req["business"]["PhoneNumber"]
         business_id = self.req["business"]["Id"]

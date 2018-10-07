@@ -57,7 +57,8 @@ func actionInput(w http.ResponseWriter, req *http.Request) {
     log.Print(err)
   }
 
-  respString, err := json.Marshal(resp)
+  respString, err := json.Marshal(*resp)
+  log.Printf("%s", respString)
 
   w.Header().Set("Content-Type", "application/json")
   w.WriteHeader(http.StatusOK)
@@ -67,6 +68,7 @@ func actionInput(w http.ResponseWriter, req *http.Request) {
   if err != nil {
     log.Println(err)
   }
+
 
 }
 
