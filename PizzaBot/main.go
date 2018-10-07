@@ -46,12 +46,27 @@ func actionInput(w http.ResponseWriter, req *http.Request) {
     log.Println(err)
   }
 
-	var reqObj RasaResponse
+	var reqObj RasaRequest
 	if err := json.Unmarshal(body, &reqObj); err != nil {
     log.Println(err)
 	}
 
-  bot.HandleAction(&reqObj)
+  resp, err := bot.HandleAction(&reqObj)
+
+  if err != nil {
+    log.Print(err)
+  }
+
+  respString, err := json.Marshal(resp)
+
+  w.Header().Set("Content-Type", "application/json")
+  w.WriteHeader(http.StatusOK)
+
+  _, err = w.Write(respString)
+
+  if err != nil {
+    log.Println(err)
+  }
 
 }
 
