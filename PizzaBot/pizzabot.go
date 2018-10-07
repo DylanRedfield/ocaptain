@@ -331,6 +331,9 @@ func (bot *Bot) saveMessage(business *Business, recipeint *Recipient, message *M
 }
 
 func ActionStartOrder(req *RasaResponse) {
+
+  log.Println(businessId)
+  log.Println(&req)
 	order := Order{
 		RecipientId:          req.SenderId,
     RecipientContact: req.Tracker.Slots["recipient_contact"],
@@ -393,7 +396,6 @@ func (bot Bot) saveOrder(req *RasaResponse, order *Order) {
   businessId := req.Tracker.Slots["business_id"]
   recipientId := req.Tracker.Slots["recipient_id"]
 
-  log.Println(businessId)
 
 	ordersRef := bot.Client.Collection(Businesses).Doc(businessId).Collection(Orders)
 
