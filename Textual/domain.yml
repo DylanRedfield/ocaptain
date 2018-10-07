@@ -29,8 +29,6 @@ slots:
     type: text
   scheduledTime:
     type: text
-  date:
-    type: text
   business_id:
     type: text
   recipient_contact:

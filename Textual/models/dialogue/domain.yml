@@ -60,13 +60,16 @@ slots:
   address:
     initial_value: null
     type: rasa_core.slots.TextSlot
+  business_id:
+    initial_value: null
+    type: rasa_core.slots.TextSlot
   contents:
     initial_value: null
     type: rasa_core.slots.TextSlot
-  date:
+  name:
     initial_value: null
     type: rasa_core.slots.TextSlot
-  name:
+  recipient_contact:
     initial_value: null
     type: rasa_core.slots.TextSlot
   scheduledTime:
