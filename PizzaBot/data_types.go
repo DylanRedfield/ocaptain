@@ -243,5 +243,5 @@ type Response struct {
 type Event struct {
   Event string `json:"event"`
   Name string `json:"name"`
-  Value []map[string]string `json:"value"`
+  Value string `json:"value"`
 }

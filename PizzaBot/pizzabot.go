@@ -156,6 +156,7 @@ func (bot *Bot) ActionUpdateOrder(req *RasaRequest, resp *RasaResponse) {
 
   if req.Tracker.Slots["address"] != "" {
     orderType = "DELIVERY"
+    resp.Events = append(resp.Events, Event{"slot", "type", "DELIVERY"}) 
   }
   if order.Id == "" {
     order := Order{
@@ -175,9 +176,7 @@ func (bot *Bot) ActionUpdateOrder(req *RasaRequest, resp *RasaResponse) {
       order.Name = slots["name"]
     }
 
-    if slots["type"] != "" {
-      order.Type = orderType
-    }
+    order.Type = orderType
 
     if slots["content"] != "" {
       order.Content = slots["content"]

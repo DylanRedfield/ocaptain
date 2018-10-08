@@ -23,7 +23,7 @@ default_args = {
         "fallback_action_name": DEFAULT_FALLBACK_ACTION
         }
 
-agent = train_dialogue_model("domain.yml", "stories.md", "models/dialogue", None, "endpoints.yml", 3, False, default_args)
+agent = train_dialogue_model("domain.yml", "stories.md", "models/dialogue", None, "endpoints.yml", None, False, default_args)
 #agent = Agent(domain = "domain.yml", interpreter = interpreter, action_endpoint = endpoint_conf)
 #training_data = agent.load_data("stories.md")
 #agent.train(training_data)
