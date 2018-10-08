@@ -158,6 +158,7 @@ func (bot *Bot) ActionUpdateOrder(req *RasaRequest, resp *RasaResponse) {
     orderType = "DELIVERY"
     resp.Events = append(resp.Events, Event{"slot", "type", "DELIVERY"}) 
   }
+
   if order.Id == "" {
     order := Order{
       RecipientId:          req.SenderId,
@@ -196,7 +197,6 @@ func (bot *Bot) ActionUpdateOrder(req *RasaRequest, resp *RasaResponse) {
     })
 
   }
-
 
 }
 
