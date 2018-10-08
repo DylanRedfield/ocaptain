@@ -49,8 +49,8 @@
 * inform{"address": "2651 deer path"}
     - utter_ask_order_contents
     - slot{"address": "2651 deer path"}
-    - slot{"type": "DELIVERY"}
     - action_update_order
+    - slot{"type": "DELIVERY"}
 * inform{"contents": "two fried rice"}
     - utter_ask_is_all
     - slot{"contents": "two fried rice"}
