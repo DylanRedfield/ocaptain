@@ -2,22 +2,17 @@
   "action_fingerprints": {
     "action_listen": {
       "slots": [
-        "contents",
+        "type",
         "address",
         "name",
-        "type"
-      ]
-    },
-    "utter_ask_address": {
-      "slots": [
-        "type"
+        "contents"
       ]
     },
     "utter_ask_order_contents": {
       "slots": [
+        "type",
         "address",
-        "name",
-        "type"
+        "name"
       ]
     },
     "utter_ask_is_all": {
@@ -28,13 +23,21 @@
     "action_place_order": {
       "slots": []
     },
+    "action_update_order": {
+      "slots": []
+    },
     "utter_ask_type": {
       "slots": [
         "contents",
         "name"
       ]
     },
-    "action_update_order": {
+    "utter_ask_address": {
+      "slots": [
+        "type"
+      ]
+    },
+    "action_restart": {
       "slots": []
     },
     "utter_ask_name": {
@@ -42,10 +45,10 @@
         "type"
       ]
     },
-    "action_check_is_open": {
+    "action_check_time_close": {
       "slots": []
     },
-    "action_check_time_close": {
+    "action_check_is_open": {
       "slots": []
     }
   },
@@ -53,8 +56,8 @@
   "python": "3.6.5",
   "max_histories": [
     null,
-    5,
-    5
+    3,
+    3
   ],
   "ensemble_name": "rasa_core.policies.ensemble.SimplePolicyEnsemble",
   "policy_names": [

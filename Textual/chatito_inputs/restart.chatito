@@ -1,2 +1,3 @@
-%[restart]('training':'1')
+%[restart]('training':'2')
     restart
+    reset

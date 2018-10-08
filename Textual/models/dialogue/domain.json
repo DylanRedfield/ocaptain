@@ -8,6 +8,7 @@
     "intent_goodbye",
     "intent_greet",
     "intent_inform",
+    "intent_restart",
     "intent_start_order",
     "intent_thank",
     "entity_type",
@@ -42,14 +43,8 @@
     "prev_action_place_order",
     "prev_action_check_time_close",
     "prev_action_check_is_open",
-    "prev_action_start_order",
-    "prev_action_start_order_with_inputs",
     "prev_action_check_is_open_on_day",
     "prev_action_check_time_close_on_day",
-    "prev_action_set_content",
-    "prev_action_set_type",
-    "prev_action_set_name",
-    "prev_action_set_address",
     "prev_action_update_order",
     "prev_action_reset_slots"
   ]

@@ -5,15 +5,15 @@ from rasa_core.channels.console import CmdlineInput
 from rasa_core.channels.channel import RestInput
 from rasa_core import utils
 
-print("Start interpreter")
+print("-- Start interpreter --")
 interpreter = RasaNLUInterpreter("models/current/nlu")
 
-print("start load")
+print("-- Start Load --")
 endpoint_conf = utils.read_endpoint_config("endpoints.yml", endpoint_type="action_endpoint")
-agent = Agent.load("models/current/dialogue", interpreter = interpreter, action_endpoint = endpoint_conf)
+agent = Agent.load("models/dialogue", interpreter = interpreter, action_endpoint = endpoint_conf)
 
-print("Make input channel")
+print("-- Make input channel --")
 input_channel = TextualInput(agent)
 
-print("start handle")
+print("-- Running --")
 agent.handle_channels([input_channel], 5005, serve_forever = True)

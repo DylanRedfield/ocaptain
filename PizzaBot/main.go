@@ -58,7 +58,6 @@ func actionInput(w http.ResponseWriter, req *http.Request) {
   }
 
   respString, err := json.Marshal(*resp)
-  log.Printf("%s", respString)
 
   w.Header().Set("Content-Type", "application/json")
   w.WriteHeader(http.StatusOK)

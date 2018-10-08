@@ -16,14 +16,8 @@ actions:
 - action_place_order
 - action_check_time_close
 - action_check_is_open
-- action_start_order
-- action_start_order_with_inputs
 - action_check_is_open_on_day
 - action_check_time_close_on_day
-- action_set_content
-- action_set_type
-- action_set_name
-- action_set_address
 - action_update_order
 - action_reset_slots
 config:
@@ -56,6 +50,8 @@ intents:
     use_entities: true
 - check_menu_item:
     use_entities: true
+- restart:
+    use_entities: true
 slots:
   address:
     initial_value: null
@@ -82,13 +78,19 @@ templates:
   utter_after_order:
   - text: Great it will be ready in about 30 minutes
   utter_ask_address:
-  - text: What is the address for devliery?
+  - text: What's the address for devliery?
   utter_ask_confirmation:
   - text: Is this correct?
+  utter_ask_confirmation_delivery:
+  - text: Is this correct?
+  utter_ask_confirmation_pick_up:
+  - text: Is this correct?
+  utter_ask_is_all:
+  - text: Is that all?
   utter_ask_name:
   - text: What's the name for the order?
   utter_ask_order_contents:
-  - text: What is the order?
+  - text: What's the order?
   utter_ask_type:
   - text: Is that pick up or delivery
   utter_goodbye:

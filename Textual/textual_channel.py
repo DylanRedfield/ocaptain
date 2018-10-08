@@ -70,15 +70,13 @@ class TextualInput(InputChannel):
 
         @textual_webhook.route("/webhook", methods=['POST'])
         def message():
+            print("--- Input Text ---")
             req = request.get_json()
 
             text = req["message"]["Content"]
             sender = req["recipient"]["Id"]
 
-            print (type(self.agent.tracker_store))
             tracker = self.agent.tracker_store.get_or_create_tracker(sender)
-
-            print(tracker.slots['business_id'].value)
 
             if tracker.get_slot('business_id') == None or tracker.get_slot('recipient_contact') == None:
                 event = SlotSet('business_id', req["business"]["Id"])

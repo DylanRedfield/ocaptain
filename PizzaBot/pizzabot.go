@@ -104,6 +104,7 @@ func (bot *Bot) HandleAction(req *RasaRequest) (*RasaResponse, error) {
 
 	action := req.NextAction
   log.Println(action)
+  log.Println(req.Tracker.Slots)
 		switch action {
     case ACTION_UPDATE_ORDER:
       bot.ActionUpdateOrder(req, resp)
@@ -151,6 +152,11 @@ func (bot *Bot) ActionUpdateOrder(req *RasaRequest, resp *RasaResponse) {
 		order.Id = doc.Ref.ID
   }
 
+  orderType := ""
+
+  if req.Tracker.Slots["address"] != "" {
+    orderType = "DELIVERY"
+  }
   if order.Id == "" {
     order := Order{
       RecipientId:          req.SenderId,
@@ -170,7 +176,7 @@ func (bot *Bot) ActionUpdateOrder(req *RasaRequest, resp *RasaResponse) {
     }
 
     if slots["type"] != "" {
-      order.Type = slots["type"]
+      order.Type = orderType
     }
 
     if slots["content"] != "" {
@@ -185,7 +191,7 @@ func (bot *Bot) ActionUpdateOrder(req *RasaRequest, resp *RasaResponse) {
     orderRef.Update(bot.Ctx, []firestore.Update{
       {Path: "address", Value: req.Tracker.Slots["address"]},
       {Path: "name", Value: req.Tracker.Slots["name"]},
-      {Path: "type", Value: req.Tracker.Slots["type"]},
+      {Path: "type", Value: orderType},
       {Path: "content", Value: req.Tracker.Slots["content"]},
       {Path: "lastModifiedTime", Value: currentTime()},
     })
@@ -291,10 +297,6 @@ func (bot *Bot) ActionCheckIsOpenOnDay(req *RasaRequest, resp *RasaResponse) {
 
   reply = fmt.Sprint("%s on %d/%d", reply, t.Month(), t.Day())
   resp.Responses = append(resp.Responses, Response{Text: reply})
-}
-
-func (bot *Bot) ActionReset(req *RasaRequest, resp *RasaResponse) {
-  resp.Events = appeend(resp.Events, Event{Event:"restart"})
 }
 
 func (bot Bot) saveOrder(req *RasaRequest, order *Order) {

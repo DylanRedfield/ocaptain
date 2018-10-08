@@ -29,12 +29,12 @@
     - export
 
 ## Generated Story 4077220906793463003
-* inform{"type": "DELIVERY", "number": 2651, "address": "2651 deer path"}
+* inform{"type": "DELIVERY", "address": "2651 deer path"}
     - utter_ask_order_contents
     - slot{"address": "2651 deer path"}
-    - slot{"type": "DELIVERY"}
     - action_update_order
 * inform{"contents": "two fried rice"}
+    - slot{"type": "DELIVERY"}
     - utter_ask_is_all
     - slot{"contents": "two fried rice"}
     - action_update_order
@@ -107,7 +107,7 @@
     - export
 
 ## Generated Story -2065433638848492322
-* inform{"number": 2651, "type": "DELIVERY", "name": "dylan", "address": "2651 deer path"}
+* inform{"type": "DELIVERY", "name": "dylan", "address": "2651 deer path"}
     - utter_ask_order_contents
     - slot{"address": "2651 deer path"}
     - slot{"name": "dylan"}

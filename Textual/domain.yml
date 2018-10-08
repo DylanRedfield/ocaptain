@@ -64,20 +64,24 @@ templates:
     - "Is this correct?"
   utter_ask_confirmation_delivery:
     - "Is this correct?"
-  utter_after_order:
-    - "That'll be a few minutes"
 
 actions:
+  - utter_greet
+  - utter_goodbye
+  - utter_your_welcome
+  - utter_ask_address
+  - utter_ask_name
+  - utter_thank
+  - utter_ask_is_all
+  - utter_ask_order_contents
+  - utter_ask_confirmation_pick_up
+  - utter_ask_confirmation_delivery
+  - utter_ask_type
+  - utter_after_order
   - action_place_order
   - action_check_time_close
   - action_check_is_open
-  - action_start_order
-  - action_start_order_with_inputs
   - action_check_is_open_on_day
   - action_check_time_close_on_day
-  - action_set_content
-  - action_set_type
-  - action_set_name
-  - action_set_address
   - action_update_order
   - action_reset_slots
