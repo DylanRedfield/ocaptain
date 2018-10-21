@@ -32,6 +32,8 @@ slots:
     type: text
   business_id:
     type: text
+  recipient_id:
+    type: text
   recipient_contact:
     type: text
 

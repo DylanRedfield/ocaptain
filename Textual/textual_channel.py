@@ -78,10 +78,12 @@ class TextualInput(InputChannel):
 
             tracker = self.agent.tracker_store.get_or_create_tracker(sender)
 
-            if tracker.get_slot('business_id') == None or tracker.get_slot('recipient_contact') == None:
+            if tracker.get_slot('business_id') == None or tracker.get_slot('recipient_contact') == None or tracker.get_slot('recipient_id') == None:
                 event = SlotSet('business_id', req["business"]["Id"])
                 tracker.update(event)
                 event = SlotSet('recipient_contact', req["recipient"]["Contact"])
+                tracker.update(event)
+                event = SlotSet('recipient_id', req["recipient"]["Id"])
                 tracker.update(event)
                 self.agent.tracker_store.save(tracker)
 
