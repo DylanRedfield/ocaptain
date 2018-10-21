@@ -51,12 +51,6 @@ func (bot *Bot) HandleBusinessInput(reqObj BusinessRequest) BusinessResponse {
 
 func (bot *Bot) HandleOutsideInput(reqObj OutsideRequest) OutsideResponse {
 
-  // Need to save the new message to firebase
-  err := bot.saveMessage(reqObj.Business, reqObj.Recipient, reqObj.Message)
-
-  if err != nil {
-    log.Println(err)
-  }
 
   businessId := reqObj.Business.Id
 
@@ -76,6 +70,13 @@ func (bot *Bot) HandleOutsideInput(reqObj OutsideRequest) OutsideResponse {
 			{Path: RecentMessage, Value: reqObj.Message},
 		})
 	}
+
+  // Need to save the new message to firebase
+  err := bot.saveMessage(reqObj.Business, reqObj.Recipient, reqObj.Message)
+
+  if err != nil {
+    log.Println(err)
+  }
 
   // Send a http request that will be handled in the textual_input_channel
   // The body is the OutsideRequest object

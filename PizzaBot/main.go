@@ -271,6 +271,7 @@ func recipientFromNumber(recipientNumber string, businessId string) (*Recipient,
 
   // Check if recipient was found, because ID (or any value) will be empty
   if recipient.Id == "" {
+    recipient.Contact = recipientNumber
     // No recipient found, so return error
     return recipient, errors.New("No matching recipient founder")
   } else {
