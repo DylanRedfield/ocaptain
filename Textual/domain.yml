@@ -87,3 +87,4 @@ actions:
   - action_check_time_close_on_day
   - action_update_order
   - action_reset_slots
+  - action_ask_next
