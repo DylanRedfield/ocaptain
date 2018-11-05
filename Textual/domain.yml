@@ -2,30 +2,28 @@ intents:
   - greet
   - thank
   - goodbye
-  - start_order
   - inform
   - affirm
   - deny
   - check_is_open
   - check_time_close
+  - check_time_open
   - check_menu_item
+  - make_reservation
+  - need_reservation
+  - allow_reservations
+  - order
   - restart
+  - busy
 
 entities:
-  - type
-  - contents
-  - address
   - name
   - scheduledTime
   - date
+  - item
+  - size
 
 slots:
-  type: 
-    type: custom_slots.TypeSlot
-  contents:
-    type: text
-  address:
-    type: text
   name:
     type: text
   scheduledTime:
@@ -36,55 +34,50 @@ slots:
     type: text
   recipient_contact:
     type: text
+  size:
+    type: text
 
 templates:
   utter_greet:
     - "Hey, how can I help you?"
   utter_goodbye:
     - "Goodbye"
-  utter_ask_type:
-    - "Is that pick up or delivery"
-  utter_ask_name:
-    - "What's the name for the order?"
-  utter_ask_address:
-    - "What's the address for devliery?"
-  utter_ask_order_contents:
-    - "What's the order?"
   utter_your_welcome:
     - "Your welcome"
   utter_thank:
     - "Thanks"
   utter_ask_confirmation:
     - "Is this correct?"
-  utter_after_order:
-    - "Great it will be ready in about 30 minutes"
+  utter_ask_name:
+    - "What's the name for the reservation?"
+  utter_need_reservation:
+    - "It can never hurt"
+  utter_allow_reservations_and_ask:
+    - "Yes! Would you like to make one?"
+  utter_ask_time:
+    - "What time's the reservation for?"
+  utter_ask_size:
+    - "What's the size of the party?"
   utter_restart:
     - "Restarted"
-  utter_ask_is_all:
-    - "Is that all?"
-  utter_ask_confirmation_pick_up:
-    - "Is this correct?"
-  utter_ask_confirmation_delivery:
-    - "Is this correct?"
 
 actions:
   - utter_greet
   - utter_goodbye
   - utter_your_welcome
-  - utter_ask_address
   - utter_ask_name
+  - utter_ask_time
+  - utter_ask_size
   - utter_thank
-  - utter_ask_is_all
-  - utter_ask_order_contents
-  - utter_ask_confirmation_pick_up
-  - utter_ask_confirmation_delivery
-  - utter_ask_type
-  - utter_after_order
-  - action_place_order
-  - action_check_time_close
+  - utter_ask_confirmation
   - action_check_is_open
   - action_check_is_open_on_day
+  - action_check_time_close
   - action_check_time_close_on_day
-  - action_update_order
-  - action_reset_slots
-  - action_ask_next
+  - action_check_time_open
+  - action_check_time_open_on_day
+  - action_check_menu_item
+  - action_update_reservation
+  - utter_need_reservation
+  - utter_allow_reservations
+  - action_order
