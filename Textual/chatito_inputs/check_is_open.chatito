@@ -1,15 +1,4 @@
 %[check_is_open]
-    Are you open @[date?]
-    Open @[date?]?
-    You open @[date?]?
-    Open @[date?]?
-@[date]
-    Thursday
-    Monday
-    saturday
-    31st
-    1st
-    today
-    tomorrow
-    labor day
-    christmas
+    Are you open?
+    You open?
+    Open?

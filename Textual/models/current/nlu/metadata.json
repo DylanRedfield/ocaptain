@@ -60,7 +60,10 @@
             "class": "rasa_nlu.extractors.entity_synonyms.EntitySynonymMapper"
         },
         {
-            "dimensions": null,
+            "dimensions": [
+                "time",
+                "number"
+            ],
             "url": "http://localhost:8000",
             "locale": null,
             "timezone": null,
@@ -87,6 +90,6 @@
         }
     ],
     "training_data": "training_data.json",
-    "trained_at": "20181007-230455",
+    "trained_at": "20181105-195225",
     "rasa_nlu_version": "0.13.2"
 }

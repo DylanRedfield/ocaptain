@@ -1,15 +1,5 @@
 %[check_time_close]
-    what time do you close @[date?]
-    What time are you open until @[date?]
-    When do you close @[date?]
+    what time do you close
+    What time are you open until
+    When do you close
     How long until you close?
-
-@[date]
-    Thursday
-    today
-    Monday
-    saturday
-    31st
-    1st
-    labor day
-    christmas
