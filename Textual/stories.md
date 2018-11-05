@@ -98,7 +98,8 @@
 ## Generated Story -4687692339477607813
 * inform{"contents": "two fried rice"}
     - utter_ask_type
-    - slot{"contents": "two fried rice"} - action_update_order
+    - slot{"contents": "two fried rice"}
+    - action_update_order
 * inform{"type": "DELIVERY"}
     - utter_ask_address
     - slot{"type": "DELIVERY"}

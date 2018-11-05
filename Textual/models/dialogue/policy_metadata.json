@@ -2,22 +2,17 @@
   "action_fingerprints": {
     "action_listen": {
       "slots": [
-        "type",
         "address",
         "name",
+        "type",
         "contents"
-      ]
-    },
-    "utter_ask_address": {
-      "slots": [
-        "type"
       ]
     },
     "utter_ask_order_contents": {
       "slots": [
-        "type",
         "address",
-        "name"
+        "name",
+        "type"
       ]
     },
     "utter_ask_is_all": {
@@ -28,20 +23,18 @@
     "action_place_order": {
       "slots": []
     },
+    "utter_ask_address": {
+      "slots": [
+        "type"
+      ]
+    },
     "action_check_is_open": {
       "slots": []
     },
-    "utter_ask_type": {
-      "slots": [
-        "name",
-        "contents"
-      ]
-    },
     "action_update_order": {
-      "slots": []
-    },
-    "action_restart": {
-      "slots": []
+      "slots": [
+        "type"
+      ]
     },
     "action_check_time_close": {
       "slots": []
@@ -50,6 +43,15 @@
       "slots": [
         "type"
       ]
+    },
+    "utter_ask_type": {
+      "slots": [
+        "contents",
+        "name"
+      ]
+    },
+    "action_restart": {
+      "slots": []
     }
   },
   "rasa_core": "0.11.3",

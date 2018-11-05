@@ -1,0 +1,1 @@
+- Fix intent detection for time close on day

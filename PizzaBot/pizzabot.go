@@ -153,9 +153,9 @@ func (bot *Bot) ActionUpdateOrder(req *RasaRequest, resp *RasaResponse) {
 		order.Id = doc.Ref.ID
   }
 
-  orderType := ""
+  orderType := req.Tracker.Slots["type"]
 
-  if req.Tracker.Slots["address"] != "" {
+  if req.Tracker.Slots["address"] != "" && orderType == "" {
     orderType = "DELIVERY"
     resp.Events = append(resp.Events, Event{"slot", "type", "DELIVERY"}) 
   }
@@ -180,8 +180,8 @@ func (bot *Bot) ActionUpdateOrder(req *RasaRequest, resp *RasaResponse) {
 
     order.Type = orderType
 
-    if slots["content"] != "" {
-      order.Content = slots["content"]
+    if slots["contents"] != "" {
+      order.Content = slots["contents"]
     }
 	  bot.saveOrder(req, &order)
 
@@ -193,8 +193,8 @@ func (bot *Bot) ActionUpdateOrder(req *RasaRequest, resp *RasaResponse) {
       {Path: "address", Value: req.Tracker.Slots["address"]},
       {Path: "name", Value: req.Tracker.Slots["name"]},
       {Path: "type", Value: orderType},
-      {Path: "content", Value: req.Tracker.Slots["content"]},
-      {Path: "lastModifiedTime", Value: currentTime()},
+      {Path: "content", Value: req.Tracker.Slots["contents"]},
+      {Path: "lastModificationTime", Value: currentTime()},
     })
 
   }
