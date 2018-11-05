@@ -9,8 +9,7 @@ import (
 	"net/http"
 	"time"
 	"google.golang.org/api/iterator"
-)
-
+) 
 // Recieves Botrequest, saves message to firebase, sends to recipient, and returns reponse
 func (bot *Bot) HandleBusinessInput(reqObj BusinessRequest) BusinessResponse {
 	messageRef := bot.Client.Collection(Businesses).Doc(reqObj.Business.Id).Collection(Messages).NewDoc()
@@ -199,6 +198,21 @@ func (bot *Bot) ActionUpdateOrder(req *RasaRequest, resp *RasaResponse) {
 
   }
 
+}
+
+func (bot *Bot) ActionAskNext(req *RasaRequest, resp *RasaResponse) {
+  // Figure out which question to ask and return it as a follow up action
+
+  slots := req.Tracker.Slots
+  emptySlots := map[string]string{}
+
+  for k, v := range slots {
+    if v == "" {
+      emptySlots[k] = v
+    }
+  }
+
+  // Now we have our empty slots and we can probably just choose any
 }
 
 func (bot *Bot) ActionCheckTimeClose(req *RasaRequest, resp *RasaResponse) {
