@@ -1,143 +1,59 @@
-## check open
-* check_is_open
-  - action_check_is_open 
-
-## check time close
-* check_time_close
-  - action_check_time_close
-## Generated Story 5839377152582597870
-* inform
-    - utter_ask_type
-    - action_update_order
-* inform{"type": "DELIVERY"}
-    - utter_ask_address
-    - slot{"type": "DELIVERY"}
-    - action_update_order
-* inform{"address": "2651 deer path , scotch plains"}
-    - utter_ask_order_contents
-    - slot{"address": "2651 deer path , scotch plains"}
-    - action_update_order
-* inform{"contents": "two fried rice"}
-    - utter_ask_is_all
-    - slot{"contents": "two fried rice"}
-    - action_update_order
-* affirm
-    - utter_ask_confirmation_delivery
-* affirm
-    - utter_after_order
-    - action_place_order
-    - export
-
-## Generated Story 4077220906793463003
-* inform{"type": "DELIVERY", "address": "2651 deer path"}
-    - utter_ask_order_contents
-    - slot{"address": "2651 deer path"}
-    - action_update_order
-* inform{"contents": "two fried rice"}
-    - slot{"type": "DELIVERY"}
-    - utter_ask_is_all
-    - slot{"contents": "two fried rice"}
-    - action_update_order
-* affirm
-    - utter_ask_confirmation_delivery
-* affirm
-    - utter_after_order
-    - action_place_order
-    - export
-
-## Generated Story -804095739377607763
-* inform{"address": "2651 deer path"}
-    - utter_ask_order_contents
-    - slot{"address": "2651 deer path"}
-    - action_update_order
-    - slot{"type": "DELIVERY"}
-* inform{"contents": "two fried rice"}
-    - utter_ask_is_all
-    - slot{"contents": "two fried rice"}
-    - action_update_order
-* affirm
-    - utter_ask_confirmation_delivery
-* affirm
-    - utter_after_order
-    - action_place_order
-    - export
-
-## Generated Story 4605506271822198985
-* inform
-    - utter_ask_type
-    - action_update_order
-* inform{"type": "PICK_UP"}
-    - utter_ask_name
-    - slot{"type": "PICK_UP"}
-    - action_update_order
-* inform{"name": "dylan"}
-    - utter_ask_order_contents
-    - slot{"name": "dylan"}
-    - action_update_order
-* inform{"contents": "two fried rice"}
-    - utter_ask_is_all
-    - slot{"contents": "two fried rice"}
-    - action_update_order
-* affirm
-    - utter_ask_confirmation_pick_up
-* affirm
-    - utter_after_order
-    - action_place_order
-    - export
-
-
-
-## Generated Story -523481748465100933
+## greet
 * greet
     - utter_greet
-* inform
-    - utter_ask_type
-    - action_update_order
-    - export
 
-## Generated Story -4687692339477607813
-* inform{"contents": "two fried rice"}
-    - utter_ask_type
-    - slot{"contents": "two fried rice"}
-    - action_update_order
-* inform{"type": "DELIVERY"}
-    - utter_ask_address
-    - slot{"type": "DELIVERY"}
-    - action_update_order
-    - export
+## thank
+* thank
+    - utter_thank
 
-## Generated Story -2065433638848492322
-* inform{"type": "DELIVERY", "name": "dylan", "address": "2651 deer path"}
-    - utter_ask_order_contents
-    - slot{"address": "2651 deer path"}
-    - slot{"name": "dylan"}
-    - slot{"type": "DELIVERY"}
-    - action_update_order
-* inform{"contents": "two fried rice"}
-    - utter_ask_is_all
-    - slot{"contents": "two fried rice"}
-    - action_update_order
-* affirm
-    - utter_ask_confirmation_delivery
-* affirm
-    - utter_after_order
-    - action_place_order
-    - export
+## goodbye
+* goodbye
+    - utter_goodbye
 
-## Generated Story 1374040299588660708
-* inform{"name": "dylan"}
-    - utter_ask_type
-    - slot{"name": "dylan"}
-    - action_update_order
-* inform{"type": "PICK_UP"}
-    - utter_ask_order_contents
-    - slot{"type": "PICK_UP"}
-    - action_update_order
-* inform{contents": "two fried rice"}
-    - utter_ask_is_all
-    - slot{"contents": "two fried rice"}
-    - action_update_order
-    - export
+## need_reservation
+* need_reservation
+    - utter_need_reservation
 
-* resart{}
-    - action_restart
+## allow_reservations
+* allow_reservations
+    - utter_allow_reservations_and_ask
+
+## order
+* order
+    - action_alert_business
+
+## time_close
+* time_close
+    - action_check_time_close
+* inform{"time": "xxx"}
+    - action_check_time_close_on_day
+
+## time_close with param
+* time_close{"time":"xxxx"}
+    - action_check_time_close_on_day
+* inform{"time": "xxx"}
+    - action_check_time_close_on_day
+
+## time_open
+* time_open
+    - action_check_time_open
+* inform{"time": "xxx"}
+    - action_check_time_open_on_day
+
+## time_open with param
+* time_open{"time": "xxxxx"}
+    - action_check_time_open_on_day
+* inform{"time": "xxx"}
+    - action_check_time_open_on_day
+
+## is_open
+* is_open
+    - action_check_is_open
+* inform{"time": "xxx"}
+    - action_check_is_open_on_day
+
+## is open with param
+* is_open{"time": "2018-xxxxxx"}
+    - action_check_is_open_on_day
+* inform{"time": "xxx"}
+    - action_check_is_open_on_day

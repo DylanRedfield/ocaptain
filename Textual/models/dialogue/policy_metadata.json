@@ -2,55 +2,34 @@
   "action_fingerprints": {
     "action_listen": {
       "slots": [
-        "address",
-        "name",
-        "type",
-        "contents"
+        "time"
       ]
     },
-    "utter_ask_order_contents": {
-      "slots": [
-        "address",
-        "name",
-        "type"
-      ]
-    },
-    "utter_ask_is_all": {
-      "slots": [
-        "contents"
-      ]
-    },
-    "action_place_order": {
+    "action_check_is_open_on_day": {
       "slots": []
     },
-    "utter_ask_address": {
-      "slots": [
-        "type"
-      ]
-    },
-    "action_check_is_open": {
+    "action_check_time_open_on_day": {
       "slots": []
     },
-    "action_update_order": {
-      "slots": [
-        "type"
-      ]
-    },
-    "action_check_time_close": {
+    "utter_greet": {
       "slots": []
     },
-    "utter_ask_name": {
-      "slots": [
-        "type"
-      ]
+    "utter_allow_reservations_and_ask": {
+      "slots": []
     },
-    "utter_ask_type": {
-      "slots": [
-        "contents",
-        "name"
-      ]
+    "utter_thank": {
+      "slots": []
     },
-    "action_restart": {
+    "action_check_time_close_on_day": {
+      "slots": []
+    },
+    "utter_need_reservation": {
+      "slots": []
+    },
+    "action_alert_business": {
+      "slots": []
+    },
+    "utter_goodbye": {
       "slots": []
     }
   },
