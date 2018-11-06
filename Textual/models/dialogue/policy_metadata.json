@@ -2,14 +2,34 @@
   "action_fingerprints": {
     "action_listen": {
       "slots": [
-        "name",
         "time"
       ]
     },
-    "action_check_is_open": {
+    "action_check_is_open_on_day": {
       "slots": []
     },
-    "action_update_reservation": {
+    "action_check_time_open_on_day": {
+      "slots": []
+    },
+    "utter_greet": {
+      "slots": []
+    },
+    "utter_allow_reservations_and_ask": {
+      "slots": []
+    },
+    "utter_thank": {
+      "slots": []
+    },
+    "action_check_time_close_on_day": {
+      "slots": []
+    },
+    "utter_need_reservation": {
+      "slots": []
+    },
+    "action_alert_business": {
+      "slots": []
+    },
+    "utter_goodbye": {
       "slots": []
     }
   },

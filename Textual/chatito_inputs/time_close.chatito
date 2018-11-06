@@ -1,4 +1,4 @@
-%[check_time_close]
+%[time_close]
     what time do you close ~[date?]
     What time are you open until ~[date?]
     When do you close ~[date?]

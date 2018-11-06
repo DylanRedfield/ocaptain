@@ -1,4 +1,4 @@
-%[check_is_open]
+%[is_open]
     Are you open ~[date?]?
     You open ~[date?]?
     Open ~[date?]?

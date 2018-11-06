@@ -1,4 +1,4 @@
-%[check_time_open]
+%[time_open]
     What time do you open ~[date?]?
     When can I come in ~[date?]?
     Time open ~[date?]?

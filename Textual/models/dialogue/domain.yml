@@ -18,8 +18,9 @@ actions:
 - action_check_menu_item
 - action_update_reservation
 - utter_need_reservation
-- utter_allow_reservations
+- utter_allow_reservations_and_ask
 - action_order
+- action_alert_business
 config:
   store_entities_as_slots: true
 entities:
@@ -41,13 +42,13 @@ intents:
     use_entities: true
 - deny:
     use_entities: true
-- check_is_open:
+- is_open:
     use_entities: true
-- check_time_close:
+- time_close:
     use_entities: true
-- check_time_open:
+- time_open:
     use_entities: true
-- check_menu_item:
+- menu_item:
     use_entities: true
 - make_reservation:
     use_entities: true
