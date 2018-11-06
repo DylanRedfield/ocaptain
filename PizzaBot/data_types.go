@@ -21,14 +21,14 @@ func NewBot(ctx context.Context) (*Bot, error) {
 
 	if err != nil {
 		log.Println(err)
-    return nil, err
+		return nil, err
 	}
 
 	client, err := app.Firestore(ctx)
 
 	if err != nil {
 		log.Println(err)
-    return nil, err
+		return nil, err
 	}
 
 	twilioClient := TwilioClient{
@@ -75,10 +75,10 @@ type Message struct {
 }
 
 type OutsideRequest struct {
-	Id        string `json:"id"`
+	Id        string     `json:"id"`
 	Recipient *Recipient `json:"recipient"`
-	Message   *Message `json:"message"`
-	Business  *Business `json:"business"`
+	Message   *Message   `json:"message"`
+	Business  *Business  `json:"business"`
 }
 
 type OutsideResponse struct {
@@ -106,60 +106,67 @@ type Business struct {
 	PhoneNumber string `firestore:"phoneNumber"`
 }
 
+type OpenClose struct {
+	IsOpen bool `firestore:"isOpen"`
+	OpenTime
+	CloseTime
+}
+
 func (business Business) TimeClose() string {
-  // TODO implelemt and stop returning string
-  return "9:00pm"
+	// TODO implelemt and stop returning string
+	return "9:00pm"
 }
 
 func (business Business) IsOpen() bool {
-  // TODO implement
-  return true
+	// TODO implement
+	return true
 }
 
 type Tracker struct {
-	Slots    map[string]string `json:"slots"`
-	SenderId string            `json:"sender_id"`
-  LatestMessage LatestMessage `json:"lastest_message"`
+	Slots         map[string]string `json:"slots"`
+	SenderId      string            `json:"sender_id"`
+	LatestMessage LatestMessage     `json:"lastest_message"`
 }
 
 type LatestMessage struct {
-  Text string `json:"text"`
-  Intent string `json:"intent"`
-  Entities []Entity `json:"entities"`
+	Text     string   `json:"text"`
+	Intent   string   `json:"intent"`
+	Entities []Entity `json:"entities"`
 }
 
 type Entity struct {
-  Start int32 `json:"start"`
-  End int32 `json:"end"`
-  Value string `json:"value"`
-  Text string `json:"text"`
-  Confidence float64 `json:"confidence"`
-  Entity string `json:"entity"`
+	Start      int32   `json:"start"`
+	End        int32   `json:"end"`
+	Value      string  `json:"value"`
+	Text       string  `json:"text"`
+	Confidence float64 `json:"confidence"`
+	Entity     string  `json:"entity"`
 }
 
 type RasaRequest struct {
 	NextAction string  `json:"next_action"`
-  SenderId string `json:"sender_id"`
+	SenderId   string  `json:"sender_id"`
 	Tracker    Tracker `json:"tracker"`
 }
 
 type RasaResponse struct {
-  Events []Event `json:"events"`
-  Responses []Response `json:"responses"`
+	Events    []Event    `json:"events"`
+	Responses []Response `json:"responses"`
 }
+
 func NewRasaResponse() *RasaResponse {
-  return &RasaResponse{
-    Events: []Event{},
-    Responses: []Response{},
-  }
+	return &RasaResponse{
+		Events:    []Event{},
+		Responses: []Response{},
+	}
 }
 
 type Response struct {
-  Text string `json:"text"`
+	Text string `json:"text"`
 }
 
 type Event struct {
-  Event string `json:"event"`
-  Name string `json:"name"`
-  Value string `json:"value"`
+	Event string `json:"event"`
+	Name  string `json:"name"`
+	Value string `json:"value"`
 }
