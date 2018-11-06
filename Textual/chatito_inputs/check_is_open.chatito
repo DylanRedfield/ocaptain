@@ -1,4 +1,10 @@
 %[check_is_open]
-    Are you open?
-    You open?
-    Open?
+    Are you open ~[date?]?
+    You open ~[date?]?
+    Open ~[date?]?
+
+~[date]
+    the 15th
+    Saturday
+    on Christmas
+    tonight

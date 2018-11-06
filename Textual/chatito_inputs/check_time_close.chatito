@@ -1,5 +1,11 @@
 %[check_time_close]
-    what time do you close
-    What time are you open until
-    When do you close
-    How long until you close?
+    what time do you close ~[date?]
+    What time are you open until ~[date?]
+    When do you close ~[date?]
+    How long until you close ~[date?]?
+
+~[date]
+    the 15th
+    Saturday
+    on Christmas
+    tonight

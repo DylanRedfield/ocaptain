@@ -1,4 +1,10 @@
 %[check_time_open]
-    What time do you open?
-    When can I come in?
-    Time open?
+    What time do you open ~[date?]?
+    When can I come in ~[date?]?
+    Time open ~[date?]?
+
+~[date]
+    the 15th
+    Saturday
+    on Christmas
+    tonight
