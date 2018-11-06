@@ -4,39 +4,36 @@ actions:
 - utter_greet
 - utter_goodbye
 - utter_your_welcome
-- utter_ask_address
 - utter_ask_name
+- utter_ask_time
+- utter_ask_size
 - utter_thank
-- utter_ask_is_all
-- utter_ask_order_contents
-- utter_ask_confirmation_pick_up
-- utter_ask_confirmation_delivery
-- utter_ask_type
-- utter_after_order
-- action_place_order
-- action_check_time_close
+- utter_ask_confirmation
 - action_check_is_open
 - action_check_is_open_on_day
+- action_check_time_close
 - action_check_time_close_on_day
-- action_update_order
-- action_reset_slots
+- action_check_time_open
+- action_check_time_open_on_day
+- action_check_menu_item
+- action_update_reservation
+- utter_need_reservation
+- utter_allow_reservations
+- action_order
 config:
   store_entities_as_slots: true
 entities:
-- type
-- contents
-- address
 - name
-- scheduledTime
+- time
 - date
+- item
+- size
 intents:
 - greet:
     use_entities: true
 - thank:
     use_entities: true
 - goodbye:
-    use_entities: true
-- start_order:
     use_entities: true
 - inform:
     use_entities: true
@@ -48,18 +45,24 @@ intents:
     use_entities: true
 - check_time_close:
     use_entities: true
+- check_time_open:
+    use_entities: true
 - check_menu_item:
+    use_entities: true
+- make_reservation:
+    use_entities: true
+- need_reservation:
+    use_entities: true
+- allow_reservations:
+    use_entities: true
+- order:
     use_entities: true
 - restart:
     use_entities: true
+- busy:
+    use_entities: true
 slots:
-  address:
-    initial_value: null
-    type: rasa_core.slots.TextSlot
   business_id:
-    initial_value: null
-    type: rasa_core.slots.TextSlot
-  contents:
     initial_value: null
     type: rasa_core.slots.TextSlot
   name:
@@ -71,35 +74,29 @@ slots:
   recipient_id:
     initial_value: null
     type: rasa_core.slots.TextSlot
-  scheduledTime:
+  size:
     initial_value: null
     type: rasa_core.slots.TextSlot
-  type:
+  time:
     initial_value: null
-    type: custom_slots.TypeSlot
+    type: rasa_core.slots.TextSlot
 templates:
-  utter_after_order:
-  - text: Great it will be ready in about 30 minutes
-  utter_ask_address:
-  - text: What's the address for devliery?
+  utter_allow_reservations_and_ask:
+  - text: Yes! Would you like to make one?
   utter_ask_confirmation:
   - text: Is this correct?
-  utter_ask_confirmation_delivery:
-  - text: Is this correct?
-  utter_ask_confirmation_pick_up:
-  - text: Is this correct?
-  utter_ask_is_all:
-  - text: Is that all?
   utter_ask_name:
-  - text: What's the name for the order?
-  utter_ask_order_contents:
-  - text: What's the order?
-  utter_ask_type:
-  - text: Is that pick up or delivery
+  - text: What's the name for the reservation?
+  utter_ask_size:
+  - text: What's the size of the party?
+  utter_ask_time:
+  - text: What time's the reservation for?
   utter_goodbye:
   - text: Goodbye
   utter_greet:
   - text: Hey, how can I help you?
+  utter_need_reservation:
+  - text: It can never hurt
   utter_restart:
   - text: Restarted
   utter_thank:

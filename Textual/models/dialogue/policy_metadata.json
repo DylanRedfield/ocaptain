@@ -2,55 +2,14 @@
   "action_fingerprints": {
     "action_listen": {
       "slots": [
-        "address",
         "name",
-        "type",
-        "contents"
-      ]
-    },
-    "utter_ask_order_contents": {
-      "slots": [
-        "address",
-        "name",
-        "type"
-      ]
-    },
-    "utter_ask_is_all": {
-      "slots": [
-        "contents"
-      ]
-    },
-    "action_place_order": {
-      "slots": []
-    },
-    "utter_ask_address": {
-      "slots": [
-        "type"
+        "time"
       ]
     },
     "action_check_is_open": {
       "slots": []
     },
-    "action_update_order": {
-      "slots": [
-        "type"
-      ]
-    },
-    "action_check_time_close": {
-      "slots": []
-    },
-    "utter_ask_name": {
-      "slots": [
-        "type"
-      ]
-    },
-    "utter_ask_type": {
-      "slots": [
-        "contents",
-        "name"
-      ]
-    },
-    "action_restart": {
+    "action_update_reservation": {
       "slots": []
     }
   },

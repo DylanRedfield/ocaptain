@@ -3,7 +3,7 @@
     "common_examples": [
       {
         "intent": "affirm",
-        "text": "sounds good"
+        "text": "yes"
       },
       {
         "intent": "affirm",
@@ -11,15 +11,15 @@
       },
       {
         "intent": "affirm",
+        "text": "correct"
+      },
+      {
+        "intent": "affirm",
         "text": "indeed"
       },
       {
         "intent": "affirm",
-        "text": "yes"
-      },
-      {
-        "intent": "affirm",
-        "text": "correct"
+        "text": "sounds good"
       },
       {
         "intent": "allow_reservations",
@@ -31,31 +31,11 @@
       },
       {
         "intent": "busy",
-        "text": "Are you busy?"
-      },
-      {
-        "intent": "busy",
         "text": "Busy tonight?"
       },
       {
-        "intent": "check_is_open",
-        "text": "You open ?"
-      },
-      {
-        "intent": "check_is_open",
-        "text": "Are you open Saturday?"
-      },
-      {
-        "intent": "check_is_open",
-        "text": "Open on Christmas?"
-      },
-      {
-        "intent": "check_is_open",
-        "text": "You open Saturday?"
-      },
-      {
-        "intent": "check_is_open",
-        "text": "Open tonight?"
+        "intent": "busy",
+        "text": "Are you busy?"
       },
       {
         "intent": "check_is_open",
@@ -63,23 +43,7 @@
       },
       {
         "intent": "check_is_open",
-        "text": "Open ?"
-      },
-      {
-        "intent": "check_is_open",
         "text": "Open the 15th?"
-      },
-      {
-        "intent": "check_is_open",
-        "text": "Are you open ?"
-      },
-      {
-        "intent": "check_is_open",
-        "text": "Are you open the 15th?"
-      },
-      {
-        "intent": "check_is_open",
-        "text": "You open the 15th?"
       },
       {
         "intent": "check_is_open",
@@ -87,7 +51,19 @@
       },
       {
         "intent": "check_is_open",
-        "text": "Are you open on Christmas?"
+        "text": "Are you open Saturday?"
+      },
+      {
+        "intent": "check_is_open",
+        "text": "Open tonight?"
+      },
+      {
+        "intent": "check_is_open",
+        "text": "Open Saturday?"
+      },
+      {
+        "intent": "check_is_open",
+        "text": "Are you open ?"
       },
       {
         "intent": "check_is_open",
@@ -95,7 +71,31 @@
       },
       {
         "intent": "check_is_open",
-        "text": "Open Saturday?"
+        "text": "Open on Christmas?"
+      },
+      {
+        "intent": "check_is_open",
+        "text": "Are you open the 15th?"
+      },
+      {
+        "intent": "check_is_open",
+        "text": "Open ?"
+      },
+      {
+        "intent": "check_is_open",
+        "text": "You open ?"
+      },
+      {
+        "intent": "check_is_open",
+        "text": "You open Saturday?"
+      },
+      {
+        "intent": "check_is_open",
+        "text": "Are you open on Christmas?"
+      },
+      {
+        "intent": "check_is_open",
+        "text": "You open the 15th?"
       },
       {
         "intent": "check_menu_item",
@@ -111,39 +111,7 @@
       },
       {
         "intent": "check_time_close",
-        "text": "How long until you close ?"
-      },
-      {
-        "intent": "check_time_close",
-        "text": "When do you close the 15th"
-      },
-      {
-        "intent": "check_time_close",
-        "text": "What time are you open until on Christmas"
-      },
-      {
-        "intent": "check_time_close",
-        "text": "what time do you close tonight"
-      },
-      {
-        "intent": "check_time_close",
-        "text": "what time do you close"
-      },
-      {
-        "intent": "check_time_close",
-        "text": "How long until you close on Christmas?"
-      },
-      {
-        "intent": "check_time_close",
-        "text": "When do you close Saturday"
-      },
-      {
-        "intent": "check_time_close",
-        "text": "What time are you open until"
-      },
-      {
-        "intent": "check_time_close",
-        "text": "what time do you close the 15th"
+        "text": "what time do you close on Christmas"
       },
       {
         "intent": "check_time_close",
@@ -151,11 +119,35 @@
       },
       {
         "intent": "check_time_close",
+        "text": "How long until you close ?"
+      },
+      {
+        "intent": "check_time_close",
+        "text": "What time are you open until"
+      },
+      {
+        "intent": "check_time_close",
+        "text": "When do you close the 15th"
+      },
+      {
+        "intent": "check_time_close",
+        "text": "What time are you open until Saturday"
+      },
+      {
+        "intent": "check_time_close",
+        "text": "How long until you close on Christmas?"
+      },
+      {
+        "intent": "check_time_close",
+        "text": "what time do you close tonight"
+      },
+      {
+        "intent": "check_time_close",
         "text": "When do you close"
       },
       {
         "intent": "check_time_close",
-        "text": "How long until you close Saturday?"
+        "text": "What time are you open until on Christmas"
       },
       {
         "intent": "check_time_close",
@@ -163,7 +155,31 @@
       },
       {
         "intent": "check_time_close",
+        "text": "How long until you close tonight?"
+      },
+      {
+        "intent": "check_time_close",
+        "text": "When do you close Saturday"
+      },
+      {
+        "intent": "check_time_close",
         "text": "What time are you open until the 15th"
+      },
+      {
+        "intent": "check_time_close",
+        "text": "what time do you close"
+      },
+      {
+        "intent": "check_time_close",
+        "text": "When do you close on Christmas"
+      },
+      {
+        "intent": "check_time_close",
+        "text": "How long until you close Saturday?"
+      },
+      {
+        "intent": "check_time_close",
+        "text": "what time do you close the 15th"
       },
       {
         "intent": "check_time_close",
@@ -174,20 +190,32 @@
         "text": "What time are you open until tonight"
       },
       {
-        "intent": "check_time_close",
-        "text": "When do you close on Christmas"
+        "intent": "check_time_open",
+        "text": "What time do you open Saturday?"
       },
       {
-        "intent": "check_time_close",
-        "text": "What time are you open until Saturday"
+        "intent": "check_time_open",
+        "text": "When can I come in ?"
       },
       {
-        "intent": "check_time_close",
-        "text": "How long until you close tonight?"
+        "intent": "check_time_open",
+        "text": "Time open ?"
       },
       {
-        "intent": "check_time_close",
-        "text": "what time do you close on Christmas"
+        "intent": "check_time_open",
+        "text": "Time open Saturday?"
+      },
+      {
+        "intent": "check_time_open",
+        "text": "What time do you open tonight?"
+      },
+      {
+        "intent": "check_time_open",
+        "text": "Time open the 15th?"
+      },
+      {
+        "intent": "check_time_open",
+        "text": "When can I come in on Christmas?"
       },
       {
         "intent": "check_time_open",
@@ -195,11 +223,7 @@
       },
       {
         "intent": "check_time_open",
-        "text": "Time open tonight?"
-      },
-      {
-        "intent": "check_time_open",
-        "text": "When can I come in tonight?"
+        "text": "What time do you open ?"
       },
       {
         "intent": "check_time_open",
@@ -211,27 +235,11 @@
       },
       {
         "intent": "check_time_open",
-        "text": "When can I come in ?"
+        "text": "Time open tonight?"
       },
       {
         "intent": "check_time_open",
-        "text": "What time do you open tonight?"
-      },
-      {
-        "intent": "check_time_open",
-        "text": "Time open Saturday?"
-      },
-      {
-        "intent": "check_time_open",
-        "text": "What time do you open ?"
-      },
-      {
-        "intent": "check_time_open",
-        "text": "When can I come in on Christmas?"
-      },
-      {
-        "intent": "check_time_open",
-        "text": "Time open the 15th?"
+        "text": "When can I come in Saturday?"
       },
       {
         "intent": "check_time_open",
@@ -239,23 +247,11 @@
       },
       {
         "intent": "check_time_open",
-        "text": "What time do you open Saturday?"
-      },
-      {
-        "intent": "check_time_open",
-        "text": "Time open ?"
-      },
-      {
-        "intent": "check_time_open",
-        "text": "When can I come in Saturday?"
+        "text": "When can I come in tonight?"
       },
       {
         "intent": "deny",
-        "text": "no"
-      },
-      {
-        "intent": "deny",
-        "text": "nah"
+        "text": "I don't think so"
       },
       {
         "intent": "deny",
@@ -263,11 +259,19 @@
       },
       {
         "intent": "deny",
+        "text": "nah"
+      },
+      {
+        "intent": "deny",
         "text": "nuh"
       },
       {
         "intent": "deny",
-        "text": "I don't think so"
+        "text": "no"
+      },
+      {
+        "intent": "goodbye",
+        "text": "see you later"
       },
       {
         "intent": "goodbye",
@@ -278,8 +282,12 @@
         "text": "bye"
       },
       {
-        "intent": "goodbye",
-        "text": "see you later"
+        "intent": "greet",
+        "text": "what's up"
+      },
+      {
+        "intent": "greet",
+        "text": "hello"
       },
       {
         "intent": "greet",
@@ -287,15 +295,7 @@
       },
       {
         "intent": "greet",
-        "text": "hey"
-      },
-      {
-        "intent": "greet",
-        "text": "what's up"
-      },
-      {
-        "intent": "greet",
-        "text": "hi"
+        "text": "good morning"
       },
       {
         "intent": "greet",
@@ -303,35 +303,19 @@
       },
       {
         "intent": "greet",
-        "text": "good morning"
+        "text": "hey"
       },
       {
         "intent": "greet",
-        "text": "hello"
-      },
-      {
-        "intent": "inform",
-        "text": "5 o'clock"
-      },
-      {
-        "intent": "inform",
-        "text": "[it's?] Thursday"
-      },
-      {
-        "intent": "inform",
-        "entities": [
-          {
-            "end": 12,
-            "entity": "name",
-            "start": 7,
-            "value": "Dylan"
-          }
-        ],
-        "text": "[Its?] Dylan"
+        "text": "hi"
       },
       {
         "intent": "inform",
         "text": "[The?] 31st"
+      },
+      {
+        "intent": "inform",
+        "text": "5 o'clock"
       },
       {
         "intent": "inform",
@@ -340,22 +324,6 @@
       {
         "intent": "inform",
         "text": "[For?] three"
-      },
-      {
-        "intent": "inform",
-        "text": "[For?] 9"
-      },
-      {
-        "intent": "inform",
-        "entities": [
-          {
-            "end": 10,
-            "entity": "name",
-            "start": 7,
-            "value": "Kim"
-          }
-        ],
-        "text": "[Its?] Kim"
       },
       {
         "intent": "inform",
@@ -371,15 +339,23 @@
       },
       {
         "intent": "inform",
+        "text": "[it's?] Thursday"
+      },
+      {
+        "intent": "inform",
+        "text": "[For?] 9"
+      },
+      {
+        "intent": "inform",
         "entities": [
           {
-            "end": 12,
+            "end": 13,
             "entity": "name",
             "start": 7,
-            "value": "Rohan"
+            "value": "Ronald"
           }
         ],
-        "text": "[Its?] Rohan"
+        "text": "[Its?] Ronald"
       },
       {
         "intent": "inform",
@@ -409,13 +385,25 @@
         "intent": "inform",
         "entities": [
           {
-            "end": 13,
+            "end": 12,
             "entity": "name",
             "start": 7,
-            "value": "Ronald"
+            "value": "Dylan"
           }
         ],
-        "text": "[Its?] Ronald"
+        "text": "[Its?] Dylan"
+      },
+      {
+        "intent": "inform",
+        "entities": [
+          {
+            "end": 12,
+            "entity": "name",
+            "start": 7,
+            "value": "Rohan"
+          }
+        ],
+        "text": "[Its?] Rohan"
       },
       {
         "intent": "inform",
@@ -430,12 +418,20 @@
         "text": "[Its?] Kate"
       },
       {
-        "intent": "make_reservation",
-        "text": "Can I get a table?"
+        "intent": "inform",
+        "entities": [
+          {
+            "end": 10,
+            "entity": "name",
+            "start": 7,
+            "value": "Kim"
+          }
+        ],
+        "text": "[Its?] Kim"
       },
       {
         "intent": "make_reservation",
-        "text": "Reserve a table for nine"
+        "text": "Can I get a table?"
       },
       {
         "intent": "make_reservation",
@@ -443,19 +439,23 @@
       },
       {
         "intent": "make_reservation",
-        "text": "Table for nine at nine"
+        "text": "Reserve a table for nine"
       },
       {
         "intent": "make_reservation",
         "text": "Make a reservation for tonight"
       },
       {
-        "intent": "need_reservation",
-        "text": "Can I just walk in?"
+        "intent": "make_reservation",
+        "text": "Table for nine at nine"
       },
       {
         "intent": "need_reservation",
         "text": "Do I need a reservation?"
+      },
+      {
+        "intent": "need_reservation",
+        "text": "Can I just walk in?"
       },
       {
         "intent": "order",
@@ -463,7 +463,7 @@
       },
       {
         "intent": "order",
-        "text": "Can I place an order"
+        "text": "Can I get chicken fingers"
       },
       {
         "intent": "order",
@@ -471,15 +471,19 @@
       },
       {
         "intent": "order",
-        "text": "Can I get chicken fingers"
+        "text": "Can I place an order"
+      },
+      {
+        "intent": "restart",
+        "text": "reset"
       },
       {
         "intent": "restart",
         "text": "restart"
       },
       {
-        "intent": "restart",
-        "text": "reset"
+        "intent": "thank",
+        "text": "That's great, thank"
       },
       {
         "intent": "thank",
@@ -488,10 +492,6 @@
       {
         "intent": "thank",
         "text": "Thank you"
-      },
-      {
-        "intent": "thank",
-        "text": "That's great, thank"
       }
     ],
     "regex_features": [],
