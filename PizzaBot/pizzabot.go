@@ -119,6 +119,41 @@ func (bot *Bot) HandleAction(req *RasaRequest) (*RasaResponse, error) {
 	return resp, nil
 }
 
+func (bot *Bot) ActionCheckReservationDateTime(req *RasaRequest, resp *RasaResponse) {
+	// TODO add support for time intervals
+	/* Will have a datetime, businessId, partySize, etc saved in slots */
+	businessId := req.Tracker.Slots["business_id"]
+	recipientId := req.Tracker.Slots["recipient_id"]
+	searchTimeStr := req.Tracker.Slots["time"]
+	partySize := req.Tracker.Slots["partySize"]
+
+	searchTime := time.Parse(time.RFC3339, searchTimeStr)
+
+	business, err := bot.getBusinessFromId(businessId)
+
+	if err != nil {
+		log.Println(err)
+	}
+
+	reservationResult, err := Query(business.ReservationPlatformId, searchTime, partySize)
+
+	if err != nil {
+		log.Println(err)
+	}
+
+	if reservationResult.Message == "" {
+		// Reservations found within 2.5 hours of request
+
+		// Check if one equals exactly and if so make the reservation
+
+		// Check if any are within 15 minutes and if so ask if that is fine
+
+		// If not then give all the options and ask if any of those work
+	}
+
+	// else their query wasn't happy and thus need to give them a message
+
+}
 func (bot *Bot) ActionUpdateOrder(req *RasaRequest, resp *RasaResponse) {
 	businessId := req.Tracker.Slots["business_id"]
 	recipientId := req.Tracker.Slots["recipient_id"]

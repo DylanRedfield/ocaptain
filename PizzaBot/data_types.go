@@ -100,11 +100,13 @@ type Order struct {
 }
 
 type Business struct {
-	Id          string               `firestore:"-"`
-	Approved    bool                 `firestore:"approved"`
-	Password    string               `firestore:"password"`
-	PhoneNumber string               `firestore:"phoneNumber"`
-	Hours       map[string]OpenClose `firestore:"hours"`
+	Id                    string               `firestore:"-"`
+	Approved              bool                 `firestore:"approved"`
+	Password              string               `firestore:"password"`
+	PhoneNumber           string               `firestore:"phoneNumber"`
+	Hours                 map[string]OpenClose `firestore:"hours"`
+	ReservationPlatform   string               `firestore:"reservationPlatform"`
+	ReservationPlatformId string               `firestore:"reservationPlatformId"`
 }
 
 type OpenClose struct {
