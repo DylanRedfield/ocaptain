@@ -100,21 +100,21 @@ type Order struct {
 }
 
 type Business struct {
-	Id          string `firestore:"-"`
-	Approved    bool   `firestore:"approved"`
-	Password    string `firestore:"password"`
-	PhoneNumber string `firestore:"phoneNumber"`
+	Id          string               `firestore:"-"`
+	Approved    bool                 `firestore:"approved"`
+	Password    string               `firestore:"password"`
+	PhoneNumber string               `firestore:"phoneNumber"`
+	Hours       map[string]OpenClose `firestore:"hours"`
 }
 
 type OpenClose struct {
-	IsOpen bool `firestore:"isOpen"`
-	OpenTime
-	CloseTime
+	IsOpen    bool  `firestore:"isOpen"`
+	OpenTime  int32 `firestore:"openTime"`
+	CloseTime int32 `firestore:"closeTime"`
 }
 
-func (business Business) TimeClose() string {
-	// TODO implelemt and stop returning string
-	return "9:00pm"
+func (business Business) TimeClose(day string) int32 {
+	return business.Hours[day].CloseTime
 }
 
 func (business Business) IsOpen() bool {
