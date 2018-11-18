@@ -19,14 +19,13 @@ intents:
 entities:
   - name
   - time
-  - date
   - item
   - size
 
 slots:
   name:
     type: text
-  time:
+  scheduled_time:
     type: text
   business_id:
     type: text

@@ -26,7 +26,6 @@ config:
 entities:
 - name
 - time
-- date
 - item
 - size
 intents:
@@ -75,10 +74,10 @@ slots:
   recipient_id:
     initial_value: null
     type: rasa_core.slots.TextSlot
-  size:
+  scheduled_time:
     initial_value: null
     type: rasa_core.slots.TextSlot
-  time:
+  size:
     initial_value: null
     type: rasa_core.slots.TextSlot
 templates:
