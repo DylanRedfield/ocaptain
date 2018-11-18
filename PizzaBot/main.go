@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"errors"
 	firebase "firebase.google.com/go"
+	"fmt"
 	"google.golang.org/api/iterator"
 	"google.golang.org/api/option"
 	"io/ioutil"
@@ -21,53 +22,65 @@ var bot *Bot
 func init() {
 	ctx = context.Background()
 
-  var err error
-  bot, err = NewBot(ctx)
+	var err error
+	bot, err = NewBot(ctx)
 
-  if err != nil {
-    log.Println("Error initiating bot")
-  }
+	if err != nil {
+		log.Println("Error initiating bot")
+	}
 }
 
 func main() {
-	mux := http.NewServeMux()
-	mux.Handle("/PizzaBot/businessInput", http.HandlerFunc(businessInput))
-	mux.Handle("/PizzaBot/outsideSmsInput", http.HandlerFunc(outsideSmsInput))
-	mux.Handle("/PizzaBot/sendSelf", http.HandlerFunc(sendSelf))
-  mux.Handle("/ocaptain", http.HandlerFunc(actionInput))
-  mux.Handle("/ocaptain/sendAndSave", http.HandlerFunc(sendAndSave))
-	log.Println(http.ListenAndServe(":8080", mux))
+	test()
+
+	/*mux := http.NewServeMux()
+		mux.Handle("/PizzaBot/businessInput", http.HandlerFunc(businessInput))
+		mux.Handle("/PizzaBot/outsideSmsInput", http.HandlerFunc(outsideSmsInput))
+		mux.Handle("/PizzaBot/sendSelf", http.HandlerFunc(sendSelf))
+	  mux.Handle("/ocaptain", http.HandlerFunc(actionInput))
+	  mux.Handle("/ocaptain/sendAndSave", http.HandlerFunc(sendAndSave))
+		log.Println(http.ListenAndServe(":8080", mux))*/
+}
+
+func test() {
+	datetime := time.Date(2018, 11, 19, 14, 0, 0, 0, time.UTC)
+	result, err := Query("24712", datetime, 3)
+
+	if err != nil {
+		log.Println(err)
+	}
+
+	fmt.Printf("%s", result.Results)
 }
 
 func actionInput(w http.ResponseWriter, req *http.Request) {
 	body, err := ioutil.ReadAll(req.Body)
 
-  if err != nil {
-    log.Println(err)
-  }
+	if err != nil {
+		log.Println(err)
+	}
 
 	var reqObj RasaRequest
 	if err := json.Unmarshal(body, &reqObj); err != nil {
-    log.Println(err)
+		log.Println(err)
 	}
 
-  resp, err := bot.HandleAction(&reqObj)
+	resp, err := bot.HandleAction(&reqObj)
 
-  if err != nil {
-    log.Print(err)
-  }
+	if err != nil {
+		log.Print(err)
+	}
 
-  respString, err := json.Marshal(*resp)
+	respString, err := json.Marshal(*resp)
 
-  w.Header().Set("Content-Type", "application/json")
-  w.WriteHeader(http.StatusOK)
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
 
-  _, err = w.Write(respString)
+	_, err = w.Write(respString)
 
-  if err != nil {
-    log.Println(err)
-  }
-
+	if err != nil {
+		log.Println(err)
+	}
 
 }
 
@@ -109,27 +122,27 @@ func sendSelf(w http.ResponseWriter, req *http.Request) {
 }
 
 func sendAndSave(w http.ResponseWriter, req *http.Request) {
-  log.Println("UGHHH")
+	log.Println("UGHHH")
 	body, err := ioutil.ReadAll(req.Body)
 
-  if err != nil {
-    log.Println(err)
-  }
+	if err != nil {
+		log.Println(err)
+	}
 
 	var reqObj OutsideRequest
 	if err := json.Unmarshal(body, &reqObj); err != nil {
-    log.Println(err)
+		log.Println(err)
 	}
 
 	twilioClient := TwilioClient{
 		AccountSid: "AC9dfbda388f3ee10353bbc001694f5c27",
 		AuthToken:  "e3429e06cc27740f1c859d2bfc9964ae"}
 
-  to := reqObj.Recipient.Contact
-  from := reqObj.Business.PhoneNumber
-  text := reqObj.Message.Content
+	to := reqObj.Recipient.Contact
+	from := reqObj.Business.PhoneNumber
+	text := reqObj.Message.Content
 
-  twilioClient.SendSMS(SMSRequest{to, from, text})
+	twilioClient.SendSMS(SMSRequest{to, from, text})
 
 	ctx = context.Background()
 
@@ -147,19 +160,18 @@ func sendAndSave(w http.ResponseWriter, req *http.Request) {
 		log.Println(err)
 	}
 
-  log.Println(reqObj.Business.Id)
+	log.Println(reqObj.Business.Id)
 	messagesRef := client.Collection(Businesses).Doc(reqObj.Business.Id).Collection(Messages)
-  _, _, err = messagesRef.Add(ctx, reqObj.Message)
+	_, _, err = messagesRef.Add(ctx, reqObj.Message)
 
-  if err != nil {
-    log.Println(err)
-  }
+	if err != nil {
+		log.Println(err)
+	}
 
-  personRef := client.Collection(Businesses).Doc(reqObj.Business.Id).Collection(Recipients).Doc(reqObj.Recipient.Id)
-  personRef.Update(ctx, []firestore.Update{
-    {Path: RecentMessage, Value: reqObj.Message},
-  })
-
+	personRef := client.Collection(Businesses).Doc(reqObj.Business.Id).Collection(Recipients).Doc(reqObj.Recipient.Id)
+	personRef.Update(ctx, []firestore.Update{
+		{Path: RecentMessage, Value: reqObj.Message},
+	})
 
 }
 func initFirebase() *Bot {
@@ -178,12 +190,12 @@ func toOutsideRequest(twilReq TwilioRequest) OutsideRequest {
 
 	timeInMil := time.Now().UnixNano() / 1000000
 	message := &Message{
-    Content: twilReq.Body, 
-    IsBusinessSender: false,
-		HasBusinessRead: false, 
-    DidBotCreate: false, 
-    TimeSent: timeInMil,
-  }
+		Content:          twilReq.Body,
+		IsBusinessSender: false,
+		HasBusinessRead:  false,
+		DidBotCreate:     false,
+		TimeSent:         timeInMil,
+	}
 
 	business, err := businessFromPhone(twilReq.To)
 
@@ -197,12 +209,10 @@ func toOutsideRequest(twilReq TwilioRequest) OutsideRequest {
 		log.Println(err)
 	}
 
-
 	message.RecipientId = recipient.Id
 
 	return OutsideRequest{Recipient: recipient, Message: message, Business: business}
 }
-
 
 func businessFromPhone(phoneNumber string) (*Business, error) {
 	business := &Business{}
@@ -262,20 +272,19 @@ func recipientFromNumber(recipientNumber string, businessId string) (*Recipient,
 
 		if err != nil {
 			log.Println(err)
-      break
+			break
 		}
 
 		recipient.Id = doc.Ref.ID
 	}
 
-
-  // Check if recipient was found, because ID (or any value) will be empty
-  if recipient.Id == "" {
-    recipient.Contact = recipientNumber
-    // No recipient found, so return error
-    return recipient, errors.New("No matching recipient founder")
-  } else {
-    recipient.Contact = recipientNumber
-    return recipient, nil
-  }
+	// Check if recipient was found, because ID (or any value) will be empty
+	if recipient.Id == "" {
+		recipient.Contact = recipientNumber
+		// No recipient found, so return error
+		return recipient, errors.New("No matching recipient founder")
+	} else {
+		recipient.Contact = recipientNumber
+		return recipient, nil
+	}
 }
