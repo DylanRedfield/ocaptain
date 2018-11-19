@@ -142,7 +142,7 @@ type Entity struct {
 	Value      string  `json:"value"`
 	Text       string  `json:"text"`
 	Confidence float64 `json:"confidence"`
-	Entity     string  `json:"entity"`
+	Entity     interface{}  `json:"entity"`
 }
 
 type RasaRequest struct {

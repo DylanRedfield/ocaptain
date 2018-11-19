@@ -21,6 +21,15 @@ actions:
 - utter_allow_reservations_and_ask
 - action_order
 - action_alert_business
+- action_save_reservation
+- action_ask_is_close_time_okay
+- action_ask_if_any_similar_times_work
+- utter_no_reservations_available
+- utter_time_within
+- action_check_reservation_datetime
+- action_utter_you_are_set
+- action_set_scheduled_time_slot
+- action_set_size_slot
 config:
   store_entities_as_slots: true
 entities:
@@ -28,6 +37,7 @@ entities:
 - time
 - item
 - size
+- number
 intents:
 - greet:
     use_entities: true
@@ -68,6 +78,9 @@ slots:
   name:
     initial_value: null
     type: rasa_core.slots.TextSlot
+  potential_times:
+    initial_value: null
+    type: rasa_core.slots.ListSlot
   recipient_contact:
     initial_value: null
     type: rasa_core.slots.TextSlot

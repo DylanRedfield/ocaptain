@@ -115,6 +115,12 @@ func (bot *Bot) HandleAction(req *RasaRequest) (*RasaResponse, error) {
 		bot.ActionCheckTimeClose(req, resp)
 	case ACTION_CHECK_TIME_CLOSE_ON_DAY:
 		bot.ActionCheckTimeCloseOnDay(req, resp)
+  case ACTION_CHECK_RESERVATION_DATETIME:
+    bot.ActionCheckReservationDatetime(req, resp)
+  case ACTION_SET_SCHEDULED_TIME_SLOT:
+    bot.ActionSetScheduledTimeSlot(req, resp)
+  case ACTION_SET_SIZE_SLOT:
+    bot.ActionSetSizeSlot(req, resp)
 	}
 
 	return resp, nil
@@ -214,6 +220,29 @@ func (bot *Bot) ActionCheckReservationDatetime(req *RasaRequest, resp *RasaRespo
 	}
 
 }
+
+func (bot *Bot) ActionSetScheduledTimeSlot(req *RasaRequest, resp *RasaResponse) {
+  scheduledTime := ""
+  for _, v := range req.Tracker.LatestMessage.Entities {
+    if v.Entity == "time" {
+      scheduledTime = v.Value
+    }
+  }
+  nextAction := Event{Event: "slot", Name: "scheduledTime", Value: scheduledTime}
+	resp.Events = append(resp.Events, nextAction)
+}
+
+func (bot *Bot) ActionSetSizeSlot(req *RasaRequest, resp *RasaResponse) {
+  scheduledTime := ""
+  for _, v := range req.Tracker.LatestMessage.Entities {
+    if v.Entity == "number" {
+      scheduledTime = v.Value
+    }
+  }
+  nextAction := Event{Event: "slot", Name: "size", Value: scheduledTime}
+	resp.Events = append(resp.Events, nextAction)
+}
+
 func (bot *Bot) ActionUpdateOrder(req *RasaRequest, resp *RasaResponse) {
 	businessId := req.Tracker.Slots["business_id"]
 	recipientId := req.Tracker.Slots["recipient_id"]

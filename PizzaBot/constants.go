@@ -55,7 +55,10 @@ const (
 	ACTION_CHECK_IS_OPEN_ON_DAY            = "action_check_is_open_on_day"
 	ACTION_CHECK_TIME_CLOSE                = "action_check_time_close"
 	ACTION_CHECK_TIME_CLOSE_ON_DAY         = "action_check_time_close_on_DAY"
+  ACTION_CHECK_RESERVATION_DATETIME = "action_check_reservation_datetime"
   ACTION_UPDATE_ORDER = "action_update_order"
   ACTION_RESET_SLOTS = "action_reset_slots"
   ACTION_RESTART_SLOTS = "action_restart"
+  ACTION_SET_SCHEDULED_TIME_SLOT = "action_set_scheduled_time_slot"
+  ACTION_SET_SIZE_SLOT = "action_set_size_slot"
 )
