@@ -62,12 +62,15 @@
 * make_reservation{}
     - utter_ask_time
 * inform{"time":"xxx"}
-    - slot{"scheduledTime":"xxx"}
+    - action_set_scheduled_time_slot
+    - slot{"scheduledTime" : "xxx"}
     - utter_ask_size
 * inform{"number":"x"}
-    - slot{"size": "x"}
+    - action_set_size_slot
+    - slot{"size" : "x"}
     - action_check_reservation_datetime
     - utter_ask_name
 * inform{"name":"name"}
+    - slot{"name" : "name"}
     - action_save_reservation
     - action_utter_you_are_set

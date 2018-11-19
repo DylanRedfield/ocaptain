@@ -21,6 +21,7 @@ entities:
   - time
   - item
   - size
+  - number
 
 slots:
   name:
@@ -90,3 +91,5 @@ actions:
   - utter_time_within
   - action_check_reservation_datetime
   - action_utter_you_are_set
+  - action_set_scheduled_time_slot
+  - action_set_size_slot
