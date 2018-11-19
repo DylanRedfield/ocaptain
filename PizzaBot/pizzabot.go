@@ -131,7 +131,7 @@ func (bot *Bot) ActionCheckReservationDatetime(req *RasaRequest, resp *RasaRespo
 	/* Will have a datetime, businessId, partySize, etc saved in slots */
 	businessId := req.Tracker.Slots["business_id"]
 	//recipientId := req.Tracker.Slots["recipient_id"]
-	searchTimeStr := req.Tracker.Slots["time"]
+	searchTimeStr := req.Tracker.Slots["scheduledTime"]
 	partySize := req.Tracker.Slots["partySize"]
 	name := req.Tracker.Slots["name"]
 
@@ -223,11 +223,14 @@ func (bot *Bot) ActionCheckReservationDatetime(req *RasaRequest, resp *RasaRespo
 
 func (bot *Bot) ActionSetScheduledTimeSlot(req *RasaRequest, resp *RasaResponse) {
   scheduledTime := ""
+  fmt.Println(req.Tracker.LatestMessage.Entities)
   for _, v := range req.Tracker.LatestMessage.Entities {
     if v.Entity == "time" {
       scheduledTime = v.Value
     }
   }
+
+  log.Println(scheduledTime)
   nextAction := Event{Event: "slot", Name: "scheduledTime", Value: scheduledTime}
 	resp.Events = append(resp.Events, nextAction)
 }

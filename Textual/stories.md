@@ -74,3 +74,7 @@
     - slot{"name" : "name"}
     - action_save_reservation
     - action_utter_you_are_set
+
+* inform{"time":"xxx"}
+    - action_set_scheduled_time_slot
+    - slot{"scheduledTime" : "xxx"}

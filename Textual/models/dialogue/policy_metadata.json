@@ -5,10 +5,7 @@
         "name"
       ]
     },
-    "action_check_time_close_on_day": {
-      "slots": []
-    },
-    "action_alert_business": {
+    "action_check_is_open_on_day": {
       "slots": []
     },
     "action_set_scheduled_time_slot": {
@@ -21,28 +18,28 @@
         "size"
       ]
     },
-    "action_utter_you_are_set": {
+    "utter_goodbye": {
       "slots": []
     },
-    "utter_goodbye": {
+    "action_alert_business": {
       "slots": []
     },
     "utter_thank": {
       "slots": []
     },
+    "utter_greet": {
+      "slots": []
+    },
     "action_check_time_open_on_day": {
+      "slots": []
+    },
+    "action_check_time_close_on_day": {
       "slots": []
     },
     "utter_need_reservation": {
       "slots": []
     },
-    "utter_greet": {
-      "slots": []
-    },
     "utter_allow_reservations_and_ask": {
-      "slots": []
-    },
-    "action_check_is_open_on_day": {
       "slots": []
     }
   },
