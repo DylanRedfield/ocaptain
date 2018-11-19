@@ -120,7 +120,7 @@ func (bot *Bot) HandleAction(req *RasaRequest) (*RasaResponse, error) {
 	return resp, nil
 }
 
-func (bot *Bot) ActionCheckReservationDateTime(req *RasaRequest, resp *RasaResponse) {
+func (bot *Bot) ActionCheckReservationDatetime(req *RasaRequest, resp *RasaResponse) {
 	// TODO add support for time intervals
 	/* Will have a datetime, businessId, partySize, etc saved in slots */
 	businessId := req.Tracker.Slots["business_id"]
@@ -162,9 +162,15 @@ func (bot *Bot) ActionCheckReservationDateTime(req *RasaRequest, resp *RasaRespo
 			// Exact match, so as long as we have a name we add the reservation to the db
 
 			if name == "" {
-				// TODO Action ask name
+				// Action ask the name
+				nextAction := Event{Event: "followup", Name: "utter_ask_name"}
+				resp.Events = append(resp.Events, nextAction)
+				return
 			} else {
-				// TODO Action make reservation
+				// Force Action save_reservation
+				nextAction := Event{Event: "followup", Name: "action_save_reservation"}
+				resp.Events = append(resp.Events, nextAction)
+				return
 			}
 		}
 
@@ -179,13 +185,33 @@ func (bot *Bot) ActionCheckReservationDateTime(req *RasaRequest, resp *RasaRespo
 		}
 
 		if lessThan15 {
-			// TODO Action ask if close one is okay
+			// Action is this one good?
+			nextAction := Event{Event: "slot", Name: "potential_times", Value: []time.Time{selectedTime}}
+			resp.Events = append(resp.Events, nextAction)
+
+			nextAction = Event{Event: "followup", Name: "action_ask_is_close_time_okay"}
+			resp.Events = append(resp.Events, nextAction)
+			return
 		}
 
-		// TODO action we didn't find any at that time, but do any of these times work for you?
-	}
+		nextAction := Event{Event: "slot", Name: "potential_times", Value: reservationResult.Results}
+		resp.Events = append(resp.Events, nextAction)
 
-	// else their query wasn't happy and thus need to give them a message
+		// action we didn't find any at that time, but do any of these times work for you?
+		nextAction = Event{Event: "followup", Name: "action_ask_if_any_similar_times_work"}
+		resp.Events = append(resp.Events, nextAction)
+		return
+
+	} else if reservationResult.Message == NO_AVAILABLE {
+		nextAction := Event{Event: "followup", Name: "utter_no_reservations_available"}
+		resp.Events = append(resp.Events, nextAction)
+		return
+
+	} else if reservationResult.Message == IN_ADVANCE {
+		nextAction := Event{Event: "followup", Name: "utter_time_within"}
+		resp.Events = append(resp.Events, nextAction)
+		return
+	}
 
 }
 func (bot *Bot) ActionUpdateOrder(req *RasaRequest, resp *RasaResponse) {

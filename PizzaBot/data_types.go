@@ -168,7 +168,7 @@ type Response struct {
 }
 
 type Event struct {
-	Event string `json:"event"`
-	Name  string `json:"name"`
-	Value string `json:"value"`
+	Event string      `json:"event"`
+	Name  string      `json:"name"`
+	Value interface{} `json:"value"`
 }

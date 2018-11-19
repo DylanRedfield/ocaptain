@@ -35,6 +35,8 @@ slots:
     type: text
   size:
     type: text
+  potential_times:
+    type: list
 
 templates:
   utter_greet:
@@ -81,3 +83,10 @@ actions:
   - utter_allow_reservations_and_ask
   - action_order
   - action_alert_business
+  - action_save_reservation
+  - action_ask_is_close_time_okay
+  - action_ask_if_any_similar_times_work
+  - utter_no_reservations_available
+  - utter_time_within
+  - action_check_reservation_datetime
+  - action_utter_you_are_set
