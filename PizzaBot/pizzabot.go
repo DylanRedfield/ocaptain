@@ -115,12 +115,12 @@ func (bot *Bot) HandleAction(req *RasaRequest) (*RasaResponse, error) {
 		bot.ActionCheckTimeClose(req, resp)
 	case ACTION_CHECK_TIME_CLOSE_ON_DAY:
 		bot.ActionCheckTimeCloseOnDay(req, resp)
-  case ACTION_CHECK_RESERVATION_DATETIME:
-    bot.ActionCheckReservationDatetime(req, resp)
-  case ACTION_SET_SCHEDULED_TIME_SLOT:
-    bot.ActionSetScheduledTimeSlot(req, resp)
-  case ACTION_SET_SIZE_SLOT:
-    bot.ActionSetSizeSlot(req, resp)
+	case ACTION_CHECK_RESERVATION_DATETIME:
+		bot.ActionCheckReservationDatetime(req, resp)
+	case ACTION_SET_SCHEDULED_TIME_SLOT:
+		bot.ActionSetScheduledTimeSlot(req, resp)
+	case ACTION_SET_SIZE_SLOT:
+		bot.ActionSetSizeSlot(req, resp)
 	}
 
 	return resp, nil
@@ -222,27 +222,24 @@ func (bot *Bot) ActionCheckReservationDatetime(req *RasaRequest, resp *RasaRespo
 }
 
 func (bot *Bot) ActionSetScheduledTimeSlot(req *RasaRequest, resp *RasaResponse) {
-  scheduledTime := ""
-  fmt.Println(req.Tracker.LatestMessage.Entities)
-  for _, v := range req.Tracker.LatestMessage.Entities {
-    if v.Entity == "time" {
-      scheduledTime = v.Value
-    }
-  }
-
-  log.Println(scheduledTime)
-  nextAction := Event{Event: "slot", Name: "scheduledTime", Value: scheduledTime}
+	scheduledTime := ""
+	for _, v := range req.Tracker.LatestMessage.Entities {
+		if v.Entity == "time" {
+			scheduledTime = v.Value.(string)
+		}
+	}
+	nextAction := Event{Event: "slot", Name: "scheduledTime", Value: scheduledTime}
 	resp.Events = append(resp.Events, nextAction)
 }
 
 func (bot *Bot) ActionSetSizeSlot(req *RasaRequest, resp *RasaResponse) {
-  scheduledTime := ""
-  for _, v := range req.Tracker.LatestMessage.Entities {
-    if v.Entity == "number" {
-      scheduledTime = v.Value
-    }
-  }
-  nextAction := Event{Event: "slot", Name: "size", Value: scheduledTime}
+	size := ""
+	for _, v := range req.Tracker.LatestMessage.Entities {
+		if v.Entity == "number" {
+			size = v.Value.(string)
+		}
+	}
+	nextAction := Event{Event: "slot", Name: "size", Value: size}
 	resp.Events = append(resp.Events, nextAction)
 }
 
@@ -373,7 +370,7 @@ func (bot *Bot) ActionCheckTimeCloseOnDay(req *RasaRequest, resp *RasaResponse) 
 		}
 	}
 
-	t, err := time.Parse(time.RFC3339, entity.Value)
+	t, err := time.Parse(time.RFC3339, entity.Value.(string))
 
 	if err != nil {
 		log.Println(err)
@@ -418,7 +415,7 @@ func (bot *Bot) ActionCheckIsOpenOnDay(req *RasaRequest, resp *RasaResponse) {
 		}
 	}
 
-	t, err := time.Parse(time.RFC3339, entity.Value)
+	t, err := time.Parse(time.RFC3339, entity.Value.(string))
 
 	if err != nil {
 		log.Println(err)
