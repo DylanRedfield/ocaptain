@@ -31,20 +31,19 @@ func init() {
 }
 
 func main() {
-	test()
 
-	/*mux := http.NewServeMux()
-		mux.Handle("/PizzaBot/businessInput", http.HandlerFunc(businessInput))
-		mux.Handle("/PizzaBot/outsideSmsInput", http.HandlerFunc(outsideSmsInput))
-		mux.Handle("/PizzaBot/sendSelf", http.HandlerFunc(sendSelf))
-	  mux.Handle("/ocaptain", http.HandlerFunc(actionInput))
-	  mux.Handle("/ocaptain/sendAndSave", http.HandlerFunc(sendAndSave))
-		log.Println(http.ListenAndServe(":8080", mux))*/
+	mux := http.NewServeMux()
+	mux.Handle("/PizzaBot/businessInput", http.HandlerFunc(businessInput))
+	mux.Handle("/PizzaBot/outsideSmsInput", http.HandlerFunc(outsideSmsInput))
+	mux.Handle("/PizzaBot/sendSelf", http.HandlerFunc(sendSelf))
+	mux.Handle("/ocaptain", http.HandlerFunc(actionInput))
+	mux.Handle("/ocaptain/sendAndSave", http.HandlerFunc(sendAndSave))
+	log.Println(http.ListenAndServe(":8080", mux))
 }
 
 func test() {
 	datetime := time.Date(2018, 11, 19, 14, 0, 0, 0, time.UTC)
-	result, err := Query("24712", datetime, 3)
+	result, err := Query("24712", datetime, "3")
 
 	if err != nil {
 		log.Println(err)

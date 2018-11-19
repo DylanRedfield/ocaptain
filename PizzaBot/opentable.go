@@ -20,7 +20,7 @@ type OpenTableResult struct {
 	Results []time.Time
 }
 
-func Query(id string, datetime time.Time, partySize int32) (OpenTableResult, error) {
+func Query(id string, datetime time.Time, partySize string) (OpenTableResult, error) {
 	result := OpenTableResult{}
 
 	//	url := fmt.Sprintf("https://www.opentable.com/restaurant/profile/%s/reserve?restref=%s&datetime=%s&covers=%s", id, id, datetime, partySize)

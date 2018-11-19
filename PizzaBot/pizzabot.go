@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"google.golang.org/api/iterator"
 	"log"
+	"math"
 	"net/http"
 	"time"
 )
@@ -123,11 +124,16 @@ func (bot *Bot) ActionCheckReservationDateTime(req *RasaRequest, resp *RasaRespo
 	// TODO add support for time intervals
 	/* Will have a datetime, businessId, partySize, etc saved in slots */
 	businessId := req.Tracker.Slots["business_id"]
-	recipientId := req.Tracker.Slots["recipient_id"]
+	//recipientId := req.Tracker.Slots["recipient_id"]
 	searchTimeStr := req.Tracker.Slots["time"]
 	partySize := req.Tracker.Slots["partySize"]
+	name := req.Tracker.Slots["name"]
 
-	searchTime := time.Parse(time.RFC3339, searchTimeStr)
+	searchTime, err := time.Parse(time.RFC3339, searchTimeStr)
+
+	if err != nil {
+		log.Println(err)
+	}
 
 	business, err := bot.getBusinessFromId(businessId)
 
@@ -144,11 +150,39 @@ func (bot *Bot) ActionCheckReservationDateTime(req *RasaRequest, resp *RasaRespo
 	if reservationResult.Message == "" {
 		// Reservations found within 2.5 hours of request
 
+		found := false
 		// Check if one equals exactly and if so make the reservation
+		for _, v := range reservationResult.Results {
+			if v == searchTime {
+				found = true
+			}
+		}
+
+		if found {
+			// Exact match, so as long as we have a name we add the reservation to the db
+
+			if name == "" {
+				// TODO Action ask name
+			} else {
+				// TODO Action make reservation
+			}
+		}
 
 		// Check if any are within 15 minutes and if so ask if that is fine
+		lessThan15 := false
+		selectedTime := reservationResult.Results[0]
+		for _, v := range reservationResult.Results {
+			if math.Abs(v.Sub(searchTime).Minutes()) <= 15 {
+				lessThan15 = true
+				selectedTime = v
+			}
+		}
 
-		// If not then give all the options and ask if any of those work
+		if lessThan15 {
+			// TODO Action ask if close one is okay
+		}
+
+		// TODO action we didn't find any at that time, but do any of these times work for you?
 	}
 
 	// else their query wasn't happy and thus need to give them a message
