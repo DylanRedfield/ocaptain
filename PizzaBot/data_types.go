@@ -137,12 +137,12 @@ type LatestMessage struct {
 }
 
 type Entity struct {
-	Start      int32   `json:"start"`
-	End        int32   `json:"end"`
-	Value      string  `json:"value"`
-	Text       string  `json:"text"`
-	Confidence float64 `json:"confidence"`
-	Entity     interface{}  `json:"entity"`
+	Start      int32       `json:"start"`
+	End        int32       `json:"end"`
+	Value      interface{} `json:"value"`
+	Text       string      `json:"text"`
+	Confidence float64     `json:"confidence"`
+	Entity     string      `json:"entity"`
 }
 
 type RasaRequest struct {
