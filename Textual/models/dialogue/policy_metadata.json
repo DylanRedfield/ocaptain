@@ -1,59 +1,36 @@
 {
   "action_fingerprints": {
     "action_listen": {
-      "slots": [
-        "name"
-      ]
-    },
-    "action_check_is_open_on_day": {
-      "slots": []
-    },
-    "action_set_scheduled_time_slot": {
-      "slots": [
-        "scheduledTime"
-      ]
-    },
-    "action_set_size_slot": {
-      "slots": [
-        "size"
-      ]
-    },
-    "utter_goodbye": {
-      "slots": []
-    },
-    "action_alert_business": {
-      "slots": []
-    },
-    "utter_thank": {
       "slots": []
     },
     "utter_greet": {
       "slots": []
     },
-    "action_check_time_open_on_day": {
+    "action_set_scheduled_time_slot": {
+      "slots": [
+        "scheduled_time"
+      ]
+    },
+    "action_check_reservation_datetime": {
       "slots": []
     },
-    "action_check_time_close_on_day": {
+    "utter_goodbye": {
       "slots": []
     },
-    "utter_need_reservation": {
-      "slots": []
-    },
-    "utter_allow_reservations_and_ask": {
+    "utter_ask_time": {
       "slots": []
     }
   },
-  "rasa_core": "0.11.3",
+  "rasa_core": "0.12.1",
   "python": "3.6.5",
   "max_histories": [
-    null,
     5,
-    5
+    null
   ],
   "ensemble_name": "rasa_core.policies.ensemble.SimplePolicyEnsemble",
   "policy_names": [
-    "rasa_core.policies.fallback.FallbackPolicy",
-    "rasa_core.policies.memoization.MemoizationPolicy",
-    "rasa_core.policies.keras_policy.KerasPolicy"
-  ]
+    "rasa_core.policies.keras_policy.KerasPolicy",
+    "rasa_core.policies.fallback.FallbackPolicy"
+  ],
+  "trained_at": "20181120-033253"
 }

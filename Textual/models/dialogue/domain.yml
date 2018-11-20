@@ -1,51 +1,55 @@
 %YAML 1.1
 ---
 actions:
-- utter_greet
-- utter_goodbye
-- utter_your_welcome
-- utter_ask_name
-- utter_ask_time
-- utter_ask_size
-- utter_thank
-- utter_ask_confirmation
-- action_check_is_open
-- action_check_is_open_on_day
-- action_check_time_close
 - action_check_time_close_on_day
-- action_check_time_open
-- action_check_time_open_on_day
-- action_check_menu_item
-- action_update_reservation
-- utter_need_reservation
-- utter_allow_reservations_and_ask
+- utter_goodbye
 - action_order
-- action_alert_business
+- action_check_time_open
+- action_check_time_close
 - action_save_reservation
-- action_ask_is_close_time_okay
+- utter_ask_name
+- action_check_is_open_on_day
 - action_ask_if_any_similar_times_work
-- utter_no_reservations_available
-- utter_time_within
-- action_check_reservation_datetime
-- action_utter_you_are_set
+- utter_ask_confirmation
+- action_ask_is_close_time_okay
 - action_set_scheduled_time_slot
+- action_check_menu_item
+- action_check_reservation_datetime
+- utter_thank
+- action_utter_you_are_set
+- utter_allow_reservations_and_ask
+- utter_your_welcome
+- utter_need_reservation
+- utter_no_reservations_available
+- action_check_is_open
+- action_alert_business
 - action_set_size_slot
+- utter_greet
+- action_update_reservation
+- action_listen
+- utter_ask_time
+- utter_time_within
+- action_check_time_open_on_day
+- utter_ask_size
 config:
   store_entities_as_slots: true
 entities:
 - name
-- time
-- item
-- size
 - number
+- item
+- time
+- size
+forms: []
 intents:
-- greet:
-    use_entities: true
-- thank:
+- make_reservation:
     use_entities: true
 - goodbye:
     use_entities: true
 - inform:
+    use_entities: true
+- greet:
+    use_entities: true
+- thank:
     use_entities: true
 - affirm:
     use_entities: true
@@ -59,8 +63,6 @@ intents:
     use_entities: true
 - menu_item:
     use_entities: true
-- make_reservation:
-    use_entities: true
 - need_reservation:
     use_entities: true
 - allow_reservations:
@@ -73,24 +75,31 @@ intents:
     use_entities: true
 slots:
   business_id:
+    auto_fill: true
     initial_value: null
     type: rasa_core.slots.TextSlot
   name:
+    auto_fill: true
     initial_value: null
     type: rasa_core.slots.TextSlot
   potential_times:
+    auto_fill: true
     initial_value: null
     type: rasa_core.slots.ListSlot
   recipient_contact:
+    auto_fill: true
     initial_value: null
     type: rasa_core.slots.TextSlot
   recipient_id:
+    auto_fill: true
     initial_value: null
     type: rasa_core.slots.TextSlot
   scheduled_time:
+    auto_fill: true
     initial_value: null
     type: rasa_core.slots.TextSlot
   size:
+    auto_fill: true
     initial_value: null
     type: rasa_core.slots.TextSlot
 templates:

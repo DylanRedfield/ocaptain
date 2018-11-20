@@ -127,12 +127,12 @@ func (business Business) IsOpen() bool {
 type Tracker struct {
 	Slots         map[string]string `json:"slots"`
 	SenderId      string            `json:"sender_id"`
-	LatestMessage LatestMessage     `json:"lastest_message"`
+	LatestMessage LatestMessage     `json:"latest_message"`
 }
 
 type LatestMessage struct {
 	Text     string   `json:"text"`
-	Intent   string   `json:"intent"`
+//	Intent   string   `json:"intent"`
 	Entities []Entity `json:"entities"`
 }
 
@@ -152,7 +152,7 @@ type RasaRequest struct {
 }
 
 type RasaResponse struct {
-	Events    []Event    `json:"events"`
+	Events    []Event    `json:"events,omitempty"`
 	Responses []Response `json:"responses"`
 }
 

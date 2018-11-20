@@ -1,95 +1,104 @@
-intents:
-  - greet
-  - thank
-  - goodbye
-  - inform
-  - affirm
-  - deny
-  - is_open
-  - time_close
-  - time_open
-  - menu_item
-  - make_reservation
-  - need_reservation
-  - allow_reservations
-  - order
-  - restart
-  - busy
-
-entities:
-  - name
-  - time
-  - item
-  - size
-  - number
-
-slots:
-  name:
-    type: text
-  scheduled_time:
-    type: text
-  business_id:
-    type: text
-  recipient_id:
-    type: text
-  recipient_contact:
-    type: text
-  size:
-    type: text
-  potential_times:
-    type: list
-
-templates:
-  utter_greet:
-    - "Hey, how can I help you?"
-  utter_goodbye:
-    - "Goodbye"
-  utter_your_welcome:
-    - "Your welcome"
-  utter_thank:
-    - "Thanks"
-  utter_ask_confirmation:
-    - "Is this correct?"
-  utter_ask_name:
-    - "What's the name for the reservation?"
-  utter_need_reservation:
-    - "It can never hurt"
-  utter_allow_reservations_and_ask:
-    - "Yes! Would you like to make one?"
-  utter_ask_time:
-    - "What time's the reservation for?"
-  utter_ask_size:
-    - "What's the size of the party?"
-  utter_restart:
-    - "Restarted"
-
+%YAML 1.1
+---
 actions:
-  - utter_greet
-  - utter_goodbye
-  - utter_your_welcome
-  - utter_ask_name
-  - utter_ask_time
-  - utter_ask_size
-  - utter_thank
-  - utter_ask_confirmation
-  - action_check_is_open
-  - action_check_is_open_on_day
-  - action_check_time_close
-  - action_check_time_close_on_day
-  - action_check_time_open
-  - action_check_time_open_on_day
-  - action_check_menu_item
-  - action_update_reservation
-  - utter_need_reservation
-  - utter_allow_reservations_and_ask
-  - action_order
-  - action_alert_business
-  - action_save_reservation
-  - action_ask_is_close_time_okay
-  - action_ask_if_any_similar_times_work
-  - utter_no_reservations_available
-  - utter_time_within
-  - action_check_reservation_datetime
-  - action_utter_you_are_set
-  - action_set_scheduled_time_slot
-  - action_set_size_slot
+- action_check_time_close_on_day
+- utter_goodbye
+- action_order
+- action_check_time_open
+- action_check_time_close
+- action_save_reservation
+- utter_ask_name
+- action_check_is_open_on_day
+- action_ask_if_any_similar_times_work
+- utter_ask_confirmation
+- action_ask_is_close_time_okay
+- action_set_scheduled_time_slot
+- action_check_menu_item
+- action_check_reservation_datetime
+- utter_thank
+- action_utter_you_are_set
+- utter_allow_reservations_and_ask
+- utter_your_welcome
+- utter_need_reservation
+- utter_no_reservations_available
+- action_check_is_open
+- action_alert_business
+- action_set_size_slot
+- utter_greet
+- action_update_reservation
+- action_listen
+- utter_ask_time
+- utter_time_within
+- action_check_time_open_on_day
+- utter_ask_size
+config:
+  store_entities_as_slots: true
+entities:
+- name
+- number
+- item
+- time
+- size
+forms: []
+intents:
+- make_reservation
+- goodbye
+- inform
+- greet
+- thank
+- affirm
+- deny
+- is_open
+- time_close
+- time_open
+- menu_item
+- need_reservation
+- allow_reservations
+- order
+- restart
+- busy
+slots:
+  business_id:
+    auto_fill: true
+    type: rasa_core.slots.TextSlot
+  name:
+    auto_fill: true
+    type: rasa_core.slots.TextSlot
+  potential_times:
+    auto_fill: true
+    type: rasa_core.slots.ListSlot
+  recipient_contact:
+    auto_fill: true
+    type: rasa_core.slots.TextSlot
+  recipient_id:
+    auto_fill: true
+    type: rasa_core.slots.TextSlot
+  scheduled_time:
+    auto_fill: true
+    type: rasa_core.slots.TextSlot
+  size:
+    auto_fill: true
+    type: rasa_core.slots.TextSlot
+templates:
+  utter_allow_reservations_and_ask:
+  - text: Yes! Would you like to make one?
+  utter_ask_confirmation:
+  - text: Is this correct?
+  utter_ask_name:
+  - text: What's the name for the reservation?
+  utter_ask_size:
+  - text: What's the size of the party?
+  utter_ask_time:
+  - text: What time's the reservation for?
+  utter_goodbye:
+  - text: Goodbye
+  utter_greet:
+  - text: Hey, how can I help you?
+  utter_need_reservation:
+  - text: It can never hurt
+  utter_restart:
+  - text: Restarted
+  utter_thank:
+  - text: Thanks
+  utter_your_welcome:
+  - text: Your welcome
