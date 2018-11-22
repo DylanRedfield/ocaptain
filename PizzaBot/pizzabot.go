@@ -103,7 +103,6 @@ func (bot *Bot) HandleAction(req *RasaRequest) (*RasaResponse, error) {
 
 	action := req.NextAction
 	log.Println(action)
-	log.Println(req.Tracker.Slots)
 	switch action {
 	case ACTION_UPDATE_ORDER:
 		bot.ActionUpdateOrder(req, resp)
@@ -121,19 +120,55 @@ func (bot *Bot) HandleAction(req *RasaRequest) (*RasaResponse, error) {
 		bot.ActionSetScheduledTimeSlot(req, resp)
 	case ACTION_SET_SIZE_SLOT:
 		bot.ActionSetSizeSlot(req, resp)
+  case ACTION_ASK_IF_SIMILAR_TIMES_WORK:
+    bot.ActionAskIfSiilarTimesWork(req, resp)
 	}
 
+
 	return resp, nil
+}
+
+func (bot *Bot) ActionAskIfSiilarTimesWork(req *RasaRequest, resp *RasaResponse) {
+  times := req.Tracker.Slots["potential_times"].([]interface{})
+  reply := "Do any of the following times work: "
+
+  for i, v := range times {
+	  datetime, _ := time.Parse(time.RFC3339, v.(string))
+
+    hour := datetime.Hour()
+    period := "am"
+
+    if hour >= 12 {
+      period = "pm"
+    }
+
+    hour = hour % 12
+
+    if hour == 0 {
+      hour = 12
+    }
+
+
+    if i != 0 {
+      reply += ", "
+    }
+    reply += fmt.Sprintf("%d:%d %s", hour, datetime.Minute(), period)
+  }
+	resp.Responses = append(resp.Responses, Response{Text: reply})
 }
 
 func (bot *Bot) ActionCheckReservationDatetime(req *RasaRequest, resp *RasaResponse) {
 	// TODO add support for time intervals
 	/* Will have a datetime, businessId, partySize, etc saved in slots */
-	businessId := req.Tracker.Slots["business_id"]
+	businessId := req.Tracker.Slots["business_id"].(string)
 	//recipientId := req.Tracker.Slots["recipient_id"]
-	searchTimeStr := req.Tracker.Slots["scheduled_time"]
-	partySize := req.Tracker.Slots["partySize"]
-	name := req.Tracker.Slots["name"]
+	searchTimeStr := req.Tracker.Slots["scheduled_time"].(string)
+	partySize := req.Tracker.Slots["size"].(string)
+
+  name := ""
+  if req.Tracker.Slots["name"] != nil {
+	  name = req.Tracker.Slots["name"].(string)
+  }
 
 	searchTime, err := time.Parse(time.RFC3339, searchTimeStr)
 
@@ -153,6 +188,7 @@ func (bot *Bot) ActionCheckReservationDatetime(req *RasaRequest, resp *RasaRespo
 		log.Println(err)
 	}
 
+  log.Println(reservationResult)
 	if reservationResult.Message == "" {
 		// Reservations found within 2.5 hours of request
 
@@ -233,19 +269,21 @@ func (bot *Bot) ActionSetScheduledTimeSlot(req *RasaRequest, resp *RasaResponse)
 }
 
 func (bot *Bot) ActionSetSizeSlot(req *RasaRequest, resp *RasaResponse) {
-	size := ""
+	size := 0.0
 	for _, v := range req.Tracker.LatestMessage.Entities {
 		if v.Entity == "number" {
-			size = v.Value.(string)
+			size = v.Value.(float64)
 		}
 	}
-	nextAction := Event{Event: "slot", Name: "size", Value: size}
+
+  // TODO undo this hacky string shit
+	nextAction := Event{Event: "slot", Name: "size", Value: fmt.Sprintf("%f", size)}
 	resp.Events = append(resp.Events, nextAction)
 }
 
 func (bot *Bot) ActionUpdateOrder(req *RasaRequest, resp *RasaResponse) {
-	businessId := req.Tracker.Slots["business_id"]
-	recipientId := req.Tracker.Slots["recipient_id"]
+	businessId := req.Tracker.Slots["business_id"].(string)
+	recipientId := req.Tracker.Slots["recipient_id"].(string)
 
 	orderQuery := bot.Client.Collection(Businesses).Doc(businessId).Collection(Orders).Where("recipientId", "==", recipientId)
 	orderQuery = orderQuery.Where("visible", "==", true).OrderBy("lastModificationTime", firestore.Desc)
@@ -273,9 +311,9 @@ func (bot *Bot) ActionUpdateOrder(req *RasaRequest, resp *RasaResponse) {
 		order.Id = doc.Ref.ID
 	}
 
-	orderType := req.Tracker.Slots["type"]
+	orderType := req.Tracker.Slots["type"].(string)
 
-	if req.Tracker.Slots["address"] != "" && orderType == "" {
+	if req.Tracker.Slots["address"].(string) != "" && orderType == "" {
 		orderType = "DELIVERY"
 		resp.Events = append(resp.Events, Event{"slot", "type", "DELIVERY"})
 	}
@@ -283,25 +321,25 @@ func (bot *Bot) ActionUpdateOrder(req *RasaRequest, resp *RasaResponse) {
 	if order.Id == "" {
 		order := Order{
 			RecipientId:          req.SenderId,
-			RecipientContact:     req.Tracker.Slots["recipient_contact"],
+			RecipientContact:     req.Tracker.Slots["recipient_contact"].(string),
 			StartTime:            currentTime(),
 			LastModificationTime: currentTime(),
 			IsVisible:            true,
 		}
 
 		slots := req.Tracker.Slots
-		if slots["address"] != "" {
-			order.Address = slots["address"]
+		if slots["address"].(string) != "" {
+			order.Address = slots["address"].(string)
 		}
 
-		if slots["name"] != "" {
-			order.Name = slots["name"]
+		if slots["name"].(string) != "" {
+			order.Name = slots["name"].(string)
 		}
 
 		order.Type = orderType
 
-		if slots["contents"] != "" {
-			order.Content = slots["contents"]
+		if slots["contents"].(string) != "" {
+			order.Content = slots["contents"].(string)
 		}
 		bot.saveOrder(req, &order)
 
@@ -310,10 +348,10 @@ func (bot *Bot) ActionUpdateOrder(req *RasaRequest, resp *RasaResponse) {
 
 		// Now we have our order and can update it
 		orderRef.Update(bot.Ctx, []firestore.Update{
-			{Path: "address", Value: req.Tracker.Slots["address"]},
-			{Path: "name", Value: req.Tracker.Slots["name"]},
+			{Path: "address", Value: req.Tracker.Slots["address"].(string)},
+			{Path: "name", Value: req.Tracker.Slots["name"].(string)},
 			{Path: "type", Value: orderType},
-			{Path: "content", Value: req.Tracker.Slots["contents"]},
+			{Path: "content", Value: req.Tracker.Slots["contents"].(string)},
 			{Path: "lastModificationTime", Value: currentTime()},
 		})
 
@@ -321,11 +359,11 @@ func (bot *Bot) ActionUpdateOrder(req *RasaRequest, resp *RasaResponse) {
 
 }
 
-func (bot *Bot) ActionAskNext(req *RasaRequest, resp *RasaResponse) {
+/*func (bot *Bot) ActionAskNext(req *RasaRequest, resp *RasaResponse) {
 	// Figure out which question to ask and return it as a follow up action
 
 	slots := req.Tracker.Slots
-	emptySlots := map[string]string{}
+	emptySlots := map[string]interface{}
 
 	for k, v := range slots {
 		if v == "" {
@@ -334,13 +372,13 @@ func (bot *Bot) ActionAskNext(req *RasaRequest, resp *RasaResponse) {
 	}
 
 	// Now we have our empty slots and we can probably just choose any
-}
+}*/
 
 func (bot *Bot) ActionCheckTimeClose(req *RasaRequest, resp *RasaResponse) {
 	// Need to check the database to see if business is closed or not
 	// Then modifies the RasaResponse with the correct RasaResponse
 
-	businessId := req.Tracker.Slots["business_id"]
+	businessId := req.Tracker.Slots["business_id"].(string)
 	business, err := bot.getBusinessFromId(businessId)
 
 	if err != nil {
@@ -355,7 +393,7 @@ func (bot *Bot) ActionCheckTimeClose(req *RasaRequest, resp *RasaResponse) {
 func (bot *Bot) ActionCheckTimeCloseOnDay(req *RasaRequest, resp *RasaResponse) {
 	// Need to check the database to see if business is closed or not
 	// Then modifies the RasaResponse with the correct RasaResponse
-	businessId := req.Tracker.Slots["business_id"]
+	businessId := req.Tracker.Slots["business_id"].(string)
 	business, err := bot.getBusinessFromId(businessId)
 
 	if err != nil {
@@ -382,7 +420,7 @@ func (bot *Bot) ActionCheckTimeCloseOnDay(req *RasaRequest, resp *RasaResponse) 
 }
 
 func (bot *Bot) ActionCheckIsOpen(req *RasaRequest, resp *RasaResponse) {
-	businessId := req.Tracker.Slots["business_id"]
+	businessId := req.Tracker.Slots["business_id"].(string)
 	business, err := bot.getBusinessFromId(businessId)
 
 	if err != nil {
@@ -400,7 +438,7 @@ func (bot *Bot) ActionCheckIsOpen(req *RasaRequest, resp *RasaResponse) {
 }
 
 func (bot *Bot) ActionCheckIsOpenOnDay(req *RasaRequest, resp *RasaResponse) {
-	businessId := req.Tracker.Slots["business_id"]
+	businessId := req.Tracker.Slots["business_id"].(string)
 	business, err := bot.getBusinessFromId(businessId)
 
 	if err != nil {
@@ -434,8 +472,8 @@ func (bot *Bot) ActionCheckIsOpenOnDay(req *RasaRequest, resp *RasaResponse) {
 }
 
 func (bot Bot) saveOrder(req *RasaRequest, order *Order) {
-	businessId := req.Tracker.Slots["business_id"]
-	recipientId := req.Tracker.Slots["recipient_id"]
+	businessId := req.Tracker.Slots["business_id"].(string)
+	recipientId := req.Tracker.Slots["recipient_id"].(string)
 
 	ordersRef := bot.Client.Collection(Businesses).Doc(businessId).Collection(Orders)
 

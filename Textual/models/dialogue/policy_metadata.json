@@ -3,9 +3,6 @@
     "action_listen": {
       "slots": []
     },
-    "utter_greet": {
-      "slots": []
-    },
     "action_set_scheduled_time_slot": {
       "slots": [
         "scheduled_time"
@@ -14,8 +11,16 @@
     "action_check_reservation_datetime": {
       "slots": []
     },
+    "utter_greet": {
+      "slots": []
+    },
     "utter_goodbye": {
       "slots": []
+    },
+    "action_set_size_slot": {
+      "slots": [
+        "size"
+      ]
     },
     "utter_ask_time": {
       "slots": []
@@ -25,12 +30,14 @@
   "python": "3.6.5",
   "max_histories": [
     5,
+    5,
     null
   ],
   "ensemble_name": "rasa_core.policies.ensemble.SimplePolicyEnsemble",
   "policy_names": [
     "rasa_core.policies.keras_policy.KerasPolicy",
+    "rasa_core.policies.memoization.MemoizationPolicy",
     "rasa_core.policies.fallback.FallbackPolicy"
   ],
-  "trained_at": "20181120-033253"
+  "trained_at": "20181122-025817"
 }

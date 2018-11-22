@@ -24,3 +24,15 @@
 * make_reservation
     - utter_ask_time
 
+## Generated Story -8705239742651640220
+* make_reservation
+    - utter_ask_time
+* inform{"time": "2018-11-22T18:00:00.000-08:00"}
+    - action_set_scheduled_time_slot
+    - slot{"scheduled_time": "2018-11-22T18:00:00.000-08:00"}
+    - utter_ask_size
+* inform{"number": 4}
+    - action_set_size_slot
+    - slot{"size": 4}
+    - action_check_reservation_datetime
+

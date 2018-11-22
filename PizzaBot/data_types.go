@@ -125,7 +125,7 @@ func (business Business) IsOpen() bool {
 }
 
 type Tracker struct {
-	Slots         map[string]string `json:"slots"`
+	Slots         map[string]interface{} `json:"slots"`
 	SenderId      string            `json:"sender_id"`
 	LatestMessage LatestMessage     `json:"latest_message"`
 }
