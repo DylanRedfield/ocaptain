@@ -10,4 +10,5 @@ pipeline:
 - name: "ner_duckling_http"
   url: "http://localhost:8000"
   dimensions: ["time", "number"]
+  timezone: "Etc/GMT"
 - name: "intent_classifier_sklearn"

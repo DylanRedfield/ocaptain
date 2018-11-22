@@ -195,7 +195,7 @@ func (bot *Bot) ActionCheckReservationDatetime(req *RasaRequest, resp *RasaRespo
 		found := false
 		// Check if one equals exactly and if so make the reservation
 		for _, v := range reservationResult.Results {
-			if v == searchTime {
+			if v.Equal(searchTime) {
 				found = true
 			}
 		}
