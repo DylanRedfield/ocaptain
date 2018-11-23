@@ -31,6 +31,10 @@ actions:
 - utter_ask_size
 - utter_your_welcome
 - action_utter_you_are_set
+- action_utter_ask_is_other_reservation_time_okay
+- utter_request_time_too_early
+- utter_no_reservation_available
+- action_post_reservation_saved
 config:
   store_entities_as_slots: true
 entities:
@@ -102,3 +106,8 @@ templates:
   - text: Thanks
   utter_your_welcome:
   - text: Your welcome
+  utter_request_time_too_early:
+    - text: Sorry, but you can only request reservations that are more than five minutes from now
+  utter_no_reservation_available:
+    - text: Sorry, but we don't have any reservations available at that time
+

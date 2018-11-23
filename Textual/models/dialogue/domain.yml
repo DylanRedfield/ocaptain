@@ -1,44 +1,47 @@
 %YAML 1.1
 ---
 actions:
-- action_check_time_open_on_day
-- utter_goodbye
-- utter_ask_confirmation
-- action_check_time_close
 - action_alert_business
-- action_utter_you_are_set
-- utter_ask_time
+- utter_ask_confirmation
 - utter_greet
-- action_set_scheduled_time_slot
-- action_save_reservation
-- action_listen
-- action_ask_if_any_similar_times_work
-- utter_thank
-- utter_allow_reservations_and_ask
-- utter_ask_size
-- action_update_reservation
-- action_check_reservation_datetime
-- action_check_time_close_on_day
-- action_check_time_open
-- action_check_is_open_on_day
-- utter_ask_name
-- action_ask_is_close_time_okay
 - action_check_is_open
+- action_save_reservation
+- action_update_reservation
+- utter_ask_name
+- action_check_reservation_datetime
+- action_check_is_open_on_day
+- action_order
+- action_check_time_close
+- action_check_menu_item
+- utter_ask_time
+- action_check_time_close_on_day
 - utter_no_reservations_available
-- utter_your_welcome
+- utter_goodbye
+- action_listen
+- action_check_time_open_on_day
+- action_check_time_open
 - utter_need_reservation
 - utter_time_within
-- action_order
-- action_check_menu_item
+- utter_allow_reservations_and_ask
+- utter_thank
+- action_ask_is_close_time_okay
 - action_set_size_slot
+- action_set_scheduled_time_slot
+- action_ask_if_any_similar_times_work
+- utter_ask_size
+- utter_your_welcome
+- action_utter_you_are_set
+- action_utter_ask_is_other_reservation_time_okay
+- utter_request_time_too_early
+- utter_no_reservation_available
 config:
   store_entities_as_slots: true
 entities:
-- time
-- number
-- size
 - name
 - item
+- size
+- time
+- number
 forms: []
 intents:
 - make_reservation:
@@ -119,6 +122,11 @@ templates:
   - text: Hey, how can I help you?
   utter_need_reservation:
   - text: It can never hurt
+  utter_no_reservation_available:
+  - text: Sorry, but we don't have any reservations available at that time
+  utter_request_time_too_early:
+  - text: Sorry, but you can only request reservations that are more than five minutes
+      from now
   utter_restart:
   - text: Restarted
   utter_thank:

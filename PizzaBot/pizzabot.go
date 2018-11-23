@@ -36,6 +36,10 @@ func (bot *Bot) HandleAction(req *RasaRequest) (*RasaResponse, error) {
 		bot.ActionSetSizeSlot(req, resp)
 	case ACTION_ASK_IF_SIMILAR_TIMES_WORK:
 		bot.ActionAskIfSiilarTimesWork(req, resp)
+  case ACTION_UTTER_ASK_IS_OTHER_RESERVATION_TIME_OKAY:
+    bot.ActionUtterAskIsOtherReservationTimeOkay(req, resp)
+  case ACTION_POST_RESERVATION_SAVE:
+    bot.ActionUtterPostReservationSaved(req, resp)
 	}
 
 	return resp, nil
@@ -48,25 +52,32 @@ func (bot *Bot) ActionAskIfSiilarTimesWork(req *RasaRequest, resp *RasaResponse)
 	for i, v := range times {
 		datetime, _ := time.Parse(time.RFC3339, v.(string))
 
-		hour := datetime.Hour()
-		period := "am"
-
-		if hour >= 12 {
-			period = "pm"
-		}
-
-		hour = hour % 12
-
-		if hour == 0 {
-			hour = 12
-		}
-
 		if i != 0 {
 			reply += ", "
 		}
-		reply += fmt.Sprintf("%d:%d %s", hour, datetime.Minute(), period)
+
+    reply = datetime.Format("3:04 PM")
 	}
 	resp.Responses = append(resp.Responses, Response{Text: reply})
+}
+
+func (bot *Bot) ActionUtterAskIsOtherReservationTimeOkay(req *RasaRequest, resp *RasaResponse) {
+	times := req.Tracker.Slots[POTENTIAL_TIMES].([]interface{})
+
+  potentialTime := ""
+	for _, v := range times {
+		datetime, err := time.Parse(time.RFC3339, v.(string))
+
+    if err != nil {
+      log.Println(err)
+    }
+
+    potentialTime = datetime.Format("3:04 PM")
+	}
+
+  reply := fmt.Sprintf("Is %s close enough?", potentialTime)
+	resp.Responses = append(resp.Responses, Response{Text: reply})
+
 }
 
 func (bot *Bot) ActionCheckReservationDatetime(req *RasaRequest, resp *RasaResponse) {
@@ -75,7 +86,7 @@ func (bot *Bot) ActionCheckReservationDatetime(req *RasaRequest, resp *RasaRespo
 	//recipientId := req.Tracker.Slots["recipient_id"]
 	businessId := req.Tracker.Slots[BUSINESS_ID].(string)
 	searchTimeStr := req.Tracker.Slots[SCHEDULED_TIME].(string)
-	partySize := req.Tracker.Slots[SCHEDULED_TIME].(string)
+	partySize := req.Tracker.Slots[SIZE].(string)
 
 	searchTime, err := time.Parse(time.RFC3339, searchTimeStr)
 
@@ -149,10 +160,11 @@ func (bot *Bot) handleReservationDatetimeQueryResult(reservationResult OpenTable
 
 		if lessThan15 {
 			// Action is this one good?
-			nextAction := Event{Event: SLOT, Name: POTENTIAL_TIMES, Value: []time.Time{selectedTime}}
+
+			nextAction := Event{Event: SLOT, Name: POTENTIAL_TIMES, Value: []string{selectedTime.Format(time.RFC3339)}}
 			resp.Events = append(resp.Events, nextAction)
 
-			nextAction = Event{Event: FOLLOWUP, Name: ACTION_ASK_IF_SIMLIAR_TIMES_WORK}
+			nextAction = Event{Event: FOLLOWUP, Name: ACTION_UTTER_ASK_IS_OTHER_RESERVATION_TIME_OKAY}
 			resp.Events = append(resp.Events, nextAction)
 			return
 		}
@@ -161,7 +173,7 @@ func (bot *Bot) handleReservationDatetimeQueryResult(reservationResult OpenTable
 		resp.Events = append(resp.Events, nextAction)
 
 		// action we didn't find any at that time, but do any of these times work for you?
-		nextAction = Event{Event: FOLLOWUP, Name: ACTION_UTTER_ASK_IF_SIMILAR_TIMES_OKAY}
+		nextAction = Event{Event: FOLLOWUP, Name: ACTION_ASK_IF_SIMILAR_TIMES_WORK}
 		resp.Events = append(resp.Events, nextAction)
 		return
 
@@ -206,21 +218,21 @@ func (bot *Bot) ActionUtterPostReservationSaved(req *RasaRequest, resp *RasaResp
 
 func (bot *Bot) checkOrSetInputSlots(req *RasaRequest, resp *RasaResponse) {
 	businessId := ""
-	if req.Tracker.Slots[BUSINESS_ID] != nil {
+	if req.Tracker.Slots[BUSINESS_ID] == nil {
 		businessId = "MewuHeThW4QJGDxD9tTr"
 		nextAction := Event{Event: SLOT, Name: BUSINESS_ID, Value: businessId}
 		resp.Events = append(resp.Events, nextAction)
 
 	}
 	recipientId := ""
-	if req.Tracker.Slots[RECIPIENT_ID] != nil {
+	if req.Tracker.Slots[RECIPIENT_ID] == nil {
 		recipientId = "hxk7QAAgWVi47Qt05s7o"
 		nextAction := Event{Event: SLOT, Name: RECIPIENT_ID, Value: recipientId}
 		resp.Events = append(resp.Events, nextAction)
 
 	}
 	recipientContact := ""
-	if req.Tracker.Slots[RECIPIENT_CONTACT] != nil {
+	if req.Tracker.Slots[RECIPIENT_CONTACT] == nil {
 		recipientContact = "+19084771280"
 		nextAction := Event{Event: "slot", Name: RECIPIENT_CONTACT, Value: recipientContact}
 		resp.Events = append(resp.Events, nextAction)

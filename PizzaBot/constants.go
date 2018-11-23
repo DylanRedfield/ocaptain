@@ -68,6 +68,7 @@ const (
 	UTTER_REQUEST_TIME_TOO_EARLY                           = "utter_request_time_too_early"
 	UTTER_NO_RESERVATIONS_AVAILABLE                        = "utter_no_reservations_available"
   ACTION_SAVE_RESERVATION = "action_save_reservation"
+  ACTION_POST_RESERVATION_SAVE = "action_post_reservation_save"
 )
 
 // Entities

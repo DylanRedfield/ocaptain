@@ -3,21 +3,21 @@
     "action_listen": {
       "slots": []
     },
-    "utter_ask_time": {
-      "slots": []
-    },
     "action_set_scheduled_time_slot": {
       "slots": [
         "scheduled_time"
       ]
     },
-    "action_check_reservation_datetime": {
-      "slots": []
-    },
     "action_set_size_slot": {
       "slots": [
         "size"
       ]
+    },
+    "action_check_reservation_datetime": {
+      "slots": []
+    },
+    "utter_ask_time": {
+      "slots": []
     },
     "utter_goodbye": {
       "slots": []
@@ -39,5 +39,5 @@
     "rasa_core.policies.memoization.MemoizationPolicy",
     "rasa_core.policies.fallback.FallbackPolicy"
   ],
-  "trained_at": "20181122-193718"
+  "trained_at": "20181123-200934"
 }
