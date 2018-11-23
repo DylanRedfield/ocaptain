@@ -28,6 +28,7 @@ const (
 	Recipients        = "recipients"
 	Messages          = "messages"
 	Orders            = "orders"
+  Reservations = "reservations"
 )
 
 // Actions

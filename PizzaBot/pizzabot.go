@@ -101,6 +101,8 @@ func (bot *Bot) HandleOutsideInput(reqObj OutsideRequest) OutsideResponse {
 func (bot *Bot) HandleAction(req *RasaRequest) (*RasaResponse, error) {
 	resp := NewRasaResponse()
 
+  // TODO remove this it is just for train online testing
+  bot.checkOrSetInputSlots(req, resp)
 	action := req.NextAction
 	log.Println(action)
 	switch action {
@@ -160,15 +162,10 @@ func (bot *Bot) ActionAskIfSiilarTimesWork(req *RasaRequest, resp *RasaResponse)
 func (bot *Bot) ActionCheckReservationDatetime(req *RasaRequest, resp *RasaResponse) {
 	// TODO add support for time intervals
 	/* Will have a datetime, businessId, partySize, etc saved in slots */
-	businessId := req.Tracker.Slots["business_id"].(string)
 	//recipientId := req.Tracker.Slots["recipient_id"]
+  businessId := req.Tracker.Slots["business_id"].(string)
 	searchTimeStr := req.Tracker.Slots["scheduled_time"].(string)
 	partySize := req.Tracker.Slots["size"].(string)
-
-  name := ""
-  if req.Tracker.Slots["name"] != nil {
-	  name = req.Tracker.Slots["name"].(string)
-  }
 
 	searchTime, err := time.Parse(time.RFC3339, searchTimeStr)
 
@@ -188,7 +185,21 @@ func (bot *Bot) ActionCheckReservationDatetime(req *RasaRequest, resp *RasaRespo
 		log.Println(err)
 	}
 
-  log.Println(reservationResult)
+  bot.handleReservationDatetimeQueryResult(reservationResult, req, resp)
+
+}
+
+func (bot *Bot) handleReservationDatetimeQueryResult(reservationResult OpenTableResult, req *RasaRequest, resp *RasaResponse) {
+	searchTimeStr := req.Tracker.Slots["scheduled_time"].(string)
+
+	searchTime, _ := time.Parse(time.RFC3339, searchTimeStr)
+
+  // TODO do better here
+  name := ""
+  if req.Tracker.Slots["name"] != nil {
+	  name = req.Tracker.Slots["name"].(string)
+  }
+
 	if reservationResult.Message == "" {
 		// Reservations found within 2.5 hours of request
 
@@ -254,6 +265,48 @@ func (bot *Bot) ActionCheckReservationDatetime(req *RasaRequest, resp *RasaRespo
 		resp.Events = append(resp.Events, nextAction)
 		return
 	}
+
+}
+
+func (bot *Bot) ActionSaveReservation(req *RasaRequest, resp *RasaResponse) {
+
+  name := req.Tracker.Slots["name"].(string)
+  size := int32(req.Tracker.Slots["size"].(float64))
+  scheduledTime := req.Tracker.Slots("scheduled_time").(string)
+
+	datetime, _ := time.Parse(time.RFC3339, scheduledTime)
+  timeAsFloat := datetime.Unix()
+
+  reservation := Reservation{Name : name, NumPeople : size, ScheduledTime : timeAsFloat}
+
+	reservationsRef := bot.Client.Collection(Businesses).Doc(req.BusinessId).Collection(Reservations)
+  reservationsRef.Add(bot.Ctx, reservation)
+
+}
+
+func (bot *Bot) checkOrSetInputSlots(req *RasaRequest, resp *RasaResponse) {
+  businessId := ""
+  if req.Tracker.Slots["business_id"] != nil {
+    businessId = "MewuHeThW4QJGDxD9tTr"
+    nextAction := Event{Event: "slot", Name: "business_id", Value: businessId}
+    resp.Events = append(resp.Events, nextAction)
+
+  }
+  recipientId := ""
+  if req.Tracker.Slots["recipient_id"] != nil {
+    recipientId = "MewuHeThW4QJGDxD9tTr"
+    nextAction := Event{Event: "slot", Name: "recipient_id", Value: recipientId}
+    resp.Events = append(resp.Events, nextAction)
+
+  }
+  recipientContact := ""
+  if req.Tracker.Slots["recipient_contact"] != nil {
+    recipientContact = "+19084771280"
+    nextAction := Event{Event: "slot", Name: "recipient_contact", Value: recipientContact}
+    resp.Events = append(resp.Events, nextAction)
+
+  }
+
 
 }
 

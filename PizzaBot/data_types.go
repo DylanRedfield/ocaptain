@@ -115,6 +115,15 @@ type OpenClose struct {
 	CloseTime int32 `firestore:"closeTime"`
 }
 
+type Reservation struct {
+  Id string `firestore:"-"`
+  RecipientId string `firestore:"recipientId"`
+  Name string `firestore:"-"`
+  ScheduledTime int64 `firestore:"scheduledTime"`
+  NumPeople int32 `firestore:"numPeople"`
+  IsVisible bool `firestore:"isVisible"`
+}
+
 func (business Business) TimeClose(day string) int32 {
 	return business.Hours[day].CloseTime
 }

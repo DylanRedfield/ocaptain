@@ -1,49 +1,49 @@
 %YAML 1.1
 ---
 actions:
-- utter_your_welcome
-- action_order
-- action_check_is_open_on_day
-- action_ask_is_close_time_okay
-- utter_greet
-- utter_goodbye
-- utter_ask_name
-- action_set_scheduled_time_slot
-- action_update_reservation
-- utter_thank
-- action_check_menu_item
-- action_ask_if_any_similar_times_work
-- action_check_time_close_on_day
-- action_set_size_slot
-- utter_need_reservation
-- action_save_reservation
-- utter_ask_confirmation
-- utter_ask_size
 - action_check_time_open_on_day
-- action_check_is_open
-- action_check_time_open
-- utter_ask_time
-- action_check_reservation_datetime
-- utter_time_within
-- action_listen
+- utter_goodbye
+- utter_ask_confirmation
 - action_check_time_close
-- utter_allow_reservations_and_ask
-- action_utter_you_are_set
 - action_alert_business
+- action_utter_you_are_set
+- utter_ask_time
+- utter_greet
+- action_set_scheduled_time_slot
+- action_save_reservation
+- action_listen
+- action_ask_if_any_similar_times_work
+- utter_thank
+- utter_allow_reservations_and_ask
+- utter_ask_size
+- action_update_reservation
+- action_check_reservation_datetime
+- action_check_time_close_on_day
+- action_check_time_open
+- action_check_is_open_on_day
+- utter_ask_name
+- action_ask_is_close_time_okay
+- action_check_is_open
 - utter_no_reservations_available
+- utter_your_welcome
+- utter_need_reservation
+- utter_time_within
+- action_order
+- action_check_menu_item
+- action_set_size_slot
 config:
   store_entities_as_slots: true
 entities:
-- name
-- item
-- size
 - time
 - number
+- size
+- name
+- item
 forms: []
 intents:
-- inform:
-    use_entities: true
 - make_reservation:
+    use_entities: true
+- inform:
     use_entities: true
 - goodbye:
     use_entities: true
