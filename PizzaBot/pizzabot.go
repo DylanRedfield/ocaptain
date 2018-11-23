@@ -38,8 +38,10 @@ func (bot *Bot) HandleAction(req *RasaRequest) (*RasaResponse, error) {
 		bot.ActionAskIfSiilarTimesWork(req, resp)
   case ACTION_UTTER_ASK_IS_OTHER_RESERVATION_TIME_OKAY:
     bot.ActionUtterAskIsOtherReservationTimeOkay(req, resp)
-  case ACTION_POST_RESERVATION_SAVE:
+  case ACTION_POST_RESERVATION_SAVED:
     bot.ActionUtterPostReservationSaved(req, resp)
+  case ACTION_SAVE_RESERVATION:
+    bot.ActionSaveReservation(req, resp)
 	}
 
 	return resp, nil
@@ -193,7 +195,7 @@ func (bot *Bot) handleReservationDatetimeQueryResult(reservationResult OpenTable
 func (bot *Bot) ActionSaveReservation(req *RasaRequest, resp *RasaResponse) {
 
 	name := req.Tracker.Slots[NAME].(string)
-	size := int32(req.Tracker.Slots[SIZE].(float64))
+	size := req.Tracker.Slots[SIZE].(string)
 	scheduledTime := req.Tracker.Slots[SCHEDULED_TIME].(string)
 	businessId := req.Tracker.Slots[BUSINESS_ID].(string)
 
@@ -203,16 +205,22 @@ func (bot *Bot) ActionSaveReservation(req *RasaRequest, resp *RasaResponse) {
 	reservation := Reservation{Name: name, NumPeople: size, ScheduledTime: timeAsFloat}
 
 	reservationsRef := bot.Client.Collection(Businesses).Doc(businessId).Collection(Reservations)
-	reservationsRef.Add(bot.Ctx, reservation)
+  _, _, err := reservationsRef.Add(bot.Ctx, reservation)
+
+  if err != nil {
+    log.Println(err)
+  }
 
 }
 
 func (bot *Bot) ActionUtterPostReservationSaved(req *RasaRequest, resp *RasaResponse) {
   name := req.Tracker.Slots[NAME].(string)
-  size := req.Tracker.Slots[SIZE].(float64)
+  //size := req.Tracker.Slots[SIZE].(string)
   scheduledTime := req.Tracker.Slots[SCHEDULED_TIME].(string)
 
-  reply := fmt.Sprintf("Great. %s see you and your party of %0f at %s", name, size, scheduledTime)
+  datetime, _ := time.Parse(time.RFC3339, scheduledTime)
+
+  reply := fmt.Sprintf("Great. %s see you at %s", name, datetime.Format("3:04 PM"))
 	resp.Responses = append(resp.Responses, Response{Text: reply})
 }
 

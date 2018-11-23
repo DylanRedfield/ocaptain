@@ -120,7 +120,7 @@ type Reservation struct {
 	RecipientId   string `firestore:"recipientId"`
 	Name          string `firestore:"-"`
 	ScheduledTime int64  `firestore:"scheduledTime"`
-	NumPeople     int32  `firestore:"numPeople"`
+	NumPeople     string  `firestore:"numPeople"`
 	IsVisible     bool   `firestore:"isVisible"`
 }
 

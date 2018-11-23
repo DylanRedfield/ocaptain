@@ -1,60 +1,61 @@
 %YAML 1.1
 ---
 actions:
-- action_alert_business
-- utter_ask_confirmation
-- utter_greet
-- action_check_is_open
-- action_save_reservation
-- action_update_reservation
-- utter_ask_name
-- action_check_reservation_datetime
-- action_check_is_open_on_day
-- action_order
-- action_check_time_close
-- action_check_menu_item
+- action_utter_you_are_set
 - utter_ask_time
-- action_check_time_close_on_day
-- utter_no_reservations_available
-- utter_goodbye
-- action_listen
-- action_check_time_open_on_day
-- action_check_time_open
-- utter_need_reservation
-- utter_time_within
-- utter_allow_reservations_and_ask
-- utter_thank
-- action_ask_is_close_time_okay
-- action_set_size_slot
+- action_alert_business
 - action_set_scheduled_time_slot
-- action_ask_if_any_similar_times_work
+- utter_no_reservation_available
+- utter_thank
+- utter_greet
+- action_check_time_close_on_day
+- utter_allow_reservations_and_ask
+- action_ask_is_close_time_okay
+- action_check_reservation_datetime
+- utter_need_reservation
+- utter_goodbye
+- action_utter_ask_is_other_reservation_time_okay
 - utter_ask_size
 - utter_your_welcome
-- action_utter_you_are_set
-- action_utter_ask_is_other_reservation_time_okay
+- action_update_reservation
+- action_check_menu_item
 - utter_request_time_too_early
-- utter_no_reservation_available
+- action_order
+- action_listen
+- action_check_time_open
+- utter_ask_confirmation
+- action_ask_if_any_similar_times_work
+- utter_no_reservations_available
+- action_check_time_close
+- utter_ask_name
+- action_save_reservation
+- action_check_is_open
+- action_check_time_open_on_day
+- utter_time_within
+- action_set_size_slot
+- action_post_reservation_saved
+- action_check_is_open_on_day
 config:
   store_entities_as_slots: true
 entities:
 - name
 - item
+- number
 - size
 - time
-- number
 forms: []
 intents:
-- make_reservation:
-    use_entities: true
 - inform:
+    use_entities: true
+- affirm:
+    use_entities: true
+- make_reservation:
     use_entities: true
 - goodbye:
     use_entities: true
 - greet:
     use_entities: true
 - thank:
-    use_entities: true
-- affirm:
     use_entities: true
 - deny:
     use_entities: true

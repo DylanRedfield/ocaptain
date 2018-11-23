@@ -1,11 +1,8 @@
 {
   "action_fingerprints": {
     "action_listen": {
-      "slots": []
-    },
-    "action_set_scheduled_time_slot": {
       "slots": [
-        "scheduled_time"
+        "name"
       ]
     },
     "action_set_size_slot": {
@@ -13,16 +10,29 @@
         "size"
       ]
     },
+    "action_set_scheduled_time_slot": {
+      "slots": [
+        "business_id",
+        "scheduled_time",
+        "recipient_contact",
+        "recipient_id"
+      ]
+    },
     "action_check_reservation_datetime": {
+      "slots": [
+        "potential_times"
+      ]
+    },
+    "action_post_reservation_saved": {
       "slots": []
     },
-    "utter_ask_time": {
+    "utter_greet": {
       "slots": []
     },
     "utter_goodbye": {
       "slots": []
     },
-    "utter_greet": {
+    "utter_ask_time": {
       "slots": []
     }
   },
@@ -39,5 +49,5 @@
     "rasa_core.policies.memoization.MemoizationPolicy",
     "rasa_core.policies.fallback.FallbackPolicy"
   ],
-  "trained_at": "20181123-200934"
+  "trained_at": "20181123-203333"
 }
