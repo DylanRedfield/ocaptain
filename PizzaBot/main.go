@@ -75,8 +75,7 @@ func actionInput(w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 
-
-  log.Printf("%s", respString)
+	log.Printf("%s", respString)
 	_, err = w.Write(respString)
 
 	if err != nil {

@@ -1,108 +1,20 @@
 package main
 
 import (
-	"bytes"
 	"cloud.google.com/go/firestore"
-	"encoding/json"
 	"fmt"
 	"google.golang.org/api/iterator"
 	"log"
 	"math"
-	"net/http"
 	"time"
 )
-
-// Recieves Botrequest, saves message to firebase, sends to recipient, and returns reponse
-func (bot *Bot) HandleBusinessInput(reqObj BusinessRequest) BusinessResponse {
-	messageRef := bot.Client.Collection(Businesses).Doc(reqObj.Business.Id).Collection(Messages).NewDoc()
-
-	timeInMil := time.Now().UnixNano() / 1000000
-
-	message := Message{
-		Content:          reqObj.Message,
-		IsBusinessSender: true,
-		TimeSent:         timeInMil,
-		HasBusinessRead:  true,
-		DidBotCreate:     false,
-		RecipientId:      reqObj.Recipient.Id}
-
-	_, err := messageRef.Set(bot.Ctx, message)
-
-	personRef := bot.Client.Collection(Businesses).Doc(reqObj.BusinessId).Collection(Recipients).Doc(reqObj.Recipient.Id)
-	personRef.Update(bot.Ctx, []firestore.Update{
-		{Path: RecentMessage, Value: message},
-	})
-
-	if err != nil {
-		log.Println(err)
-	}
-
-	message.Id = messageRef.ID
-
-	smsRequest := SMSRequest{
-		To:   reqObj.Recipient.Contact,
-		From: reqObj.Business.PhoneNumber,
-		Body: reqObj.Message}
-
-	bot.SmsClient.SendSMS(smsRequest)
-
-	return BusinessResponse{}
-}
-
-func (bot *Bot) HandleOutsideInput(reqObj OutsideRequest) OutsideResponse {
-
-	businessId := reqObj.Business.Id
-
-	// Need to check if a recipient was found, and if not create one, and if so update the recent message
-	if reqObj.Recipient.Id == "" {
-		reqObj.Recipient.RecentMessage = reqObj.Message
-
-		personRef, _, err := bot.Client.Collection(Businesses).Doc(businessId).Collection(Recipients).Add(bot.Ctx, reqObj.Recipient)
-		reqObj.Recipient.Id = personRef.ID
-
-		if err != nil {
-			log.Println(err)
-		}
-	} else {
-		personRef := bot.Client.Collection(Businesses).Doc(businessId).Collection(Recipients).Doc(reqObj.Recipient.Id)
-		personRef.Update(ctx, []firestore.Update{
-			{Path: RecentMessage, Value: reqObj.Message},
-		})
-	}
-
-	// Need to save the new message to firebase
-	err := bot.saveMessage(reqObj.Business, reqObj.Recipient, reqObj.Message)
-
-	if err != nil {
-		log.Println(err)
-	}
-
-	// Send a http request that will be handled in the textual_input_channel
-	// The body is the OutsideRequest object
-	body, err := json.Marshal(reqObj)
-
-	if err != nil {
-		log.Println(err)
-	}
-
-	rasaUrl := fmt.Sprintf("http://localhost:5005/webhooks/textual/webhook")
-	req, err := http.NewRequest("POST", rasaUrl, bytes.NewBuffer(body))
-	req.Header.Set("Content-Type", "application/json")
-
-	if err != nil {
-		log.Println(err)
-	}
-
-	http.DefaultClient.Do(req)
-
-	return OutsideResponse{}
-}
 
 func (bot *Bot) HandleAction(req *RasaRequest) (*RasaResponse, error) {
 	resp := NewRasaResponse()
 
-  // TODO remove this it is just for train online testing
-  bot.checkOrSetInputSlots(req, resp)
+	// TODO remove this it is just for train online testing
+	bot.checkOrSetInputSlots(req, resp)
+
 	action := req.NextAction
 	log.Println(action)
 	switch action {
@@ -122,40 +34,38 @@ func (bot *Bot) HandleAction(req *RasaRequest) (*RasaResponse, error) {
 		bot.ActionSetScheduledTimeSlot(req, resp)
 	case ACTION_SET_SIZE_SLOT:
 		bot.ActionSetSizeSlot(req, resp)
-  case ACTION_ASK_IF_SIMILAR_TIMES_WORK:
-    bot.ActionAskIfSiilarTimesWork(req, resp)
+	case ACTION_ASK_IF_SIMILAR_TIMES_WORK:
+		bot.ActionAskIfSiilarTimesWork(req, resp)
 	}
-
 
 	return resp, nil
 }
 
 func (bot *Bot) ActionAskIfSiilarTimesWork(req *RasaRequest, resp *RasaResponse) {
-  times := req.Tracker.Slots["potential_times"].([]interface{})
-  reply := "Do any of the following times work: "
+	times := req.Tracker.Slots[POTENTIAL_TIMES].([]interface{})
+	reply := "Do any of the following times work: "
 
-  for i, v := range times {
-	  datetime, _ := time.Parse(time.RFC3339, v.(string))
+	for i, v := range times {
+		datetime, _ := time.Parse(time.RFC3339, v.(string))
 
-    hour := datetime.Hour()
-    period := "am"
+		hour := datetime.Hour()
+		period := "am"
 
-    if hour >= 12 {
-      period = "pm"
-    }
+		if hour >= 12 {
+			period = "pm"
+		}
 
-    hour = hour % 12
+		hour = hour % 12
 
-    if hour == 0 {
-      hour = 12
-    }
+		if hour == 0 {
+			hour = 12
+		}
 
-
-    if i != 0 {
-      reply += ", "
-    }
-    reply += fmt.Sprintf("%d:%d %s", hour, datetime.Minute(), period)
-  }
+		if i != 0 {
+			reply += ", "
+		}
+		reply += fmt.Sprintf("%d:%d %s", hour, datetime.Minute(), period)
+	}
 	resp.Responses = append(resp.Responses, Response{Text: reply})
 }
 
@@ -163,9 +73,9 @@ func (bot *Bot) ActionCheckReservationDatetime(req *RasaRequest, resp *RasaRespo
 	// TODO add support for time intervals
 	/* Will have a datetime, businessId, partySize, etc saved in slots */
 	//recipientId := req.Tracker.Slots["recipient_id"]
-  businessId := req.Tracker.Slots["business_id"].(string)
-	searchTimeStr := req.Tracker.Slots["scheduled_time"].(string)
-	partySize := req.Tracker.Slots["size"].(string)
+	businessId := req.Tracker.Slots[BUSINESS_ID].(string)
+	searchTimeStr := req.Tracker.Slots[SCHEDULED_TIME].(string)
+	partySize := req.Tracker.Slots[SCHEDULED_TIME].(string)
 
 	searchTime, err := time.Parse(time.RFC3339, searchTimeStr)
 
@@ -185,20 +95,20 @@ func (bot *Bot) ActionCheckReservationDatetime(req *RasaRequest, resp *RasaRespo
 		log.Println(err)
 	}
 
-  bot.handleReservationDatetimeQueryResult(reservationResult, req, resp)
+	bot.handleReservationDatetimeQueryResult(reservationResult, req, resp)
 
 }
 
 func (bot *Bot) handleReservationDatetimeQueryResult(reservationResult OpenTableResult, req *RasaRequest, resp *RasaResponse) {
-	searchTimeStr := req.Tracker.Slots["scheduled_time"].(string)
+	searchTimeStr := req.Tracker.Slots[SCHEDULED_TIME].(string)
 
 	searchTime, _ := time.Parse(time.RFC3339, searchTimeStr)
 
-  // TODO do better here
-  name := ""
-  if req.Tracker.Slots["name"] != nil {
-	  name = req.Tracker.Slots["name"].(string)
-  }
+	// TODO do better here
+	name := ""
+	if req.Tracker.Slots[NAME] != nil {
+		name = req.Tracker.Slots[NAME].(string)
+	}
 
 	if reservationResult.Message == "" {
 		// Reservations found within 2.5 hours of request
@@ -216,12 +126,12 @@ func (bot *Bot) handleReservationDatetimeQueryResult(reservationResult OpenTable
 
 			if name == "" {
 				// Action ask the name
-				nextAction := Event{Event: "followup", Name: "utter_ask_name"}
+				nextAction := Event{Event: "followup", Name: UTTER_ASK_NAME}
 				resp.Events = append(resp.Events, nextAction)
 				return
 			} else {
 				// Force Action save_reservation
-				nextAction := Event{Event: "followup", Name: "action_save_reservation"}
+				nextAction := Event{Event: "followup", Name: ACTION_SAVE_RESERVATION}
 				resp.Events = append(resp.Events, nextAction)
 				return
 			}
@@ -239,29 +149,29 @@ func (bot *Bot) handleReservationDatetimeQueryResult(reservationResult OpenTable
 
 		if lessThan15 {
 			// Action is this one good?
-			nextAction := Event{Event: "slot", Name: "potential_times", Value: []time.Time{selectedTime}}
+			nextAction := Event{Event: SLOT, Name: POTENTIAL_TIMES, Value: []time.Time{selectedTime}}
 			resp.Events = append(resp.Events, nextAction)
 
-			nextAction = Event{Event: "followup", Name: "action_ask_is_close_time_okay"}
+			nextAction = Event{Event: FOLLOWUP, Name: ACTION_ASK_IF_SIMLIAR_TIMES_WORK}
 			resp.Events = append(resp.Events, nextAction)
 			return
 		}
 
-		nextAction := Event{Event: "slot", Name: "potential_times", Value: reservationResult.Results}
+		nextAction := Event{Event: SLOT, Name: POTENTIAL_TIMES, Value: reservationResult.Results}
 		resp.Events = append(resp.Events, nextAction)
 
 		// action we didn't find any at that time, but do any of these times work for you?
-		nextAction = Event{Event: "followup", Name: "action_ask_if_any_similar_times_work"}
+		nextAction = Event{Event: FOLLOWUP, Name: ACTION_UTTER_ASK_IF_SIMILAR_TIMES_OKAY}
 		resp.Events = append(resp.Events, nextAction)
 		return
 
 	} else if reservationResult.Message == NO_AVAILABLE {
-		nextAction := Event{Event: "followup", Name: "utter_no_reservations_available"}
+		nextAction := Event{Event: FOLLOWUP, Name: UTTER_NO_RESERVATIONS_AVAILABLE}
 		resp.Events = append(resp.Events, nextAction)
 		return
 
 	} else if reservationResult.Message == IN_ADVANCE {
-		nextAction := Event{Event: "followup", Name: "utter_time_within"}
+		nextAction := Event{Event: FOLLOWUP, Name: UTTER_REQUEST_TIME_TOO_EARLY}
 		resp.Events = append(resp.Events, nextAction)
 		return
 	}
@@ -270,73 +180,82 @@ func (bot *Bot) handleReservationDatetimeQueryResult(reservationResult OpenTable
 
 func (bot *Bot) ActionSaveReservation(req *RasaRequest, resp *RasaResponse) {
 
-  name := req.Tracker.Slots["name"].(string)
-  size := int32(req.Tracker.Slots["size"].(float64))
-  scheduledTime := req.Tracker.Slots("scheduled_time").(string)
+	name := req.Tracker.Slots[NAME].(string)
+	size := int32(req.Tracker.Slots[SIZE].(float64))
+	scheduledTime := req.Tracker.Slots[SCHEDULED_TIME].(string)
+	businessId := req.Tracker.Slots[BUSINESS_ID].(string)
 
 	datetime, _ := time.Parse(time.RFC3339, scheduledTime)
-  timeAsFloat := datetime.Unix()
+	timeAsFloat := datetime.Unix()
 
-  reservation := Reservation{Name : name, NumPeople : size, ScheduledTime : timeAsFloat}
+	reservation := Reservation{Name: name, NumPeople: size, ScheduledTime: timeAsFloat}
 
-	reservationsRef := bot.Client.Collection(Businesses).Doc(req.BusinessId).Collection(Reservations)
-  reservationsRef.Add(bot.Ctx, reservation)
+	reservationsRef := bot.Client.Collection(Businesses).Doc(businessId).Collection(Reservations)
+	reservationsRef.Add(bot.Ctx, reservation)
 
 }
 
+func (bot *Bot) ActionUtterPostReservationSaved(req *RasaRequest, resp *RasaResponse) {
+  name := req.Tracker.Slots[NAME].(string)
+  size := req.Tracker.Slots[SIZE].(float64)
+  scheduledTime := req.Tracker.Slots[SCHEDULED_TIME].(string)
+
+  reply := fmt.Sprintf("Great. %s see you and your party of %0f at %s", name, size, scheduledTime)
+	resp.Responses = append(resp.Responses, Response{Text: reply})
+}
+
 func (bot *Bot) checkOrSetInputSlots(req *RasaRequest, resp *RasaResponse) {
-  businessId := ""
-  if req.Tracker.Slots["business_id"] != nil {
-    businessId = "MewuHeThW4QJGDxD9tTr"
-    nextAction := Event{Event: "slot", Name: "business_id", Value: businessId}
-    resp.Events = append(resp.Events, nextAction)
+	businessId := ""
+	if req.Tracker.Slots[BUSINESS_ID] != nil {
+		businessId = "MewuHeThW4QJGDxD9tTr"
+		nextAction := Event{Event: SLOT, Name: BUSINESS_ID, Value: businessId}
+		resp.Events = append(resp.Events, nextAction)
 
-  }
-  recipientId := ""
-  if req.Tracker.Slots["recipient_id"] != nil {
-    recipientId = "MewuHeThW4QJGDxD9tTr"
-    nextAction := Event{Event: "slot", Name: "recipient_id", Value: recipientId}
-    resp.Events = append(resp.Events, nextAction)
+	}
+	recipientId := ""
+	if req.Tracker.Slots[RECIPIENT_ID] != nil {
+		recipientId = "hxk7QAAgWVi47Qt05s7o"
+		nextAction := Event{Event: SLOT, Name: RECIPIENT_ID, Value: recipientId}
+		resp.Events = append(resp.Events, nextAction)
 
-  }
-  recipientContact := ""
-  if req.Tracker.Slots["recipient_contact"] != nil {
-    recipientContact = "+19084771280"
-    nextAction := Event{Event: "slot", Name: "recipient_contact", Value: recipientContact}
-    resp.Events = append(resp.Events, nextAction)
+	}
+	recipientContact := ""
+	if req.Tracker.Slots[RECIPIENT_CONTACT] != nil {
+		recipientContact = "+19084771280"
+		nextAction := Event{Event: "slot", Name: RECIPIENT_CONTACT, Value: recipientContact}
+		resp.Events = append(resp.Events, nextAction)
 
-  }
-
+	}
 
 }
 
 func (bot *Bot) ActionSetScheduledTimeSlot(req *RasaRequest, resp *RasaResponse) {
 	scheduledTime := ""
 	for _, v := range req.Tracker.LatestMessage.Entities {
-		if v.Entity == "time" {
+		if v.Entity == TIME {
 			scheduledTime = v.Value.(string)
 		}
 	}
-	nextAction := Event{Event: "slot", Name: "scheduled_time", Value: scheduledTime}
+	nextAction := Event{Event: SLOT, Name: SCHEDULED_TIME, Value: scheduledTime}
 	resp.Events = append(resp.Events, nextAction)
 }
 
 func (bot *Bot) ActionSetSizeSlot(req *RasaRequest, resp *RasaResponse) {
 	size := 0.0
 	for _, v := range req.Tracker.LatestMessage.Entities {
-		if v.Entity == "number" {
+		if v.Entity == NUMBER {
 			size = v.Value.(float64)
 		}
 	}
 
-  // TODO undo this hacky string shit
-	nextAction := Event{Event: "slot", Name: "size", Value: fmt.Sprintf("%f", size)}
+	// TODO undo this hacky string shit
+	nextAction := Event{Event: SLOT, Name: SIZE, Value: fmt.Sprintf("%f", size)}
 	resp.Events = append(resp.Events, nextAction)
 }
 
 func (bot *Bot) ActionUpdateOrder(req *RasaRequest, resp *RasaResponse) {
-	businessId := req.Tracker.Slots["business_id"].(string)
-	recipientId := req.Tracker.Slots["recipient_id"].(string)
+	businessId := req.Tracker.Slots[BUSINESS_ID].(string)
+	recipientId := req.Tracker.Slots[RECIPIENT_ID].(string)
 
 	orderQuery := bot.Client.Collection(Businesses).Doc(businessId).Collection(Orders).Where("recipientId", "==", recipientId)
 	orderQuery = orderQuery.Where("visible", "==", true).OrderBy("lastModificationTime", firestore.Desc)

@@ -116,12 +116,12 @@ type OpenClose struct {
 }
 
 type Reservation struct {
-  Id string `firestore:"-"`
-  RecipientId string `firestore:"recipientId"`
-  Name string `firestore:"-"`
-  ScheduledTime int64 `firestore:"scheduledTime"`
-  NumPeople int32 `firestore:"numPeople"`
-  IsVisible bool `firestore:"isVisible"`
+	Id            string `firestore:"-"`
+	RecipientId   string `firestore:"recipientId"`
+	Name          string `firestore:"-"`
+	ScheduledTime int64  `firestore:"scheduledTime"`
+	NumPeople     int32  `firestore:"numPeople"`
+	IsVisible     bool   `firestore:"isVisible"`
 }
 
 func (business Business) TimeClose(day string) int32 {
@@ -135,13 +135,13 @@ func (business Business) IsOpen() bool {
 
 type Tracker struct {
 	Slots         map[string]interface{} `json:"slots"`
-	SenderId      string            `json:"sender_id"`
-	LatestMessage LatestMessage     `json:"latest_message"`
+	SenderId      string                 `json:"sender_id"`
+	LatestMessage LatestMessage          `json:"latest_message"`
 }
 
 type LatestMessage struct {
-	Text     string   `json:"text"`
-//	Intent   string   `json:"intent"`
+	Text string `json:"text"`
+	//	Intent   string   `json:"intent"`
 	Entities []Entity `json:"entities"`
 }
 
