@@ -35,19 +35,21 @@ func (bot *Bot) HandleAction(req *RasaRequest) (*RasaResponse, error) {
 	case ACTION_SET_SIZE_SLOT:
 		bot.ActionSetSizeSlot(req, resp)
 	case ACTION_ASK_IF_SIMILAR_TIMES_WORK:
-		bot.ActionAskIfSiilarTimesWork(req, resp)
+		bot.ActionAskIfSimilarTimesWork(req, resp)
   case ACTION_UTTER_ASK_IS_OTHER_RESERVATION_TIME_OKAY:
     bot.ActionUtterAskIsOtherReservationTimeOkay(req, resp)
   case ACTION_POST_RESERVATION_SAVED:
     bot.ActionUtterPostReservationSaved(req, resp)
   case ACTION_SAVE_RESERVATION:
     bot.ActionSaveReservation(req, resp)
+  case ACTION_AFFIRM_SIMILAR_TIME_ORDINAL(req, resp):
+    bot.ActionAffirmSimilarTimeOrdinal(req, resp)
 	}
 
 	return resp, nil
 }
 
-func (bot *Bot) ActionAskIfSiilarTimesWork(req *RasaRequest, resp *RasaResponse) {
+func (bot *Bot) ActionAskIfSimilarTimesWork(req *RasaRequest, resp *RasaResponse) {
 	times := req.Tracker.Slots[POTENTIAL_TIMES].([]interface{})
 	reply := "Do any of the following times work: "
 
@@ -61,6 +63,10 @@ func (bot *Bot) ActionAskIfSiilarTimesWork(req *RasaRequest, resp *RasaResponse)
     reply = datetime.Format("3:04 PM")
 	}
 	resp.Responses = append(resp.Responses, Response{Text: reply})
+}
+
+func (bot *Bot) ActionAffirmSimilarTimeOrdinal(req *RasaRequest, resp *RasaResponse) {
+
 }
 
 func (bot *Bot) ActionUtterAskIsOtherReservationTimeOkay(req *RasaRequest, resp *RasaResponse) {

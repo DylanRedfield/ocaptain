@@ -118,7 +118,7 @@ type OpenClose struct {
 type Reservation struct {
 	Id            string `firestore:"-"`
 	RecipientId   string `firestore:"recipientId"`
-	Name          string `firestore:"-"`
+	Name          string `firestore:"name"`
 	ScheduledTime int64  `firestore:"scheduledTime"`
 	NumPeople     string  `firestore:"numPeople"`
 	IsVisible     bool   `firestore:"isVisible"`

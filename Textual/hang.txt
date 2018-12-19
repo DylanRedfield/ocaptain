@@ -1,0 +1,5 @@
+- name: "ner_duckling_http"
+  url: "http://localhost:8000"
+  dimensions: ["time", "ordinal", "number"]
+  timezone: "Etc/GMT"
+

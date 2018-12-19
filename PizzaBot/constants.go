@@ -69,6 +69,7 @@ const (
 	UTTER_NO_RESERVATIONS_AVAILABLE                        = "utter_no_reservations_available"
   ACTION_SAVE_RESERVATION = "action_save_reservation"
   ACTION_POST_RESERVATION_SAVED = "action_post_reservation_saved"
+  ACTION_AFFIRM_SIMILAR_TIME_ORDINAL = "action_affirm_similar_time_ordinal"
 )
 
 // Entities

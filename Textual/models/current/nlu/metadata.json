@@ -60,6 +60,10 @@
             "class": "rasa_nlu.extractors.entity_synonyms.EntitySynonymMapper"
         },
         {
+            "name": "ner_extended_spacy",
+            "class": "extended_spacy_entity_extractor.ExtendedSpacyEntityExtractor"
+        },
+        {
             "dimensions": [
                 "time",
                 "number"
@@ -67,8 +71,8 @@
             "url": "http://localhost:8000",
             "locale": null,
             "timezone": "Etc/GMT",
-            "name": "ner_duckling_http",
-            "class": "rasa_nlu.extractors.duckling_http_extractor.DucklingHTTPExtractor"
+            "name": "ner_extended_duckling_http",
+            "class": "extended_duckling_http_extractor.ExtendedDucklingHTTPExtractor"
         },
         {
             "C": [
@@ -93,6 +97,6 @@
         }
     ],
     "training_data": "training_data.json",
-    "trained_at": "20181122-061830",
+    "trained_at": "20181219-215651",
     "rasa_nlu_version": "0.13.7"
 }
