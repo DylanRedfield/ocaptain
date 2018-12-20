@@ -67,16 +67,18 @@ const (
 	ACTION_UTTER_ASK_IS_OTHER_RESERVATION_TIME_OKAY        = "action_utter_ask_is_other_reservation_time_okay"
 	UTTER_REQUEST_TIME_TOO_EARLY                           = "utter_request_time_too_early"
 	UTTER_NO_RESERVATIONS_AVAILABLE                        = "utter_no_reservations_available"
-  ACTION_SAVE_RESERVATION = "action_save_reservation"
-  ACTION_POST_RESERVATION_SAVED = "action_post_reservation_saved"
-  ACTION_AFFIRM_SIMILAR_TIME_ORDINAL = "action_affirm_similar_time_ordinal"
+	ACTION_SAVE_RESERVATION                                = "action_save_reservation"
+	ACTION_POST_RESERVATION_SAVED                          = "action_post_reservation_saved"
+	ACTION_AFFIRM_SIMILAR_TIME_ORDINAL                     = "action_affirm_similar_time_ordinal"
+	ACTION_AFFIRM_SIMILAR_TIME                             = "action_affirm_similar_time"
 )
 
 // Entities
 const (
-  TIME = "time"
-  NUMBER = "number"
+	TIME   = "time"
+	NUMBER = "number"
 )
+
 // Slots
 const (
 	NAME              string = "name"
@@ -90,6 +92,6 @@ const (
 
 // Event
 const (
-  SLOT string = "slot"
-  FOLLOWUP = "followup"
+	SLOT     string = "slot"
+	FOLLOWUP        = "followup"
 )

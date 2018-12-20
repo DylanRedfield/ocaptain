@@ -36,14 +36,16 @@ func (bot *Bot) HandleAction(req *RasaRequest) (*RasaResponse, error) {
 		bot.ActionSetSizeSlot(req, resp)
 	case ACTION_ASK_IF_SIMILAR_TIMES_WORK:
 		bot.ActionAskIfSimilarTimesWork(req, resp)
-  case ACTION_UTTER_ASK_IS_OTHER_RESERVATION_TIME_OKAY:
-    bot.ActionUtterAskIsOtherReservationTimeOkay(req, resp)
-  case ACTION_POST_RESERVATION_SAVED:
-    bot.ActionUtterPostReservationSaved(req, resp)
-  case ACTION_SAVE_RESERVATION:
-    bot.ActionSaveReservation(req, resp)
-  case ACTION_AFFIRM_SIMILAR_TIME_ORDINAL(req, resp):
-    bot.ActionAffirmSimilarTimeOrdinal(req, resp)
+	case ACTION_UTTER_ASK_IS_OTHER_RESERVATION_TIME_OKAY:
+		bot.ActionUtterAskIsOtherReservationTimeOkay(req, resp)
+	case ACTION_POST_RESERVATION_SAVED:
+		bot.ActionUtterPostReservationSaved(req, resp)
+	case ACTION_SAVE_RESERVATION:
+		bot.ActionSaveReservation(req, resp)
+	case ACTION_AFFIRM_SIMILAR_TIME:
+		bot.ActionAffirmSimilarTime(req, resp)
+	case ACTION_AFFIRM_SIMILAR_TIME_ORDINAL:
+		bot.ActionAffirmSimilarTimeOrdinal(req, resp)
 	}
 
 	return resp, nil
@@ -60,30 +62,58 @@ func (bot *Bot) ActionAskIfSimilarTimesWork(req *RasaRequest, resp *RasaResponse
 			reply += ", "
 		}
 
-    reply = datetime.Format("3:04 PM")
+		reply = datetime.Format("3:04 PM")
 	}
 	resp.Responses = append(resp.Responses, Response{Text: reply})
 }
 
-func (bot *Bot) ActionAffirmSimilarTimeOrdinal(req *RasaRequest, resp *RasaResponse) {
+func (bot *Bot) ActionAffirmSimilarTime(req *RasaRequest, resp *RasaResponse) {
+	event := Event{Event: FOLLOWUP, Name: ACTION_AFFIRM_SIMILAR_TIME_ORDINAL}
+	resp.Events = append(resp.Events, event)
+}
 
+func (bot *Bot) ActionAffirmSimilarTimeOrdinal(req *RasaRequest, resp *RasaResponse) {
+	// Save the correct potential time into the slot and then followup with action_save_reservation
+	potential_times := req.Tracker.Slots[POTENTIAL_TIMES].([]interface{})
+
+	// Need to get the ordinal from entities
+	entities := req.Tracker.LatestMessage.Entities
+
+	ordinal := -1
+	for _, v := range entities {
+		if v.Entity == "ordinal" {
+			ordinal = v.Value.(int)
+		}
+	}
+
+	if ordinal >= len(potential_times) {
+		// TODO utter_error
+	} else {
+
+		time := potential_times[ordinal]
+		event := Event{Event: SLOT, Name: SCHEDULED_TIME, Value: time}
+		resp.Events = append(resp.Events, event)
+
+		event = Event{Event: FOLLOWUP, Name: ACTION_SAVE_RESERVATION}
+		resp.Events = append(resp.Events, event)
+	}
 }
 
 func (bot *Bot) ActionUtterAskIsOtherReservationTimeOkay(req *RasaRequest, resp *RasaResponse) {
 	times := req.Tracker.Slots[POTENTIAL_TIMES].([]interface{})
 
-  potentialTime := ""
+	potentialTime := ""
 	for _, v := range times {
 		datetime, err := time.Parse(time.RFC3339, v.(string))
 
-    if err != nil {
-      log.Println(err)
-    }
+		if err != nil {
+			log.Println(err)
+		}
 
-    potentialTime = datetime.Format("3:04 PM")
+		potentialTime = datetime.Format("3:04 PM")
 	}
 
-  reply := fmt.Sprintf("Is %s close enough?", potentialTime)
+	reply := fmt.Sprintf("Is %s close enough?", potentialTime)
 	resp.Responses = append(resp.Responses, Response{Text: reply})
 
 }
@@ -211,22 +241,22 @@ func (bot *Bot) ActionSaveReservation(req *RasaRequest, resp *RasaResponse) {
 	reservation := Reservation{Name: name, NumPeople: size, ScheduledTime: timeAsFloat}
 
 	reservationsRef := bot.Client.Collection(Businesses).Doc(businessId).Collection(Reservations)
-  _, _, err := reservationsRef.Add(bot.Ctx, reservation)
+	_, _, err := reservationsRef.Add(bot.Ctx, reservation)
 
-  if err != nil {
-    log.Println(err)
-  }
+	if err != nil {
+		log.Println(err)
+	}
 
 }
 
 func (bot *Bot) ActionUtterPostReservationSaved(req *RasaRequest, resp *RasaResponse) {
-  name := req.Tracker.Slots[NAME].(string)
-  //size := req.Tracker.Slots[SIZE].(string)
-  scheduledTime := req.Tracker.Slots[SCHEDULED_TIME].(string)
+	name := req.Tracker.Slots[NAME].(string)
+	//size := req.Tracker.Slots[SIZE].(string)
+	scheduledTime := req.Tracker.Slots[SCHEDULED_TIME].(string)
 
-  datetime, _ := time.Parse(time.RFC3339, scheduledTime)
+	datetime, _ := time.Parse(time.RFC3339, scheduledTime)
 
-  reply := fmt.Sprintf("Great. %s see you at %s", name, datetime.Format("3:04 PM"))
+	reply := fmt.Sprintf("Great. %s see you at %s", name, datetime.Format("3:04 PM"))
 	resp.Responses = append(resp.Responses, Response{Text: reply})
 }
 
