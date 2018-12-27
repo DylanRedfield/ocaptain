@@ -64,5 +64,5 @@ class ExtendedSpacyEntityExtractor(EntityExtractor):
                 "confidence": None,
                 "end": ent.end_char
             }
-            for ent in doc.ents]
+            for ent in doc.ents if ent.label_ == "ORDINAL"]
         return entities

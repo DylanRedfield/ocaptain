@@ -7,10 +7,10 @@
     },
     "action_set_scheduled_time_slot": {
       "slots": [
+        "business_id",
         "recipient_contact",
-        "recipient_id",
         "scheduled_time",
-        "business_id"
+        "recipient_id"
       ]
     },
     "action_set_size_slot": {
@@ -23,16 +23,30 @@
         "potential_times"
       ]
     },
+    "action_affirm_similar_time_ordinal": {
+      "slots": [
+        "scheduled_time"
+      ]
+    },
     "action_post_reservation_saved": {
       "slots": []
     },
-    "utter_ask_time": {
+    "action_save_reservation": {
+      "slots": []
+    },
+    "action_restart": {
+      "slots": []
+    },
+    "utter_ask_size": {
       "slots": []
     },
     "utter_goodbye": {
       "slots": []
     },
     "utter_greet": {
+      "slots": []
+    },
+    "utter_ask_time": {
       "slots": []
     }
   },
@@ -49,5 +63,5 @@
     "rasa_core.policies.memoization.MemoizationPolicy",
     "rasa_core.policies.fallback.FallbackPolicy"
   ],
-  "trained_at": "20181123-205334"
+  "trained_at": "20181227-192107"
 }

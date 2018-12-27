@@ -10,6 +10,7 @@ import (
 )
 
 func (bot *Bot) HandleAction(req *RasaRequest) (*RasaResponse, error) {
+  log.Println(req)
 	resp := NewRasaResponse()
 
 	// TODO remove this it is just for train online testing
@@ -53,7 +54,7 @@ func (bot *Bot) HandleAction(req *RasaRequest) (*RasaResponse, error) {
 
 func (bot *Bot) ActionAskIfSimilarTimesWork(req *RasaRequest, resp *RasaResponse) {
 	times := req.Tracker.Slots[POTENTIAL_TIMES].([]interface{})
-	reply := "Do any of the following times work: "
+	reply := "Nothing is available then but do any of the following times work: "
 
 	for i, v := range times {
 		datetime, _ := time.Parse(time.RFC3339, v.(string))
@@ -62,8 +63,9 @@ func (bot *Bot) ActionAskIfSimilarTimesWork(req *RasaRequest, resp *RasaResponse
 			reply += ", "
 		}
 
-		reply = datetime.Format("3:04 PM")
+		reply += datetime.Format("3:04 PM")
 	}
+  reply += "?"
 	resp.Responses = append(resp.Responses, Response{Text: reply})
 }
 
@@ -75,27 +77,34 @@ func (bot *Bot) ActionAffirmSimilarTime(req *RasaRequest, resp *RasaResponse) {
 func (bot *Bot) ActionAffirmSimilarTimeOrdinal(req *RasaRequest, resp *RasaResponse) {
 	// Save the correct potential time into the slot and then followup with action_save_reservation
 	potential_times := req.Tracker.Slots[POTENTIAL_TIMES].([]interface{})
+  name := req.Tracker.Slots[NAME]
 
 	// Need to get the ordinal from entities
 	entities := req.Tracker.LatestMessage.Entities
 
-	ordinal := -1
+	ordinal := -1.0
 	for _, v := range entities {
 		if v.Entity == "ordinal" {
-			ordinal = v.Value.(int)
+			ordinal = v.Value.(float64)
 		}
 	}
 
-	if ordinal >= len(potential_times) {
+	if int(ordinal) > len(potential_times) {
 		// TODO utter_error
 	} else {
+		time := potential_times[int(ordinal) - 1]
+    log.Println(time)
 
-		time := potential_times[ordinal]
-		event := Event{Event: SLOT, Name: SCHEDULED_TIME, Value: time}
+    event := Event{}
+    switch name.(type) {
+    case string: event = Event{Event: FOLLOWUP, Name: ACTION_SAVE_RESERVATION}
+    default : event = Event{Event: FOLLOWUP, Name: UTTER_ASK_NAME}
+    }
 		resp.Events = append(resp.Events, event)
 
-		event = Event{Event: FOLLOWUP, Name: ACTION_SAVE_RESERVATION}
+		event = Event{Event: SLOT, Name: SCHEDULED_TIME, Value: time}
 		resp.Events = append(resp.Events, event)
+
 	}
 }
 
@@ -234,11 +243,12 @@ func (bot *Bot) ActionSaveReservation(req *RasaRequest, resp *RasaResponse) {
 	size := req.Tracker.Slots[SIZE].(string)
 	scheduledTime := req.Tracker.Slots[SCHEDULED_TIME].(string)
 	businessId := req.Tracker.Slots[BUSINESS_ID].(string)
+	recipientId := req.Tracker.Slots[RECIPIENT_ID].(string)
 
 	datetime, _ := time.Parse(time.RFC3339, scheduledTime)
 	timeAsFloat := datetime.Unix()
 
-	reservation := Reservation{Name: name, NumPeople: size, ScheduledTime: timeAsFloat}
+  reservation := Reservation{Name: name, NumPeople: size, RecipientId: recipientId,  ScheduledTime: timeAsFloat}
 
 	reservationsRef := bot.Client.Collection(Businesses).Doc(businessId).Collection(Reservations)
 	_, _, err := reservationsRef.Add(bot.Ctx, reservation)
@@ -255,6 +265,7 @@ func (bot *Bot) ActionUtterPostReservationSaved(req *RasaRequest, resp *RasaResp
 	scheduledTime := req.Tracker.Slots[SCHEDULED_TIME].(string)
 
 	datetime, _ := time.Parse(time.RFC3339, scheduledTime)
+
 
 	reply := fmt.Sprintf("Great. %s see you at %s", name, datetime.Format("3:04 PM"))
 	resp.Responses = append(resp.Responses, Response{Text: reply})
@@ -286,6 +297,7 @@ func (bot *Bot) checkOrSetInputSlots(req *RasaRequest, resp *RasaResponse) {
 }
 
 func (bot *Bot) ActionSetScheduledTimeSlot(req *RasaRequest, resp *RasaResponse) {
+
 	scheduledTime := ""
 	for _, v := range req.Tracker.LatestMessage.Entities {
 		if v.Entity == TIME {
