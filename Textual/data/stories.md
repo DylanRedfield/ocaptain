@@ -192,3 +192,45 @@
     - slot{"scheduled_time": "2018-12-27T19:15:00.000+00:00"}
     - utter_ask_size
 
+## Generated Story 3958085669344885276
+* is_open
+    - action_check_is_open
+    - slot{"business_id": "MewuHeThW4QJGDxD9tTr"}
+    - slot{"recipient_id": "hxk7QAAgWVi47Qt05s7o"}
+    - slot{"recipient_contact": "+19084771280"}
+
+## Generated Story 3958085669344885277
+* is_open{"time": "2018-12-25T00:00:00.000+00:00"}
+    - action_check_is_open_on_day
+    - slot{"business_id": "MewuHeThW4QJGDxD9tTr"}
+    - slot{"recipient_id": "hxk7QAAgWVi47Qt05s7o"}
+    - slot{"recipient_contact": "+19084771280"}
+
+## Generated Story 1797266029009912305
+* time_open{"time": "2018-12-25T00:00:00.000+00:00"}
+    - action_check_time_open_on_day
+    - slot{"business_id": "MewuHeThW4QJGDxD9tTr"}
+    - slot{"recipient_id": "hxk7QAAgWVi47Qt05s7o"}
+    - slot{"recipient_contact": "+19084771280"}
+
+## Generated Story 1797266029009912306
+* time_open
+    - action_check_time_open
+    - slot{"business_id": "MewuHeThW4QJGDxD9tTr"}
+    - slot{"recipient_id": "hxk7QAAgWVi47Qt05s7o"}
+    - slot{"recipient_contact": "+19084771280"}
+
+## Generated Story 1797266029009912305
+* time_close{"time": "2018-12-25T00:00:00.000+00:00"}
+    - action_check_time_close_on_day
+    - slot{"business_id": "MewuHeThW4QJGDxD9tTr"}
+    - slot{"recipient_id": "hxk7QAAgWVi47Qt05s7o"}
+    - slot{"recipient_contact": "+19084771280"}
+
+## Generated Story 1797266029009912306
+* time_close
+    - action_check_time_close
+    - slot{"business_id": "MewuHeThW4QJGDxD9tTr"}
+    - slot{"recipient_id": "hxk7QAAgWVi47Qt05s7o"}
+    - slot{"recipient_contact": "+19084771280"}
+

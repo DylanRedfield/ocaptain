@@ -9,8 +9,8 @@
       "slots": [
         "business_id",
         "recipient_contact",
-        "scheduled_time",
-        "recipient_id"
+        "recipient_id",
+        "scheduled_time"
       ]
     },
     "action_set_size_slot": {
@@ -23,21 +23,49 @@
         "potential_times"
       ]
     },
+    "action_post_reservation_saved": {
+      "slots": []
+    },
     "action_affirm_similar_time_ordinal": {
       "slots": [
         "scheduled_time"
       ]
     },
-    "action_post_reservation_saved": {
+    "utter_ask_time": {
       "slots": []
     },
     "action_save_reservation": {
       "slots": []
     },
-    "action_restart": {
-      "slots": []
+    "action_check_is_open": {
+      "slots": [
+        "recipient_contact",
+        "recipient_id",
+        "business_id"
+      ]
     },
-    "utter_ask_size": {
+    "action_check_time_close_on_day": {
+      "slots": [
+        "recipient_contact",
+        "recipient_id",
+        "business_id"
+      ]
+    },
+    "action_check_time_close": {
+      "slots": [
+        "recipient_contact",
+        "recipient_id",
+        "business_id"
+      ]
+    },
+    "action_check_time_open_on_day": {
+      "slots": [
+        "recipient_contact",
+        "recipient_id",
+        "business_id"
+      ]
+    },
+    "action_restart": {
       "slots": []
     },
     "utter_goodbye": {
@@ -46,8 +74,22 @@
     "utter_greet": {
       "slots": []
     },
-    "utter_ask_time": {
+    "utter_ask_size": {
       "slots": []
+    },
+    "action_check_is_open_on_day": {
+      "slots": [
+        "recipient_contact",
+        "recipient_id",
+        "business_id"
+      ]
+    },
+    "action_check_time_open": {
+      "slots": [
+        "recipient_contact",
+        "recipient_id",
+        "business_id"
+      ]
     }
   },
   "rasa_core": "0.12.1",
@@ -63,5 +105,5 @@
     "rasa_core.policies.memoization.MemoizationPolicy",
     "rasa_core.policies.fallback.FallbackPolicy"
   ],
-  "trained_at": "20181227-192107"
+  "trained_at": "20181228-193817"
 }

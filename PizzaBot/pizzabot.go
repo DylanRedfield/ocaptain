@@ -6,6 +6,7 @@ import (
 	"google.golang.org/api/iterator"
 	"log"
 	"math"
+  "strconv"
 	"time"
 )
 
@@ -244,14 +245,28 @@ func (bot *Bot) ActionSaveReservation(req *RasaRequest, resp *RasaResponse) {
 	scheduledTime := req.Tracker.Slots[SCHEDULED_TIME].(string)
 	businessId := req.Tracker.Slots[BUSINESS_ID].(string)
 	recipientId := req.Tracker.Slots[RECIPIENT_ID].(string)
+	contact := req.Tracker.Slots[RECIPIENT_CONTACT].(string)
+  
 
 	datetime, _ := time.Parse(time.RFC3339, scheduledTime)
-	timeAsFloat := datetime.Unix()
+	timeAsFloat := datetime.UnixNano() / 1000000
 
-  reservation := Reservation{Name: name, NumPeople: size, RecipientId: recipientId,  ScheduledTime: timeAsFloat}
+  numPeople, err := strconv.ParseInt(size, 0, 32)
+  if err != nil {
+    log.Println(err)
+  }
+
+  reservation := Reservation{
+    Name: name, 
+    NumPeople: int(numPeople), 
+    RecipientId: recipientId, 
+    ScheduledTime: timeAsFloat,
+    IsVisible: true,
+    Contact : contact,
+  }
 
 	reservationsRef := bot.Client.Collection(Businesses).Doc(businessId).Collection(Reservations)
-	_, _, err := reservationsRef.Add(bot.Ctx, reservation)
+	_, _, err = reservationsRef.Add(bot.Ctx, reservation)
 
 	if err != nil {
 		log.Println(err)
@@ -260,14 +275,13 @@ func (bot *Bot) ActionSaveReservation(req *RasaRequest, resp *RasaResponse) {
 }
 
 func (bot *Bot) ActionUtterPostReservationSaved(req *RasaRequest, resp *RasaResponse) {
-	name := req.Tracker.Slots[NAME].(string)
 	//size := req.Tracker.Slots[SIZE].(string)
 	scheduledTime := req.Tracker.Slots[SCHEDULED_TIME].(string)
 
 	datetime, _ := time.Parse(time.RFC3339, scheduledTime)
 
 
-	reply := fmt.Sprintf("Great. %s see you at %s", name, datetime.Format("3:04 PM"))
+	reply := fmt.Sprintf("Great, you're all set. We'll see you at %s", datetime.Format("3:04 PM"))
 	resp.Responses = append(resp.Responses, Response{Text: reply})
 }
 
@@ -309,15 +323,15 @@ func (bot *Bot) ActionSetScheduledTimeSlot(req *RasaRequest, resp *RasaResponse)
 }
 
 func (bot *Bot) ActionSetSizeSlot(req *RasaRequest, resp *RasaResponse) {
-	size := 0.0
+	size := 0
 	for _, v := range req.Tracker.LatestMessage.Entities {
 		if v.Entity == NUMBER {
-			size = v.Value.(float64)
+			size = int(v.Value.(float64))
 		}
 	}
 
 	// TODO undo this hacky string shit
-	nextAction := Event{Event: SLOT, Name: SIZE, Value: fmt.Sprintf("%f", size)}
+	nextAction := Event{Event: SLOT, Name: SIZE, Value: fmt.Sprintf("%d", size)}
 	resp.Events = append(resp.Events, nextAction)
 }
 
@@ -507,7 +521,7 @@ func (bot *Bot) ActionCheckIsOpenOnDay(req *RasaRequest, resp *RasaResponse) {
 		reply = "Sorry, no we're not"
 	}
 
-	reply = fmt.Sprint("%s on %d/%d", reply, t.Month(), t.Day())
+	reply = fmt.Sprintf("%s on %d/%d", reply, t.Month(), t.Day())
 	resp.Responses = append(resp.Responses, Response{Text: reply})
 }
 
