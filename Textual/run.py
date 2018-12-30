@@ -16,4 +16,4 @@ print("-- Make input channel --")
 input_channel = TextualInput(agent)
 
 print("-- Running --")
-agent.handle_channels([input_channel], 5005, serve_forever = True)
+agent.handle_channels([input_channel], 5006, serve_forever = True)

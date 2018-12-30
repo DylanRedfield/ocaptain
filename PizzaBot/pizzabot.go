@@ -7,7 +7,6 @@ import (
 	"log"
 	"math"
 	"time"
-  "os"
 )
 
 func (bot *Bot) HandleAction(req *RasaRequest) (*RasaResponse, error) {
