@@ -111,20 +111,21 @@ type Business struct {
 
 type OpenClose struct {
 	IsOpen    bool  `firestore:"isOpen"`
-	OpenTime  int32 `firestore:"openTime"`
-	CloseTime int32 `firestore:"closeTime"`
+	OpenTime  int64 `firestore:"openTime"`
+	CloseTime int64 `firestore:"closeTime"`
 }
 
 type Reservation struct {
 	Id            string `firestore:"-"`
 	RecipientId   string `firestore:"recipientId"`
+  Contact string `firestore:"contact"`
 	Name          string `firestore:"name"`
 	ScheduledTime int64  `firestore:"scheduledTime"`
-	NumPeople     string  `firestore:"numPeople"`
-	IsVisible     bool   `firestore:"isVisible"`
+	NumPeople     int  `firestore:"numPeople"`
+	IsVisible     bool   `firestore:"visible"`
 }
 
-func (business Business) TimeClose(day string) int32 {
+func (business Business) TimeClose(day string) int64 {
 	return business.Hours[day].CloseTime
 }
 
@@ -146,8 +147,8 @@ type LatestMessage struct {
 }
 
 type Entity struct {
-	Start      int32       `json:"start"`
-	End        int32       `json:"end"`
+	Start      int       `json:"start"`
+	End        int       `json:"end"`
 	Value      interface{} `json:"value"`
 	Text       string      `json:"text"`
 	Confidence float64     `json:"confidence"`

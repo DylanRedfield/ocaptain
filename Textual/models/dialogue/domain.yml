@@ -1,58 +1,62 @@
 %YAML 1.1
 ---
 actions:
-- utter_no_reservation_available
-- action_check_is_open
-- utter_need_reservation
-- action_update_reservation
-- action_post_reservation_saved
-- utter_thank
-- utter_goodbye
-- action_set_size_slot
-- action_check_menu_item
-- utter_ask_time
-- action_listen
-- utter_do_you_have_another_date_in_mind
-- action_check_is_open_on_day
-- action_alert_business
-- action_check_time_close
-- utter_ask_name
-- utter_greet
-- utter_your_welcome
-- utter_ask_confirmation
-- utter_time_within
-- action_check_time_open_on_day
-- action_save_reservation
-- action_utter_you_are_set
-- utter_ask_size
-- action_utter_ask_is_other_reservation_time_okay
-- action_affirm_similar_time_ordinal
-- action_check_reservation_datetime
-- action_ask_if_any_similar_times_work
 - action_check_time_open
-- action_check_time_close_on_day
-- utter_no_reservations_available
-- action_order
-- action_ask_is_close_time_okay
-- utter_allow_reservations_and_ask
-- action_set_scheduled_time_slot
+- utter_ask_name
+- action_update_reservation
 - utter_request_time_too_early
+- utter_ask_confirmation
+- utter_greet
+- action_check_is_open
+- action_check_reservation_datetime
+- action_set_scheduled_time_slot
+- utter_allow_reservations_and_ask
+- utter_no_reservations_available
+- action_utter_ask_is_other_reservation_time_okay
+- action_utter_you_are_set
+- action_listen
+- action_affirm_similar_time_ordinal
+- action_post_reservation_saved
+- utter_do_you_have_another_date_in_mind
+- action_alert_business
+- utter_no_reservation_available
+- utter_ask_size
+- action_set_size_slot
+- utter_your_welcome
+- utter_ask_time
+- action_order
+- utter_thank
+- action_ask_is_close_time_okay
+- action_check_time_close
+- utter_time_within
+- action_save_reservation
+- action_check_time_close_on_day
+- action_check_is_open_on_day
+- utter_goodbye
+- utter_need_reservation
+- action_ask_if_any_similar_times_work
+- action_check_menu_item
+- action_check_time_open_on_day
 config:
   store_entities_as_slots: true
 entities:
-- CARDINAL
 - DATE
+- item
 - name
 - ordinal
 - number
-- size
-- item
 - TIME
-- ORDINAL
+- size
+- CARDINAL
 - ORG
 - time
+- ORDINAL
 forms: []
 intents:
+- time_open:
+    use_entities: true
+- is_open:
+    use_entities: true
 - make_reservation:
     use_entities: true
 - inform:
@@ -67,11 +71,7 @@ intents:
     use_entities: true
 - deny:
     use_entities: true
-- is_open:
-    use_entities: true
 - time_close:
-    use_entities: true
-- time_open:
     use_entities: true
 - menu_item:
     use_entities: true
