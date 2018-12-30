@@ -181,3 +181,8 @@ type Event struct {
 	Name  string      `json:"name"`
 	Value interface{} `json:"value"`
 }
+
+type EnvValues struct {
+  PizzaPort string `json:"pizza_port"`
+  RasaPort string `json:"rasa_port"`
+}

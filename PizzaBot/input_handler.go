@@ -8,6 +8,8 @@ import (
 	"log"
 	"net/http"
 	"time"
+  "os"
+  "io/ioutil"
 )
 
 // Recieves Botrequest, saves message to firebase, sends to recipient, and returns reponse
@@ -83,7 +85,20 @@ func (bot *Bot) HandleOutsideInput(reqObj OutsideRequest) OutsideResponse {
 		log.Println(err)
 	}
 
-	rasaUrl := fmt.Sprintf("http://localhost:5005/webhooks/textual/webhook")
+	jsonFile, err := os.Open("../env_values.json")
+
+  if err != nil {
+    log.Println(err)
+  }
+
+  defer jsonFile.Close()
+
+  byteValue, _:= ioutil.ReadAll(jsonFile)
+
+  var envValues EnvValues
+
+	json.Unmarshal([]byte(byteValue), &envValues)
+	rasaUrl := fmt.Sprintf("http://localhost:%s/webhooks/textual/webhook", envValues.RasaPort)
 	req, err := http.NewRequest("POST", rasaUrl, bytes.NewBuffer(body))
 	req.Header.Set("Content-Type", "application/json")
 

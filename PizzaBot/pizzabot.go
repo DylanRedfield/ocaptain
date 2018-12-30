@@ -7,6 +7,7 @@ import (
 	"log"
 	"math"
 	"time"
+  "os"
 )
 
 func (bot *Bot) HandleAction(req *RasaRequest) (*RasaResponse, error) {
@@ -14,7 +15,7 @@ func (bot *Bot) HandleAction(req *RasaRequest) (*RasaResponse, error) {
 	resp := NewRasaResponse()
 
 	// TODO remove this it is just for train online testing
-	bot.checkOrSetInputSlots(req, resp)
+	//bot.checkOrSetInputSlots(req, resp)
 
 	action := req.NextAction
 	log.Println(action)
