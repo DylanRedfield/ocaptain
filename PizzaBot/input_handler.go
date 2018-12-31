@@ -58,7 +58,9 @@ func (bot *Bot) HandleOutsideInput(reqObj OutsideRequest) OutsideResponse {
 		reqObj.Recipient.RecentMessage = reqObj.Message
 
 		personRef, _, err := bot.Client.Collection(Businesses).Doc(businessId).Collection(Recipients).Add(bot.Ctx, reqObj.Recipient)
+    log.Println(personRef.ID)
 		reqObj.Recipient.Id = personRef.ID
+    reqObj.Message.RecipientId = personRef.ID
 
 		if err != nil {
 			log.Println(err)

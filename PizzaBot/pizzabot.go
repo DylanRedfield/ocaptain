@@ -15,7 +15,7 @@ func (bot *Bot) HandleAction(req *RasaRequest) (*RasaResponse, error) {
 	resp := NewRasaResponse()
 
 	// TODO remove this it is just for train online testing
-	//bot.checkOrSetInputSlots(req, resp)
+	bot.checkOrSetInputSlots(req, resp)
 
 	action := req.NextAction
 	log.Println(action)
@@ -295,7 +295,7 @@ func (bot *Bot) checkOrSetInputSlots(req *RasaRequest, resp *RasaResponse) {
 	}
 	recipientId := ""
 	if req.Tracker.Slots[RECIPIENT_ID] == nil {
-		recipientId = "hxk7QAAgWVi47Qt05s7o"
+		recipientId = "BGeFfREAGGSRqRWrmLNx"
 		nextAction := Event{Event: SLOT, Name: RECIPIENT_ID, Value: recipientId}
 		resp.Events = append(resp.Events, nextAction)
 

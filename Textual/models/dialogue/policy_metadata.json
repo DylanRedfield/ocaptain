@@ -7,16 +7,10 @@
     },
     "action_set_scheduled_time_slot": {
       "slots": [
-        "business_id",
-<<<<<<< HEAD
         "scheduled_time",
-        "recipient_id",
-        "recipient_contact"
-=======
         "recipient_contact",
         "recipient_id",
-        "scheduled_time"
->>>>>>> f92a7829dc0616086392b4f703815b18ca9be130
+        "business_id"
       ]
     },
     "action_set_size_slot": {
@@ -32,38 +26,46 @@
     "action_post_reservation_saved": {
       "slots": []
     },
-<<<<<<< HEAD
-    "utter_ask_time": {
-      "slots": []
-    },
-=======
->>>>>>> f92a7829dc0616086392b4f703815b18ca9be130
     "action_affirm_similar_time_ordinal": {
       "slots": [
         "scheduled_time"
       ]
     },
-<<<<<<< HEAD
-    "utter_goodbye": {
-=======
-    "utter_ask_time": {
->>>>>>> f92a7829dc0616086392b4f703815b18ca9be130
-      "slots": []
+    "action_check_is_open_on_day": {
+      "slots": [
+        "recipient_contact",
+        "recipient_id",
+        "business_id"
+      ]
     },
-    "action_save_reservation": {
-      "slots": []
-    },
-<<<<<<< HEAD
-    "utter_greet": {
-      "slots": []
-=======
     "action_check_is_open": {
       "slots": [
         "recipient_contact",
         "recipient_id",
         "business_id"
       ]
->>>>>>> f92a7829dc0616086392b4f703815b18ca9be130
+    },
+    "action_restart": {
+      "slots": []
+    },
+    "action_save_reservation": {
+      "slots": []
+    },
+    "utter_ask_size": {
+      "slots": []
+    },
+    "utter_ask_time": {
+      "slots": []
+    },
+    "utter_greet": {
+      "slots": []
+    },
+    "action_check_time_close": {
+      "slots": [
+        "recipient_contact",
+        "recipient_id",
+        "business_id"
+      ]
     },
     "action_check_time_close_on_day": {
       "slots": [
@@ -72,7 +74,7 @@
         "business_id"
       ]
     },
-    "action_check_time_close": {
+    "action_check_time_open": {
       "slots": [
         "recipient_contact",
         "recipient_id",
@@ -86,35 +88,8 @@
         "business_id"
       ]
     },
-    "action_restart": {
-      "slots": []
-    },
-<<<<<<< HEAD
-    "action_restart": {
-=======
     "utter_goodbye": {
       "slots": []
-    },
-    "utter_greet": {
-      "slots": []
-    },
-    "utter_ask_size": {
->>>>>>> f92a7829dc0616086392b4f703815b18ca9be130
-      "slots": []
-    },
-    "action_check_is_open_on_day": {
-      "slots": [
-        "recipient_contact",
-        "recipient_id",
-        "business_id"
-      ]
-    },
-    "action_check_time_open": {
-      "slots": [
-        "recipient_contact",
-        "recipient_id",
-        "business_id"
-      ]
     }
   },
   "rasa_core": "0.12.1",
@@ -130,9 +105,5 @@
     "rasa_core.policies.memoization.MemoizationPolicy",
     "rasa_core.policies.fallback.FallbackPolicy"
   ],
-<<<<<<< HEAD
-  "trained_at": "20181230-182549"
-=======
-  "trained_at": "20181228-193817"
->>>>>>> f92a7829dc0616086392b4f703815b18ca9be130
+  "trained_at": "20181230-200221"
 }
