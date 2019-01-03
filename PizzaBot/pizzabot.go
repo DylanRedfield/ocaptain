@@ -96,6 +96,7 @@ func (bot *Bot) ActionAffirmSimilarTimeOrdinal(req *RasaRequest, resp *RasaRespo
 		time := potential_times[int(ordinal) - 1]
     log.Println(time)
 
+    // TODO Remove these follow ups
     event := Event{}
     switch name.(type) {
     case string: event = Event{Event: FOLLOWUP, Name: ACTION_SAVE_RESERVATION}
