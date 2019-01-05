@@ -19,9 +19,7 @@ func (bot *Bot) HandleAction(req *RasaRequest) (*RasaResponse, error) {
 
 	action := req.NextAction
 	log.Println(action)
-	switch action {
-	case ACTION_UPDATE_ORDER:
-		bot.ActionUpdateOrder(req, resp)
+/*	switch action {
 	case ACTION_CHECK_IS_OPEN:
 		bot.ActionCheckIsOpen(req, resp)
 	case ACTION_CHECK_IS_OPEN_ON_DAY:
@@ -48,12 +46,13 @@ func (bot *Bot) HandleAction(req *RasaRequest) (*RasaResponse, error) {
 		bot.ActionAffirmSimilarTime(req, resp)
 	case ACTION_AFFIRM_SIMILAR_TIME_ORDINAL:
 		bot.ActionAffirmSimilarTimeOrdinal(req, resp)
-	}
+	}*/
 
 	return resp, nil
 }
 
-func (bot *Bot) ActionAskIfSimilarTimesWork(req *RasaRequest, resp *RasaResponse) {
+func (bot *Bot) ActionUtterAskForPolarOrOrdinalOrTimeOnWhichIfAnyAlternativePotentialTimesForReservationAcceptable(req *RasaRequest, resp *RasaResponse) {
+  // TODO should verify potential times
 	times := req.Tracker.Slots[POTENTIAL_TIMES].([]interface{})
 	reply := "Nothing is available then but do any of the following times work: "
 
@@ -474,6 +473,29 @@ func (bot *Bot) ActionCheckTimeCloseOnDay(req *RasaRequest, resp *RasaResponse) 
 	resp.Responses = append(resp.Responses, Response{Text: reply})
 }
 
+func (bot *Bot) ActionBrancherDetermineResponseToCheckIsCurrentlyOpen(req *RasaRequest, resp *RasaResponse) {
+  // TODO check if they also input a time
+
+	businessId := req.Tracker.Slots["business_id"].(string)
+	business, err := bot.getBusinessFromId(businessId)
+
+	if err != nil {
+	  event := Event{Event: FOLLOWUP, Name: "action_need_employee"}
+    resp.Events = append(resp.Events, event)
+	}
+
+  if business.IsOpen() {
+	  event := Event{Event: FOLLOWUP, Name: "action_utter_doing_affirm_currently_open"}
+    resp.Events = append(resp.Events, event)
+  } else {
+	  event := Event{Event: FOLLOWUP, Name: "action_utter_doing_deny_currently_open"}
+    resp.Events = append(resp.Events, event)
+
+  }
+
+}
+
+// No longer in use
 func (bot *Bot) ActionCheckIsOpen(req *RasaRequest, resp *RasaResponse) {
 	businessId := req.Tracker.Slots["business_id"].(string)
 	business, err := bot.getBusinessFromId(businessId)
