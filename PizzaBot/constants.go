@@ -36,7 +36,7 @@ const (
 const (
 	UTTER_GREET                                     string = "utter_greet"
 	UTTER_GOODBYE                                          = "utter_goodbye"
-	UTTER_YOUR_WELCOME                                     = "utter_your_welcome"
+	UTTER_YOUR_WELCOME                                     = "action_utter_respond_your_welcome_AND_ask_for_next_general_request_while_clearing_slots"
 	UTTER_ASK_ADDRESS                                      = "utter_ask_address"
 	UTTER_ASK_NAME                                         = "utter_ask_name"
 	UTTER_THANK                                            = "utter_thank"
