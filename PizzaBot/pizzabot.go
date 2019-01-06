@@ -18,7 +18,19 @@ func (bot *Bot) HandleAction(req *RasaRequest) (*RasaResponse, error) {
 	bot.checkOrSetInputSlots(req, resp)
 
 	action := req.NextAction
-	log.Println(action)
+
+	switch action {
+	case "action_set_potential_size_slot":
+		bot.ActionSetPotentialSizeSlot(req, resp)
+	case "action_brancher_validate_reservation_potential_size":
+		bot.ActionBrancherValidateReservationPotentialSize(req, resp)
+	case "action_clear_potential_size_slot":
+		bot.ActionClearPotentialSizeSlot(req, resp)
+	case "action_need_employee":
+		bot.ActionNeedEmployee(req, resp)
+	case "action_set_size_slot":
+		bot.ActionSetSizeSlot(req, resp)
+	}
 	/*	switch action {
 		case ACTION_CHECK_IS_OPEN:
 			bot.ActionCheckIsOpen(req, resp)
@@ -69,7 +81,11 @@ func (bot *Bot) ActionUtterAskForPolarOrOrdinalOrTimeOnWhichIfAnyAlternativePote
 	resp.Responses = append(resp.Responses, Response{Text: reply})
 }
 
-func (bot *Bot) ActionAffirmSimilarTime(req *RasaRequest, resp *RasaResponse) {
+func (bot *Bot) ActionNeedEmployee(req *rasarequest, resp *rasaresponse) {
+	// TODO
+}
+
+func (bot *Bot) ActionAffirmSimilarTime(req *rasarequest, resp *rasaresponse) {
 	event := Event{Event: FOLLOWUP, Name: ACTION_AFFIRM_SIMILAR_TIME_ORDINAL}
 	resp.Events = append(resp.Events, event)
 }
@@ -346,42 +362,42 @@ func (bot *Bot) ActionClearPotentialSizeSlot(req *RasaRequest, resp *RasaRespons
 func (bot *Bot) ActionBrancherValidateReservationPotentialSize(req *RasaRequest, resp *RasaResponse) {
 
 	potential_size := 0
-  found := false
+	found := false
 
 	// Make sure potential_size exists
 	switch v := req.Tracker.Slots["potential_size"].(type) {
 	case int:
 		potential_size = v
-    found = true
+		found = true
 	case float64:
 		log.Println("Wanted int but got float")
 		potential_size = int(v)
-    found = true
+		found = true
 	default:
 		event := Event{Event: FOLLOWUP, Name: "utter_ask_for_number_on_reservation_size"}
 		resp.Events = append(resp.Events, event)
 	}
 
-  if found {
-    if potential_size == 0 {
-      event := Event{Event: FOLLOWUP, Name: "utter_unhappy_doing_invalid_size_AND_ask_for_size_greater_than_zero"}
-      resp.Events = append(resp.Events, event)
-    } else if potential_size > 20 {
-      event := Event{Event: FOLLOWUP, Name: "utter_unhappy_doing_request_customer_call_for_large_parties"}
-      resp.Events = append(resp.Events, event)
-    } else {
-      event := Event{Event: SLOT, Name: "size", Value: Abs(potential_size)}
-      resp.Events = append(resp.Events, event)
-    }
-  }
+	if found {
+		if potential_size == 0 {
+			event := Event{Event: FOLLOWUP, Name: "utter_unhappy_doing_invalid_size_AND_ask_for_size_greater_than_zero"}
+			resp.Events = append(resp.Events, event)
+		} else if potential_size > 20 {
+			event := Event{Event: FOLLOWUP, Name: "utter_unhappy_doing_request_customer_call_for_large_parties"}
+			resp.Events = append(resp.Events, event)
+		} else {
+			event := Event{Event: SLOT, Name: "size", Value: Abs(potential_size)}
+			resp.Events = append(resp.Events, event)
+		}
+	}
 
 }
 
 func Abs(x int) int {
-  if x < 0 {
-    return -x
-  }
-  return x
+	if x < 0 {
+		return -x
+	}
+	return x
 }
 
 func (bot *Bot) ActionSetSizeSlot(req *RasaRequest, resp *RasaResponse) {
