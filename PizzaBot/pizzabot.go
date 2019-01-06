@@ -344,10 +344,33 @@ func (bot *Bot) ActionClearPotentialSizeSlot(req *RasaRequest, resp *RasaRespons
 }
 
 func (bot *Bot) ActionBrancherValidateReservationPotentialSize(req *RasaRequest, resp *RasaResponse) {
-	/*potential_size := req.Tracker.Slots["potential_size"]
 
-	if potential_size.(type) != int*/
-	// TODO fuck
+	potential_size := 0
+
+	// Make sure potential_size exists
+	switch v := req.Tracker.Slots["potential_size"].(type) {
+	case int:
+		potential_size = v
+	case float64:
+		log.Println("Wanted int but got float")
+		potential_size = int(v)
+	default:
+		event := Event{Event: FOLLOWUP, Name: "utter_ask_for_number_on_reservation_size"}
+		resp.Events = append(resp.Events, event)
+		return
+	}
+
+	if potential_size == 0 {
+		event := Event{Event: FOLLOWUP, Name: "utter_unhappy_doing_invalid_size_AND_ask_for_size_greater_than_zero"}
+		resp.Events = append(resp.Events, event)
+	} else if potential_size > 20 {
+		event := Event{Event: FOLLOWUP, Name: "utter_unhappy_doing_request_customer_call_for_large_parties"}
+		resp.Events = append(resp.Events, event)
+	} else {
+		event := Event{Event: SLOT, Name: "size", Value: potential_size}
+		resp.Events = append(resp.Events, event)
+	}
+
 }
 
 func (bot *Bot) ActionSetSizeSlot(req *RasaRequest, resp *RasaResponse) {
