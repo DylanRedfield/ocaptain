@@ -346,31 +346,42 @@ func (bot *Bot) ActionClearPotentialSizeSlot(req *RasaRequest, resp *RasaRespons
 func (bot *Bot) ActionBrancherValidateReservationPotentialSize(req *RasaRequest, resp *RasaResponse) {
 
 	potential_size := 0
+  found := false
 
 	// Make sure potential_size exists
 	switch v := req.Tracker.Slots["potential_size"].(type) {
 	case int:
 		potential_size = v
+    found = true
 	case float64:
 		log.Println("Wanted int but got float")
 		potential_size = int(v)
+    found = true
 	default:
 		event := Event{Event: FOLLOWUP, Name: "utter_ask_for_number_on_reservation_size"}
 		resp.Events = append(resp.Events, event)
-		return
 	}
 
-	if potential_size == 0 {
-		event := Event{Event: FOLLOWUP, Name: "utter_unhappy_doing_invalid_size_AND_ask_for_size_greater_than_zero"}
-		resp.Events = append(resp.Events, event)
-	} else if potential_size > 20 {
-		event := Event{Event: FOLLOWUP, Name: "utter_unhappy_doing_request_customer_call_for_large_parties"}
-		resp.Events = append(resp.Events, event)
-	} else {
-		event := Event{Event: SLOT, Name: "size", Value: potential_size}
-		resp.Events = append(resp.Events, event)
-	}
+  if found {
+    if potential_size == 0 {
+      event := Event{Event: FOLLOWUP, Name: "utter_unhappy_doing_invalid_size_AND_ask_for_size_greater_than_zero"}
+      resp.Events = append(resp.Events, event)
+    } else if potential_size > 20 {
+      event := Event{Event: FOLLOWUP, Name: "utter_unhappy_doing_request_customer_call_for_large_parties"}
+      resp.Events = append(resp.Events, event)
+    } else {
+      event := Event{Event: SLOT, Name: "size", Value: Abs(potential_size)}
+      resp.Events = append(resp.Events, event)
+    }
+  }
 
+}
+
+func Abs(x int) int {
+  if x < 0 {
+    return -x
+  }
+  return x
 }
 
 func (bot *Bot) ActionSetSizeSlot(req *RasaRequest, resp *RasaResponse) {
