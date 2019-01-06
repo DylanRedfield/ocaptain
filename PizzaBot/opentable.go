@@ -35,7 +35,7 @@ func Query(id string, datetime time.Time, partySize string) (OpenTableResult, er
 	paramUrl := fmt.Sprintf("%s%s/reserve?restref=%s&datetime=%d-%d-%dT%d:%d&covers=%s",
 		baseUrl, id, id, searchYear, searchMonth, searchDay, searchHour, searchMinute, partySize)
 
-    log.Println(paramUrl)
+	log.Println(paramUrl)
 	res, err := http.Get(paramUrl)
 
 	if err != nil {
@@ -45,7 +45,7 @@ func Query(id string, datetime time.Time, partySize string) (OpenTableResult, er
 	defer res.Body.Close()
 
 	if res.StatusCode != 200 {
-		log.Println("status code error: %d %s", res.StatusCode, res.Status)
+		log.Printf("status code error: %d %s", res.StatusCode, res.Status)
 	}
 
 	doc, err := goquery.NewDocumentFromReader(res.Body)

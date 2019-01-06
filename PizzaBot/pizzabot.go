@@ -6,12 +6,12 @@ import (
 	"google.golang.org/api/iterator"
 	"log"
 	"math"
-  "strconv"
+	"strconv"
 	"time"
 )
 
 func (bot *Bot) HandleAction(req *RasaRequest) (*RasaResponse, error) {
-  log.Println(req)
+	log.Println(req)
 	resp := NewRasaResponse()
 
 	// TODO remove this it is just for train online testing
@@ -19,40 +19,40 @@ func (bot *Bot) HandleAction(req *RasaRequest) (*RasaResponse, error) {
 
 	action := req.NextAction
 	log.Println(action)
-/*	switch action {
-	case ACTION_CHECK_IS_OPEN:
-		bot.ActionCheckIsOpen(req, resp)
-	case ACTION_CHECK_IS_OPEN_ON_DAY:
-		bot.ActionCheckIsOpenOnDay(req, resp)
-	case ACTION_CHECK_TIME_CLOSE:
-		bot.ActionCheckTimeClose(req, resp)
-	case ACTION_CHECK_TIME_CLOSE_ON_DAY:
-		bot.ActionCheckTimeCloseOnDay(req, resp)
-	case ACTION_CHECK_RESERVATION_DATETIME:
-		bot.ActionCheckReservationDatetime(req, resp)
-	case ACTION_SET_SCHEDULED_TIME_SLOT:
-		bot.ActionSetScheduledTimeSlot(req, resp)
-	case ACTION_SET_SIZE_SLOT:
-		bot.ActionSetSizeSlot(req, resp)
-	case ACTION_ASK_IF_SIMILAR_TIMES_WORK:
-		bot.ActionAskIfSimilarTimesWork(req, resp)
-	case ACTION_UTTER_ASK_IS_OTHER_RESERVATION_TIME_OKAY:
-		bot.ActionUtterAskIsOtherReservationTimeOkay(req, resp)
-	case ACTION_POST_RESERVATION_SAVED:
-		bot.ActionUtterPostReservationSaved(req, resp)
-	case ACTION_SAVE_RESERVATION:
-		bot.ActionSaveReservation(req, resp)
-	case ACTION_AFFIRM_SIMILAR_TIME:
-		bot.ActionAffirmSimilarTime(req, resp)
-	case ACTION_AFFIRM_SIMILAR_TIME_ORDINAL:
-		bot.ActionAffirmSimilarTimeOrdinal(req, resp)
-	}*/
+	/*	switch action {
+		case ACTION_CHECK_IS_OPEN:
+			bot.ActionCheckIsOpen(req, resp)
+		case ACTION_CHECK_IS_OPEN_ON_DAY:
+			bot.ActionCheckIsOpenOnDay(req, resp)
+		case ACTION_CHECK_TIME_CLOSE:
+			bot.ActionCheckTimeClose(req, resp)
+		case ACTION_CHECK_TIME_CLOSE_ON_DAY:
+			bot.ActionCheckTimeCloseOnDay(req, resp)
+		case ACTION_CHECK_RESERVATION_DATETIME:
+			bot.ActionCheckReservationDatetime(req, resp)
+		case ACTION_SET_SCHEDULED_TIME_SLOT:
+			bot.ActionSetScheduledTimeSlot(req, resp)
+		case ACTION_SET_SIZE_SLOT:
+			bot.ActionSetSizeSlot(req, resp)
+		case ACTION_ASK_IF_SIMILAR_TIMES_WORK:
+			bot.ActionAskIfSimilarTimesWork(req, resp)
+		case ACTION_UTTER_ASK_IS_OTHER_RESERVATION_TIME_OKAY:
+			bot.ActionUtterAskIsOtherReservationTimeOkay(req, resp)
+		case ACTION_POST_RESERVATION_SAVED:
+			bot.ActionUtterPostReservationSaved(req, resp)
+		case ACTION_SAVE_RESERVATION:
+			bot.ActionSaveReservation(req, resp)
+		case ACTION_AFFIRM_SIMILAR_TIME:
+			bot.ActionAffirmSimilarTime(req, resp)
+		case ACTION_AFFIRM_SIMILAR_TIME_ORDINAL:
+			bot.ActionAffirmSimilarTimeOrdinal(req, resp)
+		}*/
 
 	return resp, nil
 }
 
 func (bot *Bot) ActionUtterAskForPolarOrOrdinalOrTimeOnWhichIfAnyAlternativePotentialTimesForReservationAcceptable(req *RasaRequest, resp *RasaResponse) {
-  // TODO should verify potential times
+	// TODO should verify potential times
 	times := req.Tracker.Slots[POTENTIAL_TIMES].([]interface{})
 	reply := "Nothing is available then but do any of the following times work: "
 
@@ -65,7 +65,7 @@ func (bot *Bot) ActionUtterAskForPolarOrOrdinalOrTimeOnWhichIfAnyAlternativePote
 
 		reply += datetime.Format("3:04 PM")
 	}
-  reply += "?"
+	reply += "?"
 	resp.Responses = append(resp.Responses, Response{Text: reply})
 }
 
@@ -77,7 +77,7 @@ func (bot *Bot) ActionAffirmSimilarTime(req *RasaRequest, resp *RasaResponse) {
 func (bot *Bot) ActionAffirmSimilarTimeOrdinal(req *RasaRequest, resp *RasaResponse) {
 	// Save the correct potential time into the slot and then followup with action_save_reservation
 	potential_times := req.Tracker.Slots[POTENTIAL_TIMES].([]interface{})
-  name := req.Tracker.Slots[NAME]
+	name := req.Tracker.Slots[NAME]
 
 	// Need to get the ordinal from entities
 	entities := req.Tracker.LatestMessage.Entities
@@ -92,15 +92,17 @@ func (bot *Bot) ActionAffirmSimilarTimeOrdinal(req *RasaRequest, resp *RasaRespo
 	if int(ordinal) > len(potential_times) {
 		// TODO utter_error
 	} else {
-		time := potential_times[int(ordinal) - 1]
-    log.Println(time)
+		time := potential_times[int(ordinal)-1]
+		log.Println(time)
 
-    // TODO Remove these follow ups
-    event := Event{}
-    switch name.(type) {
-    case string: event = Event{Event: FOLLOWUP, Name: ACTION_SAVE_RESERVATION}
-    default : event = Event{Event: FOLLOWUP, Name: UTTER_ASK_NAME}
-    }
+		// TODO Remove these follow ups
+		event := Event{}
+		switch name.(type) {
+		case string:
+			event = Event{Event: FOLLOWUP, Name: ACTION_SAVE_RESERVATION}
+		default:
+			event = Event{Event: FOLLOWUP, Name: UTTER_ASK_NAME}
+		}
 		resp.Events = append(resp.Events, event)
 
 		event = Event{Event: SLOT, Name: SCHEDULED_TIME, Value: time}
@@ -246,24 +248,23 @@ func (bot *Bot) ActionSaveReservation(req *RasaRequest, resp *RasaResponse) {
 	businessId := req.Tracker.Slots[BUSINESS_ID].(string)
 	recipientId := req.Tracker.Slots[RECIPIENT_ID].(string)
 	contact := req.Tracker.Slots[RECIPIENT_CONTACT].(string)
-  
 
 	datetime, _ := time.Parse(time.RFC3339, scheduledTime)
 	timeAsFloat := datetime.UnixNano() / 1000000
 
-  numPeople, err := strconv.ParseInt(size, 0, 32)
-  if err != nil {
-    log.Println(err)
-  }
+	numPeople, err := strconv.ParseInt(size, 0, 32)
+	if err != nil {
+		log.Println(err)
+	}
 
-  reservation := Reservation{
-    Name: name, 
-    NumPeople: int(numPeople), 
-    RecipientId: recipientId, 
-    ScheduledTime: timeAsFloat,
-    IsVisible: true,
-    Contact : contact,
-  }
+	reservation := Reservation{
+		Name:          name,
+		NumPeople:     int(numPeople),
+		RecipientId:   recipientId,
+		ScheduledTime: timeAsFloat,
+		IsVisible:     true,
+		Contact:       contact,
+	}
 
 	reservationsRef := bot.Client.Collection(Businesses).Doc(businessId).Collection(Reservations)
 	_, _, err = reservationsRef.Add(bot.Ctx, reservation)
@@ -279,7 +280,6 @@ func (bot *Bot) ActionUtterPostReservationSaved(req *RasaRequest, resp *RasaResp
 	scheduledTime := req.Tracker.Slots[SCHEDULED_TIME].(string)
 
 	datetime, _ := time.Parse(time.RFC3339, scheduledTime)
-
 
 	reply := fmt.Sprintf("Great, you're all set. We'll see you at %s", datetime.Format("3:04 PM"))
 	resp.Responses = append(resp.Responses, Response{Text: reply})
@@ -311,7 +311,6 @@ func (bot *Bot) checkOrSetInputSlots(req *RasaRequest, resp *RasaResponse) {
 }
 
 func (bot *Bot) ActionSetScheduledTimeSlot(req *RasaRequest, resp *RasaResponse) {
-
 	scheduledTime := ""
 	for _, v := range req.Tracker.LatestMessage.Entities {
 		if v.Entity == TIME {
@@ -322,11 +321,43 @@ func (bot *Bot) ActionSetScheduledTimeSlot(req *RasaRequest, resp *RasaResponse)
 	resp.Events = append(resp.Events, nextAction)
 }
 
+func (bot *Bot) ActionSetPotentialSizeSlot(req *RasaRequest, resp *RasaResponse) {
+	size := 0
+	for _, v := range req.Tracker.LatestMessage.Entities {
+		if v.Entity == NUMBER {
+			switch v.Value.(type) {
+			case float64:
+				size = int(v.Value.(float64))
+			}
+		}
+	}
+
+	// TODO undo this hacky string shit
+	nextAction := Event{Event: SLOT, Name: "potential_size", Value: fmt.Sprintf("%d", size)}
+	resp.Events = append(resp.Events, nextAction)
+
+}
+
+func (bot *Bot) ActionClearPotentialSizeSlot(req *RasaRequest, resp *RasaResponse) {
+	nextAction := Event{Event: SLOT, Name: "potential_size"}
+	resp.Events = append(resp.Events, nextAction)
+}
+
+func (bot *Bot) ActionBrancherValidateReservationPotentialSize(req *RasaRequest, resp *RasaResponse) {
+	/*potential_size := req.Tracker.Slots["potential_size"]
+
+	if potential_size.(type) != int*/
+	// TODO
+}
+
 func (bot *Bot) ActionSetSizeSlot(req *RasaRequest, resp *RasaResponse) {
 	size := 0
 	for _, v := range req.Tracker.LatestMessage.Entities {
 		if v.Entity == NUMBER {
-			size = int(v.Value.(float64))
+			switch v.Value.(type) {
+			case float64:
+				size = int(v.Value.(float64))
+			}
 		}
 	}
 
@@ -440,7 +471,7 @@ func (bot *Bot) ActionCheckTimeClose(req *RasaRequest, resp *RasaResponse) {
 	}
 
 	// TODO make the response dynamic
-	reply := fmt.Sprintf("We close at %s", business.TimeClose(""))
+	reply := fmt.Sprintf("We close at %d", business.TimeClose(""))
 	resp.Responses = append(resp.Responses, Response{Text: reply})
 }
 
@@ -469,29 +500,29 @@ func (bot *Bot) ActionCheckTimeCloseOnDay(req *RasaRequest, resp *RasaResponse) 
 	}
 
 	// TODO make the response dynamic
-	reply := fmt.Sprintf("On %d/%d we close at %s", t.Month(), t.Day(), business.TimeClose(""))
+	reply := fmt.Sprintf("On %d/%d we close at %d", t.Month(), t.Day(), business.TimeClose(""))
 	resp.Responses = append(resp.Responses, Response{Text: reply})
 }
 
 func (bot *Bot) ActionBrancherDetermineResponseToCheckIsCurrentlyOpen(req *RasaRequest, resp *RasaResponse) {
-  // TODO check if they also input a time
+	// TODO check if they also input a time
 
 	businessId := req.Tracker.Slots["business_id"].(string)
 	business, err := bot.getBusinessFromId(businessId)
 
 	if err != nil {
-	  event := Event{Event: FOLLOWUP, Name: "action_need_employee"}
-    resp.Events = append(resp.Events, event)
+		event := Event{Event: FOLLOWUP, Name: "action_need_employee"}
+		resp.Events = append(resp.Events, event)
 	}
 
-  if business.IsOpen() {
-	  event := Event{Event: FOLLOWUP, Name: "action_utter_doing_affirm_currently_open"}
-    resp.Events = append(resp.Events, event)
-  } else {
-	  event := Event{Event: FOLLOWUP, Name: "action_utter_doing_deny_currently_open"}
-    resp.Events = append(resp.Events, event)
+	if business.IsOpen() {
+		event := Event{Event: FOLLOWUP, Name: "action_utter_doing_affirm_currently_open"}
+		resp.Events = append(resp.Events, event)
+	} else {
+		event := Event{Event: FOLLOWUP, Name: "action_utter_doing_deny_currently_open"}
+		resp.Events = append(resp.Events, event)
 
-  }
+	}
 
 }
 
