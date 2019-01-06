@@ -347,7 +347,7 @@ func (bot *Bot) ActionBrancherValidateReservationPotentialSize(req *RasaRequest,
 	/*potential_size := req.Tracker.Slots["potential_size"]
 
 	if potential_size.(type) != int*/
-	// TODO
+	// TODO fuck
 }
 
 func (bot *Bot) ActionSetSizeSlot(req *RasaRequest, resp *RasaResponse) {
