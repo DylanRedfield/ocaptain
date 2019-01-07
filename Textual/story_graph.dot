@@ -1,19 +1,23 @@
 digraph  {
 0 [label=START, fillcolor=green, style=filled, fontsize=12, class="start active"];
-"-1" [label=END, fillcolor=red, style=filled, fontsize=12, class=end];
 1 [label=action_blank_for_slots, fontsize=12, class=active];
-2 [label=utter_ask_for_number_on_reservation_size, fontsize=12, class=active];
-3 [label=action_set_potential_size_slot, fontsize=12, class=active];
-4 [label=action_brancher_validate_reservation_potential_size, fontsize=12, class=active];
-9 [label=utter_ask_for_number_on_reservation_size, fontsize=12, class="dashed active"];
-10 [label="can I get a reservation", shape=rect, style=filled, fillcolor=lightblue, class="intent active"];
-11 [label=two, shape=rect, style=filled, fillcolor=lightblue, class="intent active"];
-0 -> 10  [key=0, class=active];
+2 [label=action_set_potential_size_slot, fontsize=12, class=active];
+3 [label=action_brancher_validate_reservation_potential_size, fontsize=12, class=active];
+4 [label=action_clear_potential_size_slot, fontsize=12, class=""];
+"-3" [label="...", class=ellipsis];
+6 [label=utter_ask_for_number_on_reservation_size, fontsize=12, class=""];
+"-36" [label="...", class=ellipsis];
+74 [label=utter_unhappy_doing_invalid_size_AND_ask_for_size_greater_than_zero, fontsize=12, class=active];
+75 [label="  ?  ", shape=rect, class="intent dashed active"];
+76 [label="can I get a reservation for zero", shape=rect, style=filled, fillcolor=lightblue, class="intent active"];
+0 -> 76  [key=0, class=active];
 1 -> 2  [key=NONE, label="", class=active];
-2 -> 11  [key=0, class=active];
-3 -> 4  [key=NONE, label="", class=active];
-4 -> "-1"  [key=NONE, label="", class=""];
-4 -> 9  [key=NONE, label="", class=active];
-10 -> 1  [key=0, class=active];
-11 -> 3  [key=0, class=active];
+1 -> 6  [key=NONE, label="", class=""];
+2 -> 3  [key=NONE, label="", class=active];
+3 -> 4  [key=NONE, label="", class=""];
+3 -> 74  [key=NONE, label="", class=active];
+4 -> "-3"  [key=NONE, label="", class=""];
+6 -> "-36"  [key=NONE, label="", class=""];
+74 -> 75  [key=NONE, label="", class=active];
+76 -> 1  [key=0, class=active];
 }

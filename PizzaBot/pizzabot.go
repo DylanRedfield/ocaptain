@@ -29,6 +29,10 @@ func (bot *Bot) HandleAction(req *RasaRequest) (*RasaResponse, error) {
 		bot.ActionNeedEmployee(req, resp)
 	case "action_set_size_slot":
 		bot.ActionSetSizeSlot(req, resp)
+  case "action_set_potential_time_slot":
+    bot.ActionSetPotentialTimeSlot(req, resp)
+  case "action_clear_potential_time_slot":
+    bot.ActionClearPotentialTimeSlot(req, resp)
   default:
     log.Println(action)
 	}
@@ -339,20 +343,36 @@ func (bot *Bot) ActionSetScheduledTimeSlot(req *RasaRequest, resp *RasaResponse)
 }
 
 func (bot *Bot) ActionSetPotentialSizeSlot(req *RasaRequest, resp *RasaResponse) {
-	size := 0
 	for _, v := range req.Tracker.LatestMessage.Entities {
 		if v.Entity == NUMBER {
-			switch v.Value.(type) {
+      switch s := v.Value.(type) {
 			case float64:
-				size = int(v.Value.(float64))
+        nextAction := Event{Event: SLOT, Name: "potential_size", Value: s}
+        resp.Events = append(resp.Events, nextAction)
+      case int:
+        nextAction := Event{Event: SLOT, Name: "potential_size", Value: float64(s)}
+        resp.Events = append(resp.Events, nextAction)
 			}
 		}
 	}
 
-	// TODO undo this hacky string shit
-	nextAction := Event{Event: SLOT, Name: "potential_size", Value: fmt.Sprintf("%d", size)}
-	resp.Events = append(resp.Events, nextAction)
+}
 
+func (bot *Bot) ActionSetPotentialTimeSlot(req *RasaRequest, resp *RasaResponse) {
+	for _, v := range req.Tracker.LatestMessage.Entities {
+		if v.Entity == TIME {
+      switch s := v.Value.(type) {
+      case string:
+        nextAction := Event{Event: SLOT, Name: "potential_time", Value: s}
+        resp.Events = append(resp.Events, nextAction)
+      }
+		}
+	}
+}
+
+func (bot *Bot) ActionClearPotentialTimeSlot(req *RasaRequest, resp *RasaResponse) {
+	nextAction := Event{Event: SLOT, Name: "potential_time"}
+	resp.Events = append(resp.Events, nextAction)
 }
 
 func (bot *Bot) ActionClearPotentialSizeSlot(req *RasaRequest, resp *RasaResponse) {

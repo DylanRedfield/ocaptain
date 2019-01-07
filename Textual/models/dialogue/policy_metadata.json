@@ -1,13 +1,15 @@
 {
   "action_fingerprints": {
     "action_listen": {
-      "slots": []
+      "slots": [
+        "name"
+      ]
     },
     "action_blank_for_slots": {
       "slots": [
         "business_id",
-        "recipient_contact",
-        "recipient_id"
+        "recipient_id",
+        "recipient_contact"
       ]
     },
     "action_set_potential_size_slot": {
@@ -16,6 +18,11 @@
       ]
     },
     "action_brancher_validate_reservation_potential_size": {
+      "slots": [
+        "size"
+      ]
+    },
+    "action_clear_potential_size_slot": {
       "slots": []
     }
   },
@@ -32,5 +39,5 @@
     "rasa_core.policies.memoization.MemoizationPolicy",
     "rasa_core.policies.fallback.FallbackPolicy"
   ],
-  "trained_at": "20190106-062022"
+  "trained_at": "20190107-191731"
 }

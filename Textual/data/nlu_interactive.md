@@ -1,2 +1,2 @@
 ## intent:make_reservation
-- Can I make a reservation
+- can I get a reservation for [zero](number:0)

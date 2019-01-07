@@ -1,76 +1,79 @@
 %YAML 1.1
 ---
 actions:
-- action_check_menu_item
-- action_check_is_open_on_day
-- utter_ask_for_name_on_reservation
-- utter_doing_greet
-- action_branacher_determine_response_to_check_time_open
-- utter_respond_with_affirm_restaurant_accepts_reservations_AND_ask_for_polar_on_if_reservation_wanted
-- action_blank_for_slots
-- utter_ask_for_polar_on_general_correctness_confirmatioutter_ask_for_polar_on_general_correctness_confirmation
-- utter_request_time_too_early
-- action_brancher_query_reservation_platform
-- utter_ask_for_polar_and_or_time_on_alternative_potential_reservation_time
-- utter_ask_for_number_on_reservation_size
-- action_save_reservation
-- action_set_scheduled_time_slot
-- action_ask_is_close_time_okay
-- action_utter_doing_think_AND_ask_for_next_general_request_while_clearing_slots
-- action_utter_ask_for_polar_or_ordinal_or_time_on_which_if_any_alternative_potential_times_for_reservation_acceptable
-- utter_unhappy_doing_invalid_size_AND_ask_for_size_greater_than_zero
-- action_post_reservation_saved
-- action_update_reservation
-- utter_unhappy_request_customer_call_for_large_parties
-- action_check_time_close_on_day
-- action_check_time_open_on_day
-- action_brancher_determine_response_to_check_is_currently_open
-- action_check_reservation_datetime
 - action_brancher_validate_reservation_potential_size
-- action_set_size_slot_from_potential_size_slot
-- action_check_time_open
-- utter_respond_with_affirm_need_reservation
-- utter_time_within
-- action_clear_potential_size_slot
-- action_order
-- utter_ask_for_time_for_potential_reservation
-- action_utter_you_are_set
+- action_ask_is_close_time_okay
+- utter_ask_for_polar_on_general_correctness_confirmatioutter_ask_for_polar_on_general_correctness_confirmation
 - action_uttter_respond_your_welcome_AND_and_for_next_general_request_while_clearing_slots
+- action_check_time_open
+- action_alert_business
+- action_blank_for_slots
+- action_utter_ask_for_polar_or_ordinal_or_time_on_which_if_any_alternative_potential_times_for_reservation_acceptable
+- action_order
+- utter_unhappy_request_customer_call_for_large_parties
+- action_listen
+- action_check_time_close
+- utter_unhappy_doing_no_number_recognized
+- action_set_scheduled_time_slot
+- action_set_size_slot_from_potential_size_slot
+- action_clear_potential_time_slot
+- action_save_reservation
+- action_utter_ask_for_polar_on_potential_time_within_close_to_request
+- utter_respond_with_affirm_restaurant_accepts_reservations_AND_ask_for_polar_on_if_reservation_wanted
+- action_check_is_open
+- action_affirm_similar_time_ordinal
+- utter_respond_with_affirm_need_reservation
+- utter_doing_greet
+- action_check_menu_item
+- action_need_employee
+- action_update_reservation
+- action_post_reservation_saved
+- action_clear_potential_size_slot
+- utter_request_time_too_early
+- action_check_is_open_on_day
+- action_check_reservation_datetime
+- utter_ask_for_time_for_potential_reservation
+- action_brancher_query_reservation_platform
+- utter_ask_for_name_on_reservation
+- action_brancher_determine_response_to_check_is_currently_open
+- action_brancher_determine_action_after_reservation_time_selected
+- utter_time_within
+- action_set_potential_size_slot
+- action_set_potential_times_slot
+- action_branacher_determine_response_to_check_time_open
+- action_check_time_open_on_day
+- action_utter_doing_think_AND_ask_for_next_general_request_while_clearing_slots
+- action_check_time_close_on_day
+- utter_respond_with_informing_no_reservation_availability_at_specificied_time_AND_ask_for_polar_and_or_time_for_alternative_potential_reservation_time
 - action_brancher_validate_number_size
 - action_utter_goodbye_while_clearing_slots
-- action_listen
-- utter_respond_with_informing_no_reservation_availability_at_specificied_time_AND_ask_for_polar_and_or_time_for_alternative_potential_reservation_time
-- action_set_potential_size_slot
-- action_brancher_determine_action_after_reservation_time_selected
-- action_check_time_close
-- action_utter_ask_for_polar_on_potential_time_within_close_to_request
-- action_need_employee
-- action_affirm_similar_time_ordinal
-- action_check_is_open
-- action_alert_business
+- utter_ask_for_polar_and_or_time_on_alternative_potential_reservation_time
+- utter_ask_for_number_on_reservation_size
+- utter_unhappy_doing_invalid_size_AND_ask_for_size_greater_than_zero
+- action_utter_you_are_set
 config:
   store_entities_as_slots: true
 entities:
-- DATE
-- time
-- name
-- number
-- item
-- CARDINAL
-- ORG
-- ordinal
-- TIME
-- ORDINAL
 - size
+- ordinal
+- DATE
+- ORG
+- time
+- item
+- number
+- CARDINAL
+- TIME
+- name
+- ORDINAL
 forms: []
 intents:
 - make_reservation:
     use_entities: true
+- inform:
+    use_entities: true
 - time_open:
     use_entities: true
 - is_open:
-    use_entities: true
-- inform:
     use_entities: true
 - affirm:
     use_entities: true
@@ -98,7 +101,7 @@ intents:
     use_entities: true
 slots:
   business_id:
-    auto_fill: true
+    auto_fill: false
     initial_value: null
     type: rasa_core.slots.TextSlot
   name:
@@ -106,27 +109,31 @@ slots:
     initial_value: null
     type: rasa_core.slots.TextSlot
   potential_size:
-    auto_fill: true
+    auto_fill: false
+    initial_value: null
+    type: rasa_core.slots.TextSlot
+  potential_time:
+    auto_fill: false
     initial_value: null
     type: rasa_core.slots.TextSlot
   potential_times:
-    auto_fill: true
+    auto_fill: false
     initial_value: null
     type: rasa_core.slots.ListSlot
   recipient_contact:
-    auto_fill: true
+    auto_fill: false
     initial_value: null
     type: rasa_core.slots.TextSlot
   recipient_id:
-    auto_fill: true
+    auto_fill: false
     initial_value: null
     type: rasa_core.slots.TextSlot
   scheduled_time:
-    auto_fill: true
+    auto_fill: false
     initial_value: null
     type: rasa_core.slots.TextSlot
   size:
-    auto_fill: true
+    auto_fill: false
     initial_value: null
     type: rasa_core.slots.TextSlot
 templates:
