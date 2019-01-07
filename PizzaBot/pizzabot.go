@@ -11,7 +11,6 @@ import (
 )
 
 func (bot *Bot) HandleAction(req *RasaRequest) (*RasaResponse, error) {
-	log.Println(req)
 	resp := NewRasaResponse()
 
 	// TODO remove this it is just for train online testing
@@ -30,6 +29,8 @@ func (bot *Bot) HandleAction(req *RasaRequest) (*RasaResponse, error) {
 		bot.ActionNeedEmployee(req, resp)
 	case "action_set_size_slot":
 		bot.ActionSetSizeSlot(req, resp)
+  default:
+    log.Println(action)
 	}
 	/*	switch action {
 		case ACTION_CHECK_IS_OPEN:
@@ -81,11 +82,11 @@ func (bot *Bot) ActionUtterAskForPolarOrOrdinalOrTimeOnWhichIfAnyAlternativePote
 	resp.Responses = append(resp.Responses, Response{Text: reply})
 }
 
-func (bot *Bot) ActionNeedEmployee(req *rasarequest, resp *rasaresponse) {
+func (bot *Bot) ActionNeedEmployee(req *RasaRequest, resp *RasaResponse) {
 	// TODO
 }
 
-func (bot *Bot) ActionAffirmSimilarTime(req *rasarequest, resp *rasaresponse) {
+func (bot *Bot) ActionAffirmSimilarTime(req *RasaRequest, resp *RasaResponse) {
 	event := Event{Event: FOLLOWUP, Name: ACTION_AFFIRM_SIMILAR_TIME_ORDINAL}
 	resp.Events = append(resp.Events, event)
 }
@@ -374,6 +375,7 @@ func (bot *Bot) ActionBrancherValidateReservationPotentialSize(req *RasaRequest,
 		potential_size = int(v)
 		found = true
 	default:
+    log.Printf("%T\n", v)
 		event := Event{Event: FOLLOWUP, Name: "utter_ask_for_number_on_reservation_size"}
 		resp.Events = append(resp.Events, event)
 	}
