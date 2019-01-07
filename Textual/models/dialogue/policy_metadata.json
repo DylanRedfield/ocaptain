@@ -7,9 +7,9 @@
     },
     "action_blank_for_slots": {
       "slots": [
-        "business_id",
         "recipient_id",
-        "recipient_contact"
+        "recipient_contact",
+        "business_id"
       ]
     },
     "action_set_potential_size_slot": {
@@ -23,6 +23,9 @@
       ]
     },
     "action_clear_potential_size_slot": {
+      "slots": []
+    },
+    "action_need_employee": {
       "slots": []
     }
   },
@@ -39,5 +42,5 @@
     "rasa_core.policies.memoization.MemoizationPolicy",
     "rasa_core.policies.fallback.FallbackPolicy"
   ],
-  "trained_at": "20190107-191731"
+  "trained_at": "20190107-211621"
 }

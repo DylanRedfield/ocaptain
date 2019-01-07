@@ -135,8 +135,6 @@ class ExtendedDucklingHTTPExtractor(EntityExtractor):
             dimensions = self.component_config["dimensions"]
             relevant_matches = filter_irrelevant_matches(matches, dimensions)
 
-            print (relevant_matches)
-
             if message.get('ordinals'):
                 ordinals = message.get('ordinals')
                 for ordinal in ordinals:

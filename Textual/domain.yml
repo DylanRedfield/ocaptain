@@ -43,7 +43,6 @@ actions:
 - action_blank_for_slots
 - action_brancher_validate_reservation_potential_size
 - action_utter_ask_for_polar_or_ordinal_or_time_on_which_if_any_alternative_potential_times_for_reservation_acceptable
-- utter_unhappy_request_customer_call_for_large_parties
 - action_need_employee
 - action_affirm_similar_time_ordinal
 - utter_ask_for_name_on_reservation
@@ -51,6 +50,7 @@ actions:
 - action_check_is_open
 - action_utter_ask_for_polar_on_potential_time_within_close_to_request
 - action_utter_goodbye_while_clearing_slots
+- utter_unhappy_doing_request_customer_call_for_large_parties
 config:
   store_entities_as_slots: true
 entities:
@@ -140,5 +140,5 @@ templates:
   - text: Thanks
   utter_unhappy_doing_invalid_size_AND_ask_for_size_greater_than_zero:
   - text: Please enter a number greater than zero
-  utter_unhappy_request_customer_call_for_large_parties:
+  utter_unhappy_doing_request_customer_call_for_large_parties:
   - text: I'm sorry but for parties that large, it's best to give us a call

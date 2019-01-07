@@ -20,25 +20,22 @@ class TestCore(unittest.TestCase):
         self.sender_id = "+19084771280"
 
     def test_all_input_files(self):
-        pathlist = Path("tests/input").glob('*.input')
+        pathlist = Path("tests/").glob('**/*.test')
         
         for path in pathlist:
             input_file = path.open()
-            output_file = open(str(path)[:-5] + "output")
 
-            print(input_file.read())
+            self.helper_test_file(input_file)
 
             input_file.close()
-            output_file.close()
 
-    def helper_test_file(self, input_file, output_file):
-        outputs = json.load(output_file)
+    def helper_test_file(self, input_file):
+        inputs = json.load(input_file)
 
-        for i, line in enumerate(input_file):
-            self.agent.handle_text(line, sender_id = self.sender_id)
+        for output in inputs:
+            #print("Testing")
+            self.agent.handle_text(output['text'], sender_id = self.sender_id)
             prediction = self.agent.predict_next(self.sender_id)
-
-            output = outputs[i]
 
             # Correct intent
             # TODO allow for several
@@ -56,7 +53,8 @@ class TestCore(unittest.TestCase):
                         contains = True
                 if not contains:
                     contains_all = False
-            self.assertTrue(contains_all)
+
+            self.assertTrue(contains_all, input_file.name + ".\nNeeded: " + ', '.join(goal_entities))
 
             # TODO correct slots
             # TODO correct actions
