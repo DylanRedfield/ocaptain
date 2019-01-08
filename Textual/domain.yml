@@ -4,11 +4,14 @@ actions:
 - action_listen
 - action_clear_potential_time_slot
 - action_ask_is_close_time_okay
+- action_set_potential_hour_slot
 - utter_unhappy_doing_no_number_recognized
 - utter_ask_for_number_on_reservation_size
 - utter_unhappy_doing_invalid_size_AND_ask_for_size_greater_than_zero
 - action_order
 - utter_ask_for_polar_and_or_time_on_alternative_potential_reservation_time
+- utter_ask_for_polar_on_is_am
+- utter_ask_for_time_for_more_specific
 - utter_respond_with_affirm_need_reservation
 - action_set_scheduled_time_slot
 - utter_time_within
@@ -17,10 +20,14 @@ actions:
 - action_check_time_close_on_day
 - action_set_size_slot_from_potential_size_slot
 - utter_ask_for_polar_on_general_correctness_confirmatioutter_ask_for_polar_on_general_correctness_confirmation
+- utter_unhappy_time_in_past_AND_ask_for_time_for_alternative_potential_time
+- utter_unhappy_time_too_far_in_future_AND_ask_for_time_for_alternative_potential_time
+- action_set_temp_times_slot
 - utter_doing_greet
 - action_uttter_respond_your_welcome_AND_and_for_next_general_request_while_clearing_slots
 - utter_respond_with_affirm_restaurant_accepts_reservations_AND_ask_for_polar_on_if_reservation_wanted
 - action_check_reservation_datetime
+- action_checkpoint_with_potential_time_to_validate_and_fill_size
 - action_utter_you_are_set
 - action_check_time_open
 - action_brancher_query_reservation_platform
@@ -99,7 +106,13 @@ slots:
   potential_times:
     auto_fill: false
     type: rasa_core.slots.ListSlot
+  temp_times:
+    auto_fill: false
+    type: rasa_core.slots.ListSlot
   recipient_contact:
+    auto_fill: false
+    type: rasa_core.slots.TextSlot
+  potential_hour:
     auto_fill: false
     type: rasa_core.slots.TextSlot
   recipient_id:

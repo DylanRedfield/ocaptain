@@ -27,6 +27,7 @@
     - action_brancher_validate_reservation_potential_size
     - slot{"size": 5}
     - action_clear_potential_size_slot
+> return
 
 ## checkpoint_with_potential_size_to_validate_and_fill_size_where_potential_size_is_zero
 > checkpoint_with_potential_size_to_validate_and_fill_size
