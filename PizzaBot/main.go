@@ -12,8 +12,8 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 	"time"
-  "os"
 )
 
 var ctx context.Context
@@ -42,19 +42,19 @@ func main() {
 
 	jsonFile, err := os.Open("../env_values.json")
 
-  if err != nil {
-    log.Println(err)
-  }
+	if err != nil {
+		log.Println(err)
+	}
 
-  defer jsonFile.Close()
+	defer jsonFile.Close()
 
-  byteValue, _:= ioutil.ReadAll(jsonFile)
+	byteValue, _ := ioutil.ReadAll(jsonFile)
 
-  var envValues EnvValues
+	var envValues EnvValues
 
-  json.Unmarshal([]byte(byteValue), &envValues)
+	json.Unmarshal([]byte(byteValue), &envValues)
 
-	log.Println(http.ListenAndServe(":" + envValues.PizzaPort, mux))
+	log.Println(http.ListenAndServe(":"+envValues.PizzaPort, mux))
 }
 
 func test() {

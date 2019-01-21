@@ -84,6 +84,12 @@ type OutsideRequest struct {
 type OutsideResponse struct {
 }
 
+type RasaTime struct {
+	Value string
+	Grain string
+	Type  string
+}
+
 type Order struct {
 	Id                   string `firestore:"-"`
 	Address              string `firestore:"address"`
@@ -118,10 +124,10 @@ type OpenClose struct {
 type Reservation struct {
 	Id            string `firestore:"-"`
 	RecipientId   string `firestore:"recipientId"`
-  Contact string `firestore:"contact"`
+	Contact       string `firestore:"contact"`
 	Name          string `firestore:"name"`
 	ScheduledTime int64  `firestore:"scheduledTime"`
-	NumPeople     int  `firestore:"numPeople"`
+	NumPeople     int    `firestore:"numPeople"`
 	IsVisible     bool   `firestore:"visible"`
 }
 
@@ -147,12 +153,13 @@ type LatestMessage struct {
 }
 
 type Entity struct {
-	Start      int       `json:"start"`
-	End        int       `json:"end"`
-	Value      interface{} `json:"value"`
-	Text       string      `json:"text"`
-	Confidence float64     `json:"confidence"`
-	Entity     string      `json:"entity"`
+	Start          int         `json:"start"`
+	End            int         `json:"end"`
+	Value          interface{} `json:"value"`
+	AdditionalInfo interface{} `json:"additional_info"`
+	Text           string      `json:"text"`
+	Confidence     float64     `json:"confidence"`
+	Entity         string      `json:"entity"`
 }
 
 type RasaRequest struct {
@@ -184,6 +191,6 @@ type Event struct {
 }
 
 type EnvValues struct {
-  PizzaPort string `json:"pizza_port"`
-  RasaPort string `json:"rasa_port"`
+	PizzaPort string `json:"pizza_port"`
+	RasaPort  string `json:"rasa_port"`
 }

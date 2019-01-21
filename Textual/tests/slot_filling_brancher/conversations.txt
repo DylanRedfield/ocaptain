@@ -1,4 +1,0 @@
--- Start with nothing --
-U: Can I get a reservation
-o: What's the size
-U: Four

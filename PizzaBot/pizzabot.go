@@ -3,9 +3,11 @@ package main
 import (
 	"cloud.google.com/go/firestore"
 	"fmt"
+	"github.com/mitchellh/mapstructure"
 	"google.golang.org/api/iterator"
 	"log"
 	"math"
+	"reflect"
 	"strconv"
 	"time"
 )
@@ -29,43 +31,373 @@ func (bot *Bot) HandleAction(req *RasaRequest) (*RasaResponse, error) {
 		bot.ActionNeedEmployee(req, resp)
 	case "action_set_size_slot":
 		bot.ActionSetSizeSlot(req, resp)
-  case "action_set_potential_time_slot":
-    bot.ActionSetPotentialTimeSlot(req, resp)
-  case "action_clear_potential_time_slot":
-    bot.ActionClearPotentialTimeSlot(req, resp)
-  default:
-    log.Println(action)
+	case "action_set_potential_time_slot":
+		bot.ActionSetPotentialTimeSlot(req, resp)
+	case "action_clear_potential_time_slot":
+		bot.ActionClearPotentialTimeSlot(req, resp)
+	case "action_test_bed":
+		bot.ActionTestBed(req, resp)
+  case "action_set_temp_times_slot":
+    bot.ActionSetTempTimesSlot(req, resp)
+  case "action_set_potential_hour_slot":
+    bot.ActionSetPotentialHourSlot(req, resp)
+  case "action_brancher_with_temp_times_to_determine_next_from_times_length":
+    bot.ActionBrancherWithTempTimesToDetermineNextFromTimesLength(req, resp)
+  case "action_brancher_with_temp_times_validate_single_temp_times":
+    bot.ActionBrancherWithTempTimesValidateSingleTempTimes(req, resp)
+  case "action_brancher_validate_potential_hour_slot":
+    bot.ActionBrancherValidatePotentialHourSlot(req, resp)
+  case "action_brancher_validate_with_temp_times_and_time_entity_to_modify_temp_times_from_day_grain":
+    bot.ActionBrancherValidateWithTempTimesAndTimeEntityToModifyTempTimeFromDayGrain(req, resp)
+  case "action_brancher_reservation_slot_filling_base":
+    bot.ActionBrancherReservationSlotFillingBase(req, resp)
+  case "action_brancher_to_save_new_reservation":
+    bot.ActionBrancherToSaveNewReservation(req, resp)
+  case "action_need_employee_because_error_saving":
+    bot.ActionNeedEmployeeBecauseErrorSaving(req, resp)
+  case "action_brancher_with_size_and_single_potential_times_query_reservation_platform":
+    bot.ActionBrancherWithSizeAndSinglePotentialTimesQueryReservationPlatform(req, resp)
+  case "action_brancher_with_potential_times_and_alternative_times_to_fill_scheduled_time":
+      bot.ActionBrancherWithPotentialTimesAndAlterativeTimesToFillScheduledTime(req, resp)
+	default:
+		log.Println(action)
 	}
-	/*	switch action {
-		case ACTION_CHECK_IS_OPEN:
-			bot.ActionCheckIsOpen(req, resp)
-		case ACTION_CHECK_IS_OPEN_ON_DAY:
-			bot.ActionCheckIsOpenOnDay(req, resp)
-		case ACTION_CHECK_TIME_CLOSE:
-			bot.ActionCheckTimeClose(req, resp)
-		case ACTION_CHECK_TIME_CLOSE_ON_DAY:
-			bot.ActionCheckTimeCloseOnDay(req, resp)
-		case ACTION_CHECK_RESERVATION_DATETIME:
-			bot.ActionCheckReservationDatetime(req, resp)
-		case ACTION_SET_SCHEDULED_TIME_SLOT:
-			bot.ActionSetScheduledTimeSlot(req, resp)
-		case ACTION_SET_SIZE_SLOT:
-			bot.ActionSetSizeSlot(req, resp)
-		case ACTION_ASK_IF_SIMILAR_TIMES_WORK:
-			bot.ActionAskIfSimilarTimesWork(req, resp)
-		case ACTION_UTTER_ASK_IS_OTHER_RESERVATION_TIME_OKAY:
-			bot.ActionUtterAskIsOtherReservationTimeOkay(req, resp)
-		case ACTION_POST_RESERVATION_SAVED:
-			bot.ActionUtterPostReservationSaved(req, resp)
-		case ACTION_SAVE_RESERVATION:
-			bot.ActionSaveReservation(req, resp)
-		case ACTION_AFFIRM_SIMILAR_TIME:
-			bot.ActionAffirmSimilarTime(req, resp)
-		case ACTION_AFFIRM_SIMILAR_TIME_ORDINAL:
-			bot.ActionAffirmSimilarTimeOrdinal(req, resp)
-		}*/
 
 	return resp, nil
+}
+
+func (bot *Bot) ActionTestBed(req *RasaRequest, resp *RasaResponse) {
+	entities := req.Tracker.LatestMessage.Entities
+
+	for _, entity := range entities {
+		log.Println(entity.Start)
+		/*switch v := entity.Value.(type) {
+		  default:
+		    log.Printf("%T\n", v)
+		  } */
+	}
+}
+
+func (bot *Bot) ActionBrancherReservationSlotFillingBase(req *RasaRequest, resp *RasaResponse) {
+  slots := req.Tracker.Slots
+
+  size := slots["size"]
+  potentialSize := slots["potential_size"]
+
+  scheduledTime := slots["scheduled_time"]
+  tempTimes := slots["temp_times"]
+  potentialTimes := slots["potential_times"]
+
+  name := slots["name"]
+
+  event := Event{}
+
+  if reflect.ValueOf(size).IsNil() {
+    event.Event = FOLLOWUP
+    if reflect.ValueOf(potentialSize).IsNil() {
+      event.Name = "utter_ask_for_number_on_reservation_size"
+    } else {
+      event.Name = "action_checkpoint_with_potential_size_to_validate_and_fill_size"
+    }
+  } else if reflect.ValueOf(scheduledTime).IsNil() {
+    event.Event = FOLLOWUP
+
+    if reflect.ValueOf(potentialTimes).IsNil() {
+
+      if reflect.ValueOf(tempTimes).IsNil() {
+        event.Name = "utter_ask_for_time_for_potential_reservation"
+      } else {
+        event.Name = "action_checkpoint_with_temp_times_to_fill_potential_times"
+      }
+    } else {
+      event.Name = "action_checkpoint_with_size_and_single_potential_times_to_fill_scheduled_time"
+    }
+  } else if reflect.ValueOf(name).IsNil() {
+    event.Name = "utter_ask_for_name"
+  } else {
+    event.Name = "action_brancher_to_save_new_reservation"
+  }
+
+  resp.Events = append(resp.Events, event)
+}
+
+func (bot *Bot) ActionBrancherWithAlternativeTimesAndOrdinalValidateOrdinalToSelectAlternativeTime(req *RasaRequest, resp *RasaResponse) {
+  slots := req.Tracker.Slots
+
+  rawOrdinal := slots["temp_ordinal"]
+  rawAlternativeTimes := slots["alternative_times"]
+
+  event := Event{Event: FOLLOWUP}
+
+  if reflect.ValueOf(rawAlternativeTimes).IsNil() {
+    event.Name = "action_need_employee"
+  } else if reflect.ValueOf(rawOrdinal).IsNil() {
+    event.Name = "action_need_employee"
+  } else {
+    ordinalStr := rawOrdinal.(string)
+
+    ordinalValue, err := strconv.Atoi(ordinalStr)
+    if err != nil {
+      event.Name = "action_need_employee_because_error"
+      resp.Events = append(resp.Events, event)
+      return
+    }
+
+    
+
+    alternativeTimesArr := rawAlternativeTimes.([]interface{})
+
+    if ordinalValue <= 0 || ordinalValue >= len(alternativeTimesArr) {
+      event.Name = "action_need_employee"
+    } else {
+      // Valid
+      alternativeTimesStr := rawAlternativeTimes.([]string)
+      event.Event = SLOT
+      event.Name = "scheduled_time"
+      event.Value = alternativeTimesStr[ordinalValue - 1]
+      resp.Events = append(resp.Events, event)
+
+      event = Event { Event : FOLLOWUP, Name: "action_blank_alert_scheduled_time_slot_set"}
+
+    }
+  }
+  
+  resp.Events = append(resp.Events, event)
+}
+
+func (bot *Bot) ActionBrancherWithPotentialTimesAndAlterativeTimesToFillScheduledTime(req *RasaRequest, resp *RasaResponse) {
+  slots := req.Tracker.Slots
+
+  rawPotentialTimes := slots["potential_times"]
+  rawAlternativeTimes := slots["alternative_times"]
+
+  event := Event{Event: FOLLOWUP}
+
+  if reflect.ValueOf(rawPotentialTimes).IsNil() {
+    event.Name = "utter_ask_for_time_on_potential_reservation"
+  } else if reflect.ValueOf(rawAlternativeTimes).IsNil() {
+    event.Name = "action_checkpoint_with_size_and_single_potential_times_to_fill_scheduled_time"
+  } else {
+    potentialTimes := rawPotentialTimes.([]interface{})
+    rawPotentialTime := potentialTimes[0]
+    potentialTimeStr := rawPotentialTime.(string)
+
+    potentialTime, err := time.Parse(time.RFC3339, potentialTimeStr)
+
+    if err != nil {
+      event.Name = "action_need_employee_because_error"
+      
+      resp.Events = append(resp.Events, event)
+      return
+    }
+
+    altTimes := []time.Time{}
+
+    altTimesArr := rawAlternativeTimes.([]interface{})
+    for _, v := range altTimesArr {
+      altTime, err := time.Parse(time.RFC3339, v.(string))
+
+      if err != nil {
+        event.Name = "action_need_employee_because_error"
+        
+        resp.Events = append(resp.Events, event)
+        return
+      }
+
+      altTimes = append(altTimes, altTime)
+    }
+
+
+		// Check if any are within 15 minutes and if so ask if that is fine
+		lessThan15 := false
+		for _, v := range altTimes {
+			if math.Abs(v.Sub(potentialTime).Minutes()) <= 15 {
+				lessThan15 = true
+			}
+		}
+
+    if lessThan15 {
+      event.Name = "action_utter_ask_for_polar_on_if_single_close_alternative_time_acceptable"
+    } else if len(altTimes) > 1 {
+      event.Name = "action_utter_ask_for_polar_or_time_or_number_or_ordinal_on_serveral_alternative_times"
+    } else {
+      event.Name = "action_utter_ask_for_polar_on_if_single_alternative_times_acceptable"
+    }
+
+  }
+}
+
+func (bot *Bot) ActionBrancherToSaveNewReservation(req *RasaRequest, resp *RasaResponse) {
+  slots := req.Tracker.Slots
+
+  rawSize := slots["size"]
+  rawName := slots["name"]
+  rawScheduledTime := slots["scheduled_time"]
+
+	businessId := req.Tracker.Slots[BUSINESS_ID].(string)
+	recipientId := req.Tracker.Slots[RECIPIENT_ID].(string)
+	contact := req.Tracker.Slots[RECIPIENT_CONTACT].(string)
+
+  event := Event{}
+  if reflect.ValueOf(rawSize).IsNil() || reflect.ValueOf(rawName).IsNil() || reflect.ValueOf(rawScheduledTime).IsNil() {
+    event.Event = FOLLOWUP
+    event.Name = "action_checkpoint_reservation_slot_filling"
+  } else {
+    name := rawName.(string)
+    scheduledTimeStr := rawScheduledTime.(string)
+
+    // We want to round down anyway
+    size := int(rawSize.(float64))
+
+    scheduledTime, err := time.Parse(time.RFC3339, scheduledTimeStr)
+
+    if err != nil {
+      event.Event = FOLLOWUP
+      event.Name = "action_need_employee_because_error_saving"
+      
+      resp.Events = append(resp.Events, event)
+      return
+    }
+
+    timeAsFloat := scheduledTime.UnixNano() / 1000000
+
+    reservation := Reservation{
+      Name:          name,
+      NumPeople:     size,
+      RecipientId:   recipientId,
+      ScheduledTime: timeAsFloat,
+      IsVisible:     true,
+      Contact:       contact,
+    }
+
+    reservationsRef := bot.Client.Collection(Businesses).Doc(businessId).Collection(Reservations)
+    _, _, err = reservationsRef.Add(bot.Ctx, reservation)
+
+    event.Event = FOLLOWUP
+    if err != nil {
+      event.Name = "action_need_employee_because_error_saving"
+    } else {
+      event.Name = "action_utter_post_reservation_save_AND_ask_for_next_general_request"
+    }
+
+  }
+
+  resp.Events = append(resp.Events, event)
+}
+
+func (bot *Bot) ActionBrancherWithSizeAndSinglePotentialTimesQueryReservationPlatform(req *RasaRequest, resp *RasaResponse) {
+  slots := req.Tracker.Slots
+
+  rawSize := slots["size"]
+  rawPotentialTimes := slots["potential_times"]
+
+	businessId := req.Tracker.Slots[BUSINESS_ID].(string)
+
+  event := Event{}
+  event.Event = FOLLOWUP
+
+  if reflect.ValueOf(rawSize).IsNil() {
+    event.Name = "utter_ask_for_number_on_reservation_size"
+  } else if reflect.ValueOf(rawPotentialTimes).IsNil() {
+    event.Name = "utter_ask_for_time_for_potential_reservation"
+  } else {
+    business, err := bot.getBusinessFromId(businessId)
+
+    if err != nil {
+      event.Name = "action_need_employee"
+
+      resp.Events = append(resp.Events, event)
+    }
+
+    // open table query takes in a string for now
+    size := string(int(rawSize.(float64)))
+
+    potentialTimes := rawPotentialTimes.([]interface{})
+    rawPotentialTime := potentialTimes[0]
+    potentialTimeStr := rawPotentialTime.(string)
+
+    potentialTime, err := time.Parse(time.RFC3339, potentialTimeStr)
+
+    if err != nil {
+      event.Name = "action_need_employee_because_error"
+      resp.Events = append(resp.Events, event)
+      return
+    }
+    reservationResult, err := Query(business.ReservationPlatformId, potentialTime, size)
+
+    if err != nil {
+      event.Name = "action_need_employee_because_error"
+      return
+    }
+
+    if reservationResult.Message == NO_AVAILABLE {
+      event.Name = "utter_doing_no_tables_available_near_that_time_AND_ask_for_polar_or_time_on_alternative"
+    } else if reservationResult.Message == IN_ADVANCE {
+      event.Name = "utter_requested_time_too_soon_AND_ask_for_polar_or_time_on_alternative"
+    } else {
+
+      if len(reservationResult.Results) == 0 {
+        event.Name = "action_need_employee"
+      } else {
+
+        found := false
+        for _, result := range(reservationResult.Results) {
+          if result.Equal(potentialTime) {
+            found = true
+
+		        matchTimeStr := result.Format(time.RFC3339)
+
+            event.Event = SLOT
+            event.Name = "scheduled_time"
+            event.Value = matchTimeStr
+
+	          resp.Events = append(resp.Events, event)
+            event.Event = FOLLOWUP
+            event.Value = nil
+            break
+          }
+        }
+
+        if found {
+          event.Name = "action_alert_scheduled_time_slot_set"
+        } else {
+          event.Name = "action_alert_alternative_times_slot_set"
+        }
+      }
+    }
+
+  }
+
+	resp.Events = append(resp.Events, event)
+}
+
+func (bot *Bot) ActionNeedEmployeeBecauseErrorSaving(req *RasaRequest, resp *RasaResponse) {
+  // TODO
+	event := Event{Event: "pause"}
+	resp.Events = append(resp.Events, event)
+}
+
+func (bot *Bot) ActionNeedEmployeeBecauseError(req *RasaRequest, resp *RasaResponse) {
+  // TODO
+	event := Event{Event: "pause"}
+	resp.Events = append(resp.Events, event)
+}
+func (bot *Bot) ActionSetTempTimesSlotFromPotentialHour(req *RasaRequest, resp *RasaResponse) {
+  // Set's the temp_times[0] to the current time but with the potential time as the potential_hour + 12 if less than 12
+  // and greater than 0
+  potentialHour := req.Tracker.Slots["potential_hour"].(float64)
+
+  now := time.Now()
+
+  newTime := time.Date(now.Year(), now.Month(), now.Day(), int(potentialHour), 0, 0, 0, time.UTC)
+  newTimeStr := newTime.Format(time.RFC3339)
+
+  tempTime := RasaTime{Value: newTimeStr, Grain: "hour", Type: "value"}
+
+  event := Event{Event: SLOT, Name: "temp_times", Value: []interface{}{tempTime}}
+  resp.Events = append(resp.Events, event)
+
+
 }
 
 func (bot *Bot) ActionUtterAskForPolarOrOrdinalOrTimeOnWhichIfAnyAlternativePotentialTimesForReservationAcceptable(req *RasaRequest, resp *RasaResponse) {
@@ -88,6 +420,214 @@ func (bot *Bot) ActionUtterAskForPolarOrOrdinalOrTimeOnWhichIfAnyAlternativePote
 
 func (bot *Bot) ActionNeedEmployee(req *RasaRequest, resp *RasaResponse) {
 	// TODO
+	event := Event{Event: "pause"}
+	resp.Events = append(resp.Events, event)
+}
+
+func (bot *Bot) ActionSetTempTimesSlot(req *RasaRequest, resp *RasaResponse) {
+  entities := req.Tracker.LatestMessage.Entities
+
+  entityTime := Entity{}
+  for _, v := range(entities) {
+    if v.Entity == "time" {
+      entityTime = v
+    }
+  }
+
+  event := Event{Event: SLOT, Name: "temp_times", Value: []interface{}{entityTime.AdditionalInfo}}
+  resp.Events = append(resp.Events, event)
+}
+
+func (bot *Bot) ActionSetPotentialHourSlot(req *RasaRequest, resp *RasaResponse) {
+  entities := req.Tracker.LatestMessage.Entities
+
+  potentialHour := 0.0
+
+  for _, v := range(entities) {
+    if v.Entity == "number" {
+      potentialHour = v.Value.(float64)
+    }
+  }
+
+  potentialHour = math.Abs(potentialHour)
+
+  if potentialHour >= 1 && potentialHour <= 11 {
+    potentialHour += 12
+  }
+
+
+  event := Event{Event: SLOT, Name: "potential_hour", Value: potentialHour}
+  resp.Events = append(resp.Events, event)
+}
+func (bot *Bot) ActionBrancherWithTempTimesToDetermineNextFromTimesLength(req *RasaRequest, resp *RasaResponse) {
+	switch v := req.Tracker.Slots["time_times"].(type) {
+	case []interface{}:
+		if len(v) == 1 {
+			event := Event{Event: FOLLOWUP, Name: "action_brancher_validate_single_temp_times"}
+			resp.Events = append(resp.Events, event)
+		} else {
+			event := Event{Event: FOLLOWUP, Name: "action_brancher_validate_single_temp_times"}
+			resp.Events = append(resp.Events, event)
+		}
+	default:
+		event := Event{Event: FOLLOWUP, Name: "utter_ask_for_time_for_potential_reservation"}
+		resp.Events = append(resp.Events, event)
+	}
+}
+
+func (bot *Bot) ActionBrancherWithTempTimesValidateSingleTempTimes(req *RasaRequest, resp *RasaResponse) {
+	switch v := req.Tracker.Slots["temp_times"].(type) {
+	case []interface{}:
+		switch time_map := v[0].(type) {
+		case map[string]interface{}:
+			var rasaTime RasaTime
+			err := mapstructure.Decode(time_map, &rasaTime)
+
+			if err != nil {
+				log.Println(err)
+				break
+			}
+
+			if rasaTime.Grain == "week" || rasaTime.Grain == "month" || rasaTime.Grain == "year" {
+				event := Event{Event: FOLLOWUP, Name: "action_need_employee"}
+				resp.Events = append(resp.Events, event)
+			} else if rasaTime.Grain == "day" {
+				event := Event{Event: FOLLOWUP, Name: "utter_with_temp_time_ask_for_number_or_time_on_need_hour_grain_from_day"}
+				resp.Events = append(resp.Events, event)
+			} else if rasaTime.Grain == "period" {
+				event := Event{Event: FOLLOWUP, Name: "utter_ask_for_polar_is_pm"}
+				resp.Events = append(resp.Events, event)
+			} else {
+				searchTimeStr := rasaTime.Value
+				searchTime, err := time.Parse(time.RFC3339, searchTimeStr)
+
+				if err != nil {
+					log.Println(err)
+				}
+
+				MAX_TIME := float64(24 * 90)
+
+				if searchTime.Before(time.Now()) {
+					event := Event{Event: FOLLOWUP, Name: "utter_unhappy_time_in_past_AND_ask_for_time_on_alternative"}
+					resp.Events = append(resp.Events, event)
+				} else if searchTime.Sub(time.Now()).Hours() > MAX_TIME {
+					event := Event{Event: FOLLOWUP, Name: "utter_unhappy_time_too_far_in_future_AND_ask_for_time_on_alternative"}
+					resp.Events = append(resp.Events, event)
+				} else {
+					event := Event{Event: FOLLOWUP, Name: "action_blank_alert_potential_times_slot_set"}
+					resp.Events = append(resp.Events, event)
+					// So set it as the first item in temp_temps
+					event = Event{Event: SLOT, Name: "potential_times", Value: v[0]}
+					resp.Events = append(resp.Events, event)
+				}
+
+			}
+
+		}
+	default:
+		event := Event{Event: FOLLOWUP, Name: "utter_ask_for_time_for_potential_reservation"}
+		resp.Events = append(resp.Events, event)
+	}
+}
+
+func (bot *Bot) ActionBrancherValidatePotentialHourSlot(req *RasaRequest, resp *RasaResponse) {
+	temp_times := req.Tracker.Slots["temp_times"]
+	potential_hour := req.Tracker.Slots["potential_hour"]
+
+	event := Event{}
+	if reflect.ValueOf(temp_times).IsNil() {
+		event = Event{Event: FOLLOWUP, Name: "utter_ask_for_time_for_potential_reservation"}
+	} else if reflect.ValueOf(potential_hour).IsNil() {
+		event = Event{Event: FOLLOWUP, Name: "action_checkpoint_with_single_temp_times_to_fill_potential_times"}
+	} else {
+		switch v := potential_hour.(type) {
+		case float64:
+			if v >= 24 || v == 0 {
+				event = Event{Event: FOLLOWUP, Name: "action_need_employee"}
+			} else {
+				if v >= 1 && v <= 11 {
+					v += 12
+				}
+				event = Event{Event: SLOT, Name: "potential_hour", Value: v}
+        event := Event{Event: FOLLOWUP, Name: "action_blank_alert_potential_hour_slot_set"}
+        resp.Events = append(resp.Events, event)
+
+			}
+		default:
+			event = Event{Event: FOLLOWUP, Name: "action_need_employee"}
+		}
+	}
+	resp.Events = append(resp.Events, event)
+}
+
+func (bot *Bot) ActionBrancherValidateWithTempTimesAndTimeEntityToModifyTempTimeFromDayGrain(req *RasaRequest, resp *RasaResponse) {
+	temp_times := req.Tracker.Slots["temp_times"]
+
+	entities := req.Tracker.LatestMessage.Entities
+
+	entityTime := Entity{}
+
+	found := false
+	for _, entity := range entities {
+		if entity.Entity == "time" {
+			entityTime = entity
+			found = true
+		}
+	}
+
+	event := Event{}
+	if reflect.ValueOf(temp_times).IsNil() {
+		event = Event{Event: FOLLOWUP, Name: "utter_ask_for_time_for_potential_reservation"}
+	} else if !found {
+		event = Event{Event: FOLLOWUP, Name: "action_need_employee"}
+	} else {
+		switch typed_times := temp_times.(type) {
+		case []interface{}:
+			switch time_map := typed_times[0].(type) {
+			case map[string]interface{}:
+				var rasaTime RasaTime
+				err := mapstructure.Decode(time_map, &rasaTime)
+
+				if err != nil {
+					log.Println(err)
+					event = Event{Event: FOLLOWUP, Name: "action_need_employee"}
+					break
+				}
+
+				entityTimeMap := entityTime.Value.(map[string]interface{})
+				entityTimeStr := entityTimeMap["value"].(string)
+				entityTimeGrain := entityTimeMap["grain"].(string)
+
+				entityTimeObj, _ := time.Parse(time.RFC3339, entityTimeStr)
+
+				if entityTimeGrain == "week" || entityTimeGrain == "month" || entityTimeGrain == "year" {
+					event = Event{Event: FOLLOWUP, Name: "action_need_employee"}
+				} else {
+					// Need to take the hour from the timeEntity and add it to the temp_time
+					tempTimeStr := rasaTime.Value
+					tempTime, _ := time.Parse(time.RFC3339, tempTimeStr)
+
+					entityTimeHours := entityTimeObj.Hour()
+
+					if entityTimeGrain == "period" {
+						if entityTimeHours >= 1 && entityTimeHours <= 11 {
+							entityTimeHours += 12
+						}
+					}
+
+					newTime := time.Date(tempTime.Year(), tempTime.Month(), tempTime.Day(), entityTimeHours, tempTime.Minute(), 0, 0, time.UTC)
+
+					time_map["value"] = newTime.Format(time.RFC3339)
+
+					event = Event{Event: SLOT, Name: "temp_times", Value: []interface{}{time_map}}
+					event := Event{Event: FOLLOWUP, Name: "action_blank_alert_temp_times_slot_set"}
+					resp.Events = append(resp.Events, event)
+
+				}
+			}
+		}
+	}
+	resp.Events = append(resp.Events, event)
 }
 
 func (bot *Bot) ActionAffirmSimilarTime(req *RasaRequest, resp *RasaResponse) {
@@ -345,13 +885,13 @@ func (bot *Bot) ActionSetScheduledTimeSlot(req *RasaRequest, resp *RasaResponse)
 func (bot *Bot) ActionSetPotentialSizeSlot(req *RasaRequest, resp *RasaResponse) {
 	for _, v := range req.Tracker.LatestMessage.Entities {
 		if v.Entity == NUMBER {
-      switch s := v.Value.(type) {
+			switch s := v.Value.(type) {
 			case float64:
-        nextAction := Event{Event: SLOT, Name: "potential_size", Value: s}
-        resp.Events = append(resp.Events, nextAction)
-      case int:
-        nextAction := Event{Event: SLOT, Name: "potential_size", Value: float64(s)}
-        resp.Events = append(resp.Events, nextAction)
+				nextAction := Event{Event: SLOT, Name: "potential_size", Value: s}
+				resp.Events = append(resp.Events, nextAction)
+			case int:
+				nextAction := Event{Event: SLOT, Name: "potential_size", Value: float64(s)}
+				resp.Events = append(resp.Events, nextAction)
 			}
 		}
 	}
@@ -361,11 +901,11 @@ func (bot *Bot) ActionSetPotentialSizeSlot(req *RasaRequest, resp *RasaResponse)
 func (bot *Bot) ActionSetPotentialTimeSlot(req *RasaRequest, resp *RasaResponse) {
 	for _, v := range req.Tracker.LatestMessage.Entities {
 		if v.Entity == TIME {
-      switch s := v.Value.(type) {
-      case string:
-        nextAction := Event{Event: SLOT, Name: "potential_time", Value: s}
-        resp.Events = append(resp.Events, nextAction)
-      }
+			switch s := v.Value.(type) {
+			case string:
+				nextAction := Event{Event: SLOT, Name: "potential_time", Value: s}
+				resp.Events = append(resp.Events, nextAction)
+			}
 		}
 	}
 }
@@ -395,7 +935,7 @@ func (bot *Bot) ActionBrancherValidateReservationPotentialSize(req *RasaRequest,
 		potential_size = int(v)
 		found = true
 	default:
-    log.Printf("%T\n", v)
+		log.Printf("%T\n", v)
 		event := Event{Event: FOLLOWUP, Name: "utter_ask_for_number_on_reservation_size"}
 		resp.Events = append(resp.Events, event)
 	}
@@ -410,6 +950,9 @@ func (bot *Bot) ActionBrancherValidateReservationPotentialSize(req *RasaRequest,
 		} else {
 			event := Event{Event: SLOT, Name: "size", Value: Abs(potential_size)}
 			resp.Events = append(resp.Events, event)
+      event = Event{Event: FOLLOWUP, Name: "action_blank_alert_size_slot_set"}
+      resp.Events = append(resp.Events, event)
+
 		}
 	}
 

@@ -5,11 +5,11 @@ import (
 	"cloud.google.com/go/firestore"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 	"time"
-  "os"
-  "io/ioutil"
 )
 
 // Recieves Botrequest, saves message to firebase, sends to recipient, and returns reponse
@@ -58,9 +58,9 @@ func (bot *Bot) HandleOutsideInput(reqObj OutsideRequest) OutsideResponse {
 		reqObj.Recipient.RecentMessage = reqObj.Message
 
 		personRef, _, err := bot.Client.Collection(Businesses).Doc(businessId).Collection(Recipients).Add(bot.Ctx, reqObj.Recipient)
-    log.Println(personRef.ID)
+		log.Println(personRef.ID)
 		reqObj.Recipient.Id = personRef.ID
-    reqObj.Message.RecipientId = personRef.ID
+		reqObj.Message.RecipientId = personRef.ID
 
 		if err != nil {
 			log.Println(err)
@@ -89,15 +89,15 @@ func (bot *Bot) HandleOutsideInput(reqObj OutsideRequest) OutsideResponse {
 
 	jsonFile, err := os.Open("../env_values.json")
 
-  if err != nil {
-    log.Println(err)
-  }
+	if err != nil {
+		log.Println(err)
+	}
 
-  defer jsonFile.Close()
+	defer jsonFile.Close()
 
-  byteValue, _:= ioutil.ReadAll(jsonFile)
+	byteValue, _ := ioutil.ReadAll(jsonFile)
 
-  var envValues EnvValues
+	var envValues EnvValues
 
 	json.Unmarshal([]byte(byteValue), &envValues)
 	rasaUrl := fmt.Sprintf("http://localhost:%s/webhooks/textual/webhook", envValues.RasaPort)

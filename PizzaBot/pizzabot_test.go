@@ -25,7 +25,7 @@ func TestActionBrancherValidateReservationsPotentialSize(t *testing.T) {
 	resp = NewRasaResponse()
 	bot.ActionBrancherValidateReservationPotentialSize(req, resp)
 	if resp.Events[0].Event != FOLLOWUP || resp.Events[0].Name != "utter_ask_for_number_on_reservation_size" {
-    t.Errorf("followed with: %s", resp.Events[0].Name)
+		t.Errorf("followed with: %s", resp.Events[0].Name)
 	}
 
 	// Test potential_size == 0
@@ -36,7 +36,7 @@ func TestActionBrancherValidateReservationsPotentialSize(t *testing.T) {
 
 	if resp.Events[0].Name != "utter_unhappy_doing_invalid_size_AND_ask_for_size_greater_than_zero" {
 
-    t.Errorf("followed with: %s", resp.Events[0].Name)
+		t.Errorf("followed with: %s", resp.Events[0].Name)
 	}
 
 	// Test potential_size > 20
@@ -45,7 +45,7 @@ func TestActionBrancherValidateReservationsPotentialSize(t *testing.T) {
 	resp = NewRasaResponse()
 	bot.ActionBrancherValidateReservationPotentialSize(req, resp)
 	if resp.Events[0].Name != "utter_unhappy_doing_request_customer_call_for_large_parties" {
-    t.Errorf("followed with: %s", resp.Events[0].Name)
+		t.Errorf("followed with: %s", resp.Events[0].Name)
 	}
 
 	// Test potential_size > 20
@@ -55,7 +55,7 @@ func TestActionBrancherValidateReservationsPotentialSize(t *testing.T) {
 	bot.ActionBrancherValidateReservationPotentialSize(req, resp)
 	if resp.Events[0].Name != "utter_unhappy_doing_invalid_size_AND_ask_for_size_greater_than_zero" {
 
-    t.Errorf("followed with: %s", resp.Events[0].Name)
+		t.Errorf("followed with: %s", resp.Events[0].Name)
 	}
 
 }
