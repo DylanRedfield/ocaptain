@@ -32,8 +32,8 @@ func (bot *Bot) HandleAction(req *RasaRequest) (*RasaResponse, error) {
 		bot.ActionSetSizeSlot(req, resp)
 	case "action_set_potential_time_slot":
 		bot.ActionSetPotentialTimeSlot(req, resp)
-	case "action_clear_potential_time_slot":
-		bot.ActionClearPotentialTimeSlot(req, resp)
+	case "action_clear_potential_times_slot":
+		bot.ActionClearPotentialTimesSlot(req, resp)
   case "action_clear_temp_ordinal_slot":
     bot.ActionClearTempOrdinalSlot(req, resp)
 	case "action_test_bed":
@@ -71,8 +71,8 @@ func (bot *Bot) HandleAction(req *RasaRequest) (*RasaResponse, error) {
   case "action_brancher_with_alternative_times_and_ordinal_validate_ordinal_to_select_alternative_time":
     bot.ActionBrancherWithAlternativeTimesAndOrdinalValidateOrdinalToSelectAlternativeTime(req, resp)
   case "action_brancher_validate_temp_time_to_select_alternative_time_to_set_scheduled_time_slot":
-    bot.ActionBrancherValidateTempTimeToSelectAlternativeTimeToSetScheduleTimeSlot(req, resp)
-  case "action_clear_alternative_times":
+    bot.ActionBrancherValidateTempTimeToSelectAlternativeTimeToSetScheduledTimeSlot(req, resp)
+  case "action_clear_alternative_times_slot":
     bot.ActionClearAlternativeTimes(req, resp)
   case "action_set_temp_ordinal_slot":
     bot.ActionSetTempOrdinalSlot(req, resp)
@@ -111,20 +111,21 @@ func (bot *Bot) ActionBrancherReservationSlotFillingBase(req *RasaRequest, resp 
   name := slots["name"]
 
   event := Event{}
+//  zero := reflect.Zero(reflect.TypeOf(size))
 
-  if reflect.ValueOf(size).IsNil() {
+  if reflect.TypeOf(size) == nil {
     event.Event = FOLLOWUP
-    if reflect.ValueOf(potentialSize).IsNil() {
+    if reflect.TypeOf(potentialSize) == nil {
       event.Name = "utter_ask_for_number_on_reservation_size"
     } else {
       event.Name = "action_checkpoint_with_potential_size_to_validate_and_fill_size"
     }
-  } else if reflect.ValueOf(scheduledTime).IsNil() {
+  } else if reflect.TypeOf(scheduledTime) == nil {
     event.Event = FOLLOWUP
 
-    if reflect.ValueOf(potentialTimes).IsNil() {
+    if reflect.TypeOf(potentialTimes) == nil {
 
-      if reflect.ValueOf(tempTimes).IsNil() {
+      if reflect.TypeOf(tempTimes) == nil {
         event.Name = "utter_ask_for_time_for_potential_reservation"
       } else {
         event.Name = "action_checkpoint_with_temp_times_to_fill_potential_times"
@@ -132,7 +133,7 @@ func (bot *Bot) ActionBrancherReservationSlotFillingBase(req *RasaRequest, resp 
     } else {
       event.Name = "action_checkpoint_with_size_and_single_potential_times_to_fill_scheduled_time"
     }
-  } else if reflect.ValueOf(name).IsNil() {
+  } else if reflect.TypeOf(name) == nil {
     event.Name = "utter_ask_for_name"
   } else {
     event.Name = "action_brancher_to_save_new_reservation"
@@ -149,9 +150,9 @@ func (bot *Bot) ActionBrancherWithAlternativeTimesAndOrdinalValidateOrdinalToSel
 
   event := Event{Event: FOLLOWUP}
 
-  if reflect.ValueOf(rawAlternativeTimes).IsNil() {
+  if reflect.TypeOf(rawAlternativeTimes) == nil {
     event.Name = "action_need_employee"
-  } else if reflect.ValueOf(rawOrdinal).IsNil() {
+  } else if reflect.TypeOf(rawOrdinal) == nil {
     event.Name = "action_need_employee"
   } else {
     ordinalStr := rawOrdinal.(string)
@@ -183,7 +184,7 @@ func (bot *Bot) ActionBrancherWithAlternativeTimesAndOrdinalValidateOrdinalToSel
   resp.Events = append(resp.Events, event)
 }
 
-func (bot *Bot) ActionBrancherValidateTempTimeToSelectAlternativeTimeToSetScheduleTimeSlot(req *RasaRequest, resp *RasaResponse) {
+func (bot *Bot) ActionBrancherValidateTempTimeToSelectAlternativeTimeToSetScheduledTimeSlot(req *RasaRequest, resp *RasaResponse) {
   slots := req.Tracker.Slots
 
   rawTempTimes := slots["temp_times"]
@@ -191,9 +192,9 @@ func (bot *Bot) ActionBrancherValidateTempTimeToSelectAlternativeTimeToSetSchedu
 
   event := Event{Event: FOLLOWUP}
 
-  if reflect.ValueOf(rawTempTimes).IsNil() {
+  if reflect.TypeOf(rawTempTimes) == nil {
     event.Name = "action_need_employee"
-  } else if reflect.ValueOf(rawAltTimes).IsNil() {
+  } else if reflect.TypeOf(rawAltTimes) == nil {
     event.Name = "action_need_employee"
   } else {
     tempTime := rawTempTimes.([]interface{})[0]
@@ -305,9 +306,9 @@ func (bot *Bot) ActionBrancherWithPotentialTimesAndAlterativeTimesToFillSchedule
 
   event := Event{Event: FOLLOWUP}
 
-  if reflect.ValueOf(rawPotentialTimes).IsNil() {
+  if reflect.TypeOf(rawPotentialTimes) == nil {
     event.Name = "utter_ask_for_time_on_potential_reservation"
-  } else if reflect.ValueOf(rawAlternativeTimes).IsNil() {
+  } else if reflect.TypeOf(rawAlternativeTimes) == nil {
     event.Name = "action_checkpoint_with_size_and_single_potential_times_to_fill_scheduled_time"
   } else {
     potentialTimes := rawPotentialTimes.([]interface{})
@@ -373,7 +374,7 @@ func (bot *Bot) ActionBrancherToSaveNewReservation(req *RasaRequest, resp *RasaR
 	contact := req.Tracker.Slots[RECIPIENT_CONTACT].(string)
 
   event := Event{}
-  if reflect.ValueOf(rawSize).IsNil() || reflect.ValueOf(rawName).IsNil() || reflect.ValueOf(rawScheduledTime).IsNil() {
+  if reflect.TypeOf(rawSize) == nil || reflect.TypeOf(rawName) == nil || reflect.TypeOf(rawScheduledTime) == nil {
     event.Event = FOLLOWUP
     event.Name = "action_checkpoint_reservation_slot_filling"
   } else {
@@ -430,9 +431,9 @@ func (bot *Bot) ActionBrancherWithSizeAndSinglePotentialTimesQueryReservationPla
   event := Event{}
   event.Event = FOLLOWUP
 
-  if reflect.ValueOf(rawSize).IsNil() {
+  if reflect.TypeOf(rawSize) == nil {
     event.Name = "utter_ask_for_number_on_reservation_size"
-  } else if reflect.ValueOf(rawPotentialTimes).IsNil() {
+  } else if reflect.TypeOf(rawPotentialTimes) == nil {
     event.Name = "utter_ask_for_time_for_potential_reservation"
   } else {
     business, err := bot.getBusinessFromId(businessId)
@@ -680,9 +681,9 @@ func (bot *Bot) ActionBrancherValidatePotentialHourSlot(req *RasaRequest, resp *
 	potential_hour := req.Tracker.Slots["potential_hour"]
 
 	event := Event{}
-	if reflect.ValueOf(temp_times).IsNil() {
+	if reflect.TypeOf(temp_times) == nil {
 		event = Event{Event: FOLLOWUP, Name: "utter_ask_for_time_for_potential_reservation"}
-	} else if reflect.ValueOf(potential_hour).IsNil() {
+	} else if reflect.TypeOf(potential_hour) == nil {
 		event = Event{Event: FOLLOWUP, Name: "action_checkpoint_with_single_temp_times_to_fill_potential_times"}
 	} else {
 		switch v := potential_hour.(type) {
@@ -721,7 +722,7 @@ func (bot *Bot) ActionBrancherValidateWithTempTimesAndTimeEntityToModifyTempTime
 	}
 
 	event := Event{}
-	if reflect.ValueOf(temp_times).IsNil() {
+	if reflect.TypeOf(temp_times) == nil {
 		event = Event{Event: FOLLOWUP, Name: "utter_ask_for_time_for_potential_reservation"}
 	} else if !found {
 		event = Event{Event: FOLLOWUP, Name: "action_need_employee"}
@@ -885,7 +886,7 @@ func (bot *Bot) ActionSetPotentialTimeSlot(req *RasaRequest, resp *RasaResponse)
 		if v.Entity == TIME {
 			switch s := v.Value.(type) {
 			case string:
-				nextAction := Event{Event: SLOT, Name: "potential_time", Value: s}
+				nextAction := Event{Event: SLOT, Name: "potential_times", Value: s}
 				resp.Events = append(resp.Events, nextAction)
 			}
 		}
@@ -905,8 +906,8 @@ func (bot *Bot) ActionSetTempOrdinalSlot(req *RasaRequest, resp *RasaResponse) {
 
 }
 
-func (bot *Bot) ActionClearPotentialTimeSlot(req *RasaRequest, resp *RasaResponse) {
-	nextAction := Event{Event: SLOT, Name: "potential_time"}
+func (bot *Bot) ActionClearPotentialTimesSlot(req *RasaRequest, resp *RasaResponse) {
+	nextAction := Event{Event: SLOT, Name: "potential_times"}
 	resp.Events = append(resp.Events, nextAction)
 }
 

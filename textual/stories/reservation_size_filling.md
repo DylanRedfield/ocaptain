@@ -1,8 +1,3 @@
-## checkpoint_to_ask_for_potential_size
-> checkpoint_to_ask_for_potential_size
-    - utter_ask_for_number_on_reservation_size
-> checkpoint_to_fill_potential_size
-
 ## checkpoint_to_fill_potential_size_inform_number
 > checkpoint_to_fill_potential_size
 * inform{"number": 2}
@@ -30,7 +25,7 @@
     - action_blank_alert_size_slot_set
     - action_clear_potential_size_slot
     - slot{"potential_size": null}
-> return
+> checkpoint_reservation_slot_filling
 
 ## checkpoint_with_potential_size_to_validate_and_fill_size_where_potential_size_is_zero
 > checkpoint_with_potential_size_to_validate_and_fill_size

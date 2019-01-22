@@ -12,15 +12,28 @@
         "business_id"
       ]
     },
+    "action_brancher_reservation_slot_filling_base": {
+      "slots": []
+    },
     "action_set_potential_size_slot": {
       "slots": [
         "potential_size"
       ]
     },
     "action_brancher_validate_reservation_potential_size": {
-      "slots": []
+      "slots": [
+        "size"
+      ]
+    },
+    "action_clear_potential_size_slot": {
+      "slots": [
+        "potential_size"
+      ]
     },
     "action_need_employee": {
+      "slots": []
+    },
+    "utter_doing_greet": {
       "slots": []
     }
   },
@@ -28,14 +41,16 @@
   "python": "3.6.5",
   "max_histories": [
     5,
+    null,
     5,
-    null
+    2
   ],
   "ensemble_name": "rasa_core.policies.ensemble.SimplePolicyEnsemble",
   "policy_names": [
     "rasa_core.policies.keras_policy.KerasPolicy",
+    "rasa_core.policies.fallback.FallbackPolicy",
     "rasa_core.policies.memoization.MemoizationPolicy",
-    "rasa_core.policies.fallback.FallbackPolicy"
+    "rasa_core.policies.form_policy.FormPolicy"
   ],
-  "trained_at": "20190111-012743"
+  "trained_at": "20190122-044939"
 }

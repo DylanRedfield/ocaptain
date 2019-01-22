@@ -1,30 +1,11 @@
 digraph  {
 0 [label=START, fillcolor=green, style=filled, fontsize=12, class="start active"];
-1 [label=action_blank_for_slots, fontsize=12, class=active];
-2 [label=action_set_potential_size_slot, fontsize=12, class=active];
-3 [label=action_brancher_validate_reservation_potential_size, fontsize=12, class=active];
-4 [label=utter_unhappy_doing_request_customer_call_for_large_parties, fontsize=12, class=""];
-"-3" [label="...", class=ellipsis];
-6 [label=utter_ask_for_number_on_reservation_size, fontsize=12, class=""];
-12 [label=utter_unhappy_doing_invalid_size_AND_ask_for_size_greater_than_zero, fontsize=12, class=""];
-"-210" [label="...", class=ellipsis];
-"-215" [label="...", class=ellipsis];
-608 [label=action_blank_alert_size_slot_set, fontsize=12, class=active];
-609 [label=action_clear_potential_size_slot, fontsize=12, class=active];
-610 [label=action_need_employee, fontsize=12, class="dashed active"];
-611 [label="can I get a reservation for 5", shape=rect, style=filled, fillcolor=lightblue, class="intent active"];
-0 -> 611  [key=0, class=active];
-1 -> 2  [key=NONE, label="", class=active];
-1 -> 6  [key=NONE, label="", class=""];
-2 -> 3  [key=NONE, label="", class=active];
-3 -> 4  [key=NONE, label="", class=""];
-3 -> 12  [key=NONE, label="", class=""];
-3 -> 608  [key=NONE, label="", class=active];
-3 -> 6  [key=NONE, label="", class=""];
-4 -> "-3"  [key=NONE, label="", class=""];
-6 -> "-215"  [key=NONE, label="", class=""];
-12 -> "-210"  [key=NONE, label="", class=""];
-608 -> 609  [key=NONE, label="", class=active];
-609 -> 610  [key=NONE, label="", class=active];
-611 -> 1  [key=0, class=active];
+1 [label=action_blank_for_slots, fontsize=12, class=""];
+"-912" [label="...", class=ellipsis];
+911 [label="  ?  ", shape=rect, class="intent dashed active"];
+912 [label="/make_reservation", shape=rect, style=filled, fillcolor=lightblue, class=intent];
+0 -> 911  [key=NONE, label="", class=active];
+0 -> 912  [key=0, class=""];
+1 -> "-912"  [key=NONE, label="", class=""];
+912 -> 1  [key=0, class=""];
 }
