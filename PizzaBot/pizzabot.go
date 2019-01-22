@@ -4,7 +4,6 @@ import (
 	"cloud.google.com/go/firestore"
 	"fmt"
 	"github.com/mitchellh/mapstructure"
-	"google.golang.org/api/iterator"
 	"log"
 	"math"
 	"reflect"
@@ -358,6 +357,8 @@ func (bot *Bot) ActionBrancherWithPotentialTimesAndAlterativeTimesToFillSchedule
     }
 
   }
+
+  resp.Events = append(resp.Events, event)
 }
 
 func (bot *Bot) ActionBrancherToSaveNewReservation(req *RasaRequest, resp *RasaResponse) {
@@ -774,48 +775,6 @@ func (bot *Bot) ActionBrancherValidateWithTempTimesAndTimeEntityToModifyTempTime
 	resp.Events = append(resp.Events, event)
 }
 
-func (bot *Bot) ActionAffirmSimilarTime(req *RasaRequest, resp *RasaResponse) {
-	event := Event{Event: FOLLOWUP, Name: ACTION_AFFIRM_SIMILAR_TIME_ORDINAL}
-	resp.Events = append(resp.Events, event)
-}
-
-func (bot *Bot) ActionAffirmSimilarTimeOrdinal(req *RasaRequest, resp *RasaResponse) {
-	// Save the correct potential time into the slot and then followup with action_save_reservation
-	potential_times := req.Tracker.Slots[POTENTIAL_TIMES].([]interface{})
-	name := req.Tracker.Slots[NAME]
-
-	// Need to get the ordinal from entities
-	entities := req.Tracker.LatestMessage.Entities
-
-	ordinal := -1.0
-	for _, v := range entities {
-		if v.Entity == "ordinal" {
-			ordinal = v.Value.(float64)
-		}
-	}
-
-	if int(ordinal) > len(potential_times) {
-		// TODO utter_error
-	} else {
-		time := potential_times[int(ordinal)-1]
-		log.Println(time)
-
-		// TODO Remove these follow ups
-		event := Event{}
-		switch name.(type) {
-		case string:
-			event = Event{Event: FOLLOWUP, Name: ACTION_SAVE_RESERVATION}
-		default:
-			event = Event{Event: FOLLOWUP, Name: UTTER_ASK_NAME}
-		}
-		resp.Events = append(resp.Events, event)
-
-		event = Event{Event: SLOT, Name: SCHEDULED_TIME, Value: time}
-		resp.Events = append(resp.Events, event)
-
-	}
-}
-
 func (bot *Bot) ActionUtterAskForPolarOrTimeOrNumberOnSeveralAlternativeTimes(req *RasaRequest, resp *RasaResponse) {
 	times := req.Tracker.Slots["alternative_times"].([]interface{})
 	reply := "Nothing is available then but do any of the following times work: "
@@ -880,180 +839,6 @@ func (bot *Bot) ActionUtterAskForPolarOnIfSingleCloseAlternativeTimeAcceptable(r
 	resp.Responses = append(resp.Responses, Response{Text: reply})
 }
 
-func (bot *Bot) ActionUtterAskIsOtherReservationTimeOkay(req *RasaRequest, resp *RasaResponse) {
-	times := req.Tracker.Slots[POTENTIAL_TIMES].([]interface{})
-
-	potentialTime := ""
-	for _, v := range times {
-		datetime, err := time.Parse(time.RFC3339, v.(string))
-
-		if err != nil {
-			log.Println(err)
-		}
-
-		potentialTime = datetime.Format("3:04 PM")
-	}
-
-	reply := fmt.Sprintf("Is %s close enough?", potentialTime)
-	resp.Responses = append(resp.Responses, Response{Text: reply})
-
-}
-
-func (bot *Bot) ActionCheckReservationDatetime(req *RasaRequest, resp *RasaResponse) {
-	// TODO add support for time intervals
-	/* Will have a datetime, businessId, partySize, etc saved in slots */
-	//recipientId := req.Tracker.Slots["recipient_id"]
-	businessId := req.Tracker.Slots[BUSINESS_ID].(string)
-	searchTimeStr := req.Tracker.Slots[SCHEDULED_TIME].(string)
-	partySize := req.Tracker.Slots[SIZE].(string)
-
-	searchTime, err := time.Parse(time.RFC3339, searchTimeStr)
-
-	if err != nil {
-		log.Println(err)
-	}
-
-	business, err := bot.getBusinessFromId(businessId)
-
-	if err != nil {
-		log.Println(err)
-	}
-
-	reservationResult, err := Query(business.ReservationPlatformId, searchTime, partySize)
-
-	if err != nil {
-		log.Println(err)
-	}
-
-	bot.handleReservationDatetimeQueryResult(reservationResult, req, resp)
-
-}
-
-func (bot *Bot) handleReservationDatetimeQueryResult(reservationResult OpenTableResult, req *RasaRequest, resp *RasaResponse) {
-	searchTimeStr := req.Tracker.Slots[SCHEDULED_TIME].(string)
-
-	searchTime, _ := time.Parse(time.RFC3339, searchTimeStr)
-
-	// TODO do better here
-	name := ""
-	if req.Tracker.Slots[NAME] != nil {
-		name = req.Tracker.Slots[NAME].(string)
-	}
-
-	if reservationResult.Message == "" {
-		// Reservations found within 2.5 hours of request
-
-		found := false
-		// Check if one equals exactly and if so make the reservation
-		for _, v := range reservationResult.Results {
-			if v.Equal(searchTime) {
-				found = true
-			}
-		}
-
-		if found {
-			// Exact match, so as long as we have a name we add the reservation to the db
-
-			if name == "" {
-				// Action ask the name
-				nextAction := Event{Event: "followup", Name: UTTER_ASK_NAME}
-				resp.Events = append(resp.Events, nextAction)
-				return
-			} else {
-				// Force Action save_reservation
-				nextAction := Event{Event: "followup", Name: ACTION_SAVE_RESERVATION}
-				resp.Events = append(resp.Events, nextAction)
-				return
-			}
-		}
-
-		// Check if any are within 15 minutes and if so ask if that is fine
-		lessThan15 := false
-		selectedTime := reservationResult.Results[0]
-		for _, v := range reservationResult.Results {
-			if math.Abs(v.Sub(searchTime).Minutes()) <= 15 {
-				lessThan15 = true
-				selectedTime = v
-			}
-		}
-
-		if lessThan15 {
-			// Action is this one good?
-
-			nextAction := Event{Event: SLOT, Name: POTENTIAL_TIMES, Value: []string{selectedTime.Format(time.RFC3339)}}
-			resp.Events = append(resp.Events, nextAction)
-
-			nextAction = Event{Event: FOLLOWUP, Name: ACTION_UTTER_ASK_IS_OTHER_RESERVATION_TIME_OKAY}
-			resp.Events = append(resp.Events, nextAction)
-			return
-		}
-
-		nextAction := Event{Event: SLOT, Name: POTENTIAL_TIMES, Value: reservationResult.Results}
-		resp.Events = append(resp.Events, nextAction)
-
-		// action we didn't find any at that time, but do any of these times work for you?
-		nextAction = Event{Event: FOLLOWUP, Name: ACTION_ASK_IF_SIMILAR_TIMES_WORK}
-		resp.Events = append(resp.Events, nextAction)
-		return
-
-	} else if reservationResult.Message == NO_AVAILABLE {
-		nextAction := Event{Event: FOLLOWUP, Name: UTTER_NO_RESERVATIONS_AVAILABLE}
-		resp.Events = append(resp.Events, nextAction)
-		return
-
-	} else if reservationResult.Message == IN_ADVANCE {
-		nextAction := Event{Event: FOLLOWUP, Name: UTTER_REQUEST_TIME_TOO_EARLY}
-		resp.Events = append(resp.Events, nextAction)
-		return
-	}
-
-}
-
-func (bot *Bot) ActionSaveReservation(req *RasaRequest, resp *RasaResponse) {
-
-	name := req.Tracker.Slots[NAME].(string)
-	size := req.Tracker.Slots[SIZE].(string)
-	scheduledTime := req.Tracker.Slots[SCHEDULED_TIME].(string)
-	businessId := req.Tracker.Slots[BUSINESS_ID].(string)
-	recipientId := req.Tracker.Slots[RECIPIENT_ID].(string)
-	contact := req.Tracker.Slots[RECIPIENT_CONTACT].(string)
-
-	datetime, _ := time.Parse(time.RFC3339, scheduledTime)
-	timeAsFloat := datetime.UnixNano() / 1000000
-
-	numPeople, err := strconv.ParseInt(size, 0, 32)
-	if err != nil {
-		log.Println(err)
-	}
-
-	reservation := Reservation{
-		Name:          name,
-		NumPeople:     int(numPeople),
-		RecipientId:   recipientId,
-		ScheduledTime: timeAsFloat,
-		IsVisible:     true,
-		Contact:       contact,
-	}
-
-	reservationsRef := bot.Client.Collection(Businesses).Doc(businessId).Collection(Reservations)
-	_, _, err = reservationsRef.Add(bot.Ctx, reservation)
-
-	if err != nil {
-		log.Println(err)
-	}
-
-}
-
-func (bot *Bot) ActionUtterPostReservationSaved(req *RasaRequest, resp *RasaResponse) {
-	//size := req.Tracker.Slots[SIZE].(string)
-	scheduledTime := req.Tracker.Slots[SCHEDULED_TIME].(string)
-
-	datetime, _ := time.Parse(time.RFC3339, scheduledTime)
-
-	reply := fmt.Sprintf("Great, you're all set. We'll see you at %s", datetime.Format("3:04 PM"))
-	resp.Responses = append(resp.Responses, Response{Text: reply})
-}
-
 func (bot *Bot) checkOrSetInputSlots(req *RasaRequest, resp *RasaResponse) {
 	businessId := ""
 	if req.Tracker.Slots[BUSINESS_ID] == nil {
@@ -1077,17 +862,6 @@ func (bot *Bot) checkOrSetInputSlots(req *RasaRequest, resp *RasaResponse) {
 
 	}
 
-}
-
-func (bot *Bot) ActionSetScheduledTimeSlot(req *RasaRequest, resp *RasaResponse) {
-	scheduledTime := ""
-	for _, v := range req.Tracker.LatestMessage.Entities {
-		if v.Entity == TIME {
-			scheduledTime = v.Value.(string)
-		}
-	}
-	nextAction := Event{Event: SLOT, Name: SCHEDULED_TIME, Value: scheduledTime}
-	resp.Events = append(resp.Events, nextAction)
 }
 
 func (bot *Bot) ActionSetPotentialSizeSlot(req *RasaRequest, resp *RasaResponse) {
@@ -1211,99 +985,6 @@ func (bot *Bot) ActionSetSizeSlot(req *RasaRequest, resp *RasaResponse) {
 	nextAction := Event{Event: SLOT, Name: SIZE, Value: fmt.Sprintf("%d", size)}
 	resp.Events = append(resp.Events, nextAction)
 }
-
-func (bot *Bot) ActionUpdateOrder(req *RasaRequest, resp *RasaResponse) {
-	businessId := req.Tracker.Slots[BUSINESS_ID].(string)
-	recipientId := req.Tracker.Slots[RECIPIENT_ID].(string)
-
-	orderQuery := bot.Client.Collection(Businesses).Doc(businessId).Collection(Orders).Where("recipientId", "==", recipientId)
-	orderQuery = orderQuery.Where("visible", "==", true).OrderBy("lastModificationTime", firestore.Desc)
-
-	order := &Order{}
-	iter := orderQuery.Documents(bot.Ctx)
-	for {
-		doc, err := iter.Next()
-
-		if err == iterator.Done {
-			break
-		}
-
-		if err != nil {
-			log.Println(err)
-			// TODO handle error
-			break
-		}
-
-		err = doc.DataTo(order)
-		if err != nil {
-			log.Println(err)
-		}
-
-		order.Id = doc.Ref.ID
-	}
-
-	orderType := req.Tracker.Slots["type"].(string)
-
-	if req.Tracker.Slots["address"].(string) != "" && orderType == "" {
-		orderType = "DELIVERY"
-		resp.Events = append(resp.Events, Event{"slot", "type", "DELIVERY"})
-	}
-
-	if order.Id == "" {
-		order := Order{
-			RecipientId:          req.SenderId,
-			RecipientContact:     req.Tracker.Slots["recipient_contact"].(string),
-			StartTime:            currentTime(),
-			LastModificationTime: currentTime(),
-			IsVisible:            true,
-		}
-
-		slots := req.Tracker.Slots
-		if slots["address"].(string) != "" {
-			order.Address = slots["address"].(string)
-		}
-
-		if slots["name"].(string) != "" {
-			order.Name = slots["name"].(string)
-		}
-
-		order.Type = orderType
-
-		if slots["contents"].(string) != "" {
-			order.Content = slots["contents"].(string)
-		}
-		bot.saveOrder(req, &order)
-
-	} else {
-		orderRef := bot.Client.Collection(Businesses).Doc(businessId).Collection(Orders).Doc(order.Id)
-
-		// Now we have our order and can update it
-		orderRef.Update(bot.Ctx, []firestore.Update{
-			{Path: "address", Value: req.Tracker.Slots["address"].(string)},
-			{Path: "name", Value: req.Tracker.Slots["name"].(string)},
-			{Path: "type", Value: orderType},
-			{Path: "content", Value: req.Tracker.Slots["contents"].(string)},
-			{Path: "lastModificationTime", Value: currentTime()},
-		})
-
-	}
-
-}
-
-/*func (bot *Bot) ActionAskNext(req *RasaRequest, resp *RasaResponse) {
-	// Figure out which question to ask and return it as a follow up action
-
-	slots := req.Tracker.Slots
-	emptySlots := map[string]interface{}
-
-	for k, v := range slots {
-		if v == "" {
-			emptySlots[k] = v
-		}
-	}
-
-	// Now we have our empty slots and we can probably just choose any
-}*/
 
 func (bot *Bot) ActionCheckTimeClose(req *RasaRequest, resp *RasaResponse) {
 	// Need to check the database to see if business is closed or not
