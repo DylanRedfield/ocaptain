@@ -57,6 +57,8 @@ actions:
 - action_brancher_validate_reservation_potential_size
 - action_utter_ask_for_polar_or_ordinal_or_time_on_which_if_any_alternative_potential_times_for_reservation_acceptable
 - action_need_employee
+- action_need_employee_because_error
+- action_need_employee_because_error_saving
 - action_affirm_similar_time_ordinal
 - utter_ask_for_name_on_reservation
 - utter_ask_for_time_for_potential_reservation
@@ -71,10 +73,31 @@ actions:
 - action_brancher_with_temp_times_validate_single_temp_times
 - action_brancher_validate_potential_hour_slot
 - action_brancher_validate_with_temp_times_and_time_entity_to_modify_temp_times_from_day_grain
+- action_checkpoint_with_single_time_times_to_fill_potential_timees
+- utter_doing_no_tables_available_near_that_time_AND_ask_for_polar_or_time_on_alternative
+- utter_requested_time_too_soon_AND_ask_for_polar_or_time_on_alternative
+- action_utter_ask_for_polar_on_if_single_close_alternative_time_acceptable
+- action_utter_ask_for_polar_on_if_single_alternative_time_acceptable
+- action_utter_ask_for_polar_or_time_or_number_on_several_alternative_times
+- action_utter_ask_with_alternative_times_for_time_or_number_or_ordinal_on_more_specific_alternative_time
+- action_brancher_with_size_and_single_potential_times_query_reservation_platform
+- action_brancher_with_potential_times_and_alternative_times_to_fill_scheduled_time
+- action_brancher_validate_temp_time_to_select_alternative_time_to_set_scheduled_time_slot
+- action_brancher_with_alternative_times_and_ordinal_validate_ordinal_to_select_alternative_time
+- action_need_employee_because_error
+- action_clear_alternative_times
+- action_ask_for_polar_on_if_single_close_alternative_time_acceptable
+- action_set_scheduled_time_slot_from_close_alternative
+- action_set_scheduled_time_from_single_alternative
+- action_set_temp_ordinal
+- action_clear_temp_ordinal
+- action_checkpoint_with_size_and_no_alternatives
+- action_checkpoint_with_size_and_single_potential_times_to_fill_scheduled_time
+- action_checkpoint_with_several_alternative_times_to_select
+- action_utter_post_reservation_AND_ask_for_next_general_request
 config:
   store_entities_as_slots: true
 entities:
-- ORG
 - ordinal
 - number
 - size
@@ -83,7 +106,6 @@ entities:
 - name
 - TIME
 - item
-- CARDINAL
 - time
 forms: []
 intents:
@@ -159,15 +181,13 @@ templates:
   utter_doing_greet:
   - text: Hey, how can I help you?
   utter_request_time_too_early:
-  - text: Sorry, but you can only request reservations that are more than five minutes
-      from now
+  - text: Sorry, but you can only request reservations that are more than five minutes from now
   utter_respond_with_affirm_need_reservation:
   - text: It can never hurt
   utter_respond_with_affirm_restaurant_accepts_reservations_AND_ask_for_polar_on_if_reservation_wanted:
   - text: Yes! Would you like to make one?
-  ? utter_respond_with_informing_no_reservation_availability_at_specificied_time_AND_ask_for_polar_and_or_time_for_alternative_potential_reservation_time
-  : - text: Sorry, but we don't have any reservations available at that time, do you
-        have another time in mind?
+  utter_respond_with_informing_no_reservation_availability_at_specificied_time_AND_ask_for_polar_and_or_time_for_alternative_potential_reservation_time:
+  - text: Sorry, but we don't have any reservations available at that time, do you have another time in mind?
   utter_restart:
   - text: Restarted
   utter_thank:
@@ -178,3 +198,7 @@ templates:
   - text: I'm sorry but for parties that large, it's best to give us a call
   utter_ask_for_polar_on_is_pm:
   - text: Is that PM?
+  utter_doing_no_tables_available_near_that_time_AND_ask_for_polar_or_time_on_alternative:
+  - text: Sorry, we don't have another within a few hours of that. Do you have another time in mind?
+  utter_requested_time_too_soon_AND_ask_for_polar_or_time_on_alternative:
+  - text: Sorry, but that time is too close to now. Do you have another in mind?
