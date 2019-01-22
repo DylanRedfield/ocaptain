@@ -2,7 +2,10 @@
 ---
 actions:
 - action_listen
+- action_checkpoint_with_potential_size_to_validate_and_fill_size
+- action_checkpoint_with_temp_times_to_fill_potential_times
 - action_brancher_reservation_slot_filling_base
+- action_brancher_to_save_new_reservation
 - action_blank_for_slots
 - utter_unhappy_doing_no_number_recognized
 - action_test_bed

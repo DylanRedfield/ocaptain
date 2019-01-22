@@ -7,9 +7,9 @@
     },
     "action_blank_for_slots": {
       "slots": [
-        "recipient_contact",
         "recipient_id",
-        "business_id"
+        "business_id",
+        "recipient_contact"
       ]
     },
     "action_brancher_reservation_slot_filling_base": {
@@ -32,25 +32,20 @@
     },
     "action_need_employee": {
       "slots": []
-    },
-    "utter_doing_greet": {
-      "slots": []
     }
   },
   "rasa_core": "0.12.1",
   "python": "3.6.5",
   "max_histories": [
     5,
-    null,
     5,
-    2
+    null
   ],
   "ensemble_name": "rasa_core.policies.ensemble.SimplePolicyEnsemble",
   "policy_names": [
     "rasa_core.policies.keras_policy.KerasPolicy",
-    "rasa_core.policies.fallback.FallbackPolicy",
     "rasa_core.policies.memoization.MemoizationPolicy",
-    "rasa_core.policies.form_policy.FormPolicy"
+    "rasa_core.policies.fallback.FallbackPolicy"
   ],
-  "trained_at": "20190122-044939"
+  "trained_at": "20190122-063211"
 }
