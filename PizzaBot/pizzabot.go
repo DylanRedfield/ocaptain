@@ -118,7 +118,7 @@ func (bot *Bot) ActionBrancherReservationSlotFillingBase(req *RasaRequest, resp 
     if reflect.TypeOf(potentialSize) == nil {
       event.Name = "utter_ask_for_number_on_reservation_size"
     } else {
-      event.Name = "action_checkpoint_with_potential_size_to_validate_and_fill_size"
+      event.Name = "action_brancher_validate_reservation_potential_size"
     }
   } else if reflect.TypeOf(scheduledTime) == nil {
     event.Event = FOLLOWUP
@@ -128,10 +128,10 @@ func (bot *Bot) ActionBrancherReservationSlotFillingBase(req *RasaRequest, resp 
       if reflect.TypeOf(tempTimes) == nil {
         event.Name = "utter_ask_for_time_for_potential_reservation"
       } else {
-        event.Name = "action_checkpoint_with_temp_times_to_fill_potential_times"
+        event.Name = "action_brancher_with_temp_times_to_fill_potential_times"
       }
     } else {
-      event.Name = "action_checkpoint_with_size_and_single_potential_times_to_fill_scheduled_time"
+      event.Name = "action_brancher_with_size_and_single_potential_times_query_reservation_platform"
     }
   } else if reflect.TypeOf(name) == nil {
     event.Name = "utter_ask_for_name"
@@ -309,7 +309,7 @@ func (bot *Bot) ActionBrancherWithPotentialTimesAndAlterativeTimesToFillSchedule
   if reflect.TypeOf(rawPotentialTimes) == nil {
     event.Name = "utter_ask_for_time_on_potential_reservation"
   } else if reflect.TypeOf(rawAlternativeTimes) == nil {
-    event.Name = "action_checkpoint_with_size_and_single_potential_times_to_fill_scheduled_time"
+    event.Name = "action_brancher_with_size_and_single_potential_times_query_reservation_platform"
   } else {
     potentialTimes := rawPotentialTimes.([]interface{})
     rawPotentialTime := potentialTimes[0]
@@ -376,7 +376,7 @@ func (bot *Bot) ActionBrancherToSaveNewReservation(req *RasaRequest, resp *RasaR
   event := Event{}
   if reflect.TypeOf(rawSize) == nil || reflect.TypeOf(rawName) == nil || reflect.TypeOf(rawScheduledTime) == nil {
     event.Event = FOLLOWUP
-    event.Name = "action_checkpoint_reservation_slot_filling"
+    event.Name = "action_brancher_reservation_slot_filling"
   } else {
     name := rawName.(string)
     scheduledTimeStr := rawScheduledTime.(string)
@@ -684,7 +684,7 @@ func (bot *Bot) ActionBrancherValidatePotentialHourSlot(req *RasaRequest, resp *
 	if reflect.TypeOf(temp_times) == nil {
 		event = Event{Event: FOLLOWUP, Name: "utter_ask_for_time_for_potential_reservation"}
 	} else if reflect.TypeOf(potential_hour) == nil {
-		event = Event{Event: FOLLOWUP, Name: "action_checkpoint_with_single_temp_times_to_fill_potential_times"}
+		event = Event{Event: FOLLOWUP, Name: "action_brancher_with_temp_times_validate_single_temp_time"}
 	} else {
 		switch v := potential_hour.(type) {
 		case float64:

@@ -1,25 +1,5 @@
 {
   "action_fingerprints": {
-    "action_listen": {
-      "slots": [
-        "name"
-      ]
-    },
-    "action_blank_for_slots": {
-      "slots": [
-        "recipient_id",
-        "business_id",
-        "recipient_contact"
-      ]
-    },
-    "action_brancher_reservation_slot_filling_base": {
-      "slots": []
-    },
-    "action_set_potential_size_slot": {
-      "slots": [
-        "potential_size"
-      ]
-    },
     "action_brancher_validate_reservation_potential_size": {
       "slots": [
         "size"
@@ -30,8 +10,39 @@
         "potential_size"
       ]
     },
+    "action_listen": {
+      "slots": [
+        "name"
+      ]
+    },
+    "action_brancher_reservation_slot_filling_base": {
+      "slots": []
+    },
+    "action_set_potential_size_slot": {
+      "slots": [
+        "potential_size"
+      ]
+    },
+    "action_brancher_to_save_new_reservation": {
+      "slots": []
+    },
     "action_need_employee": {
       "slots": []
+    },
+    "action_blank_for_slots": {
+      "slots": [
+        "recipient_id",
+        "business_id",
+        "recipient_contact"
+      ]
+    },
+    "utter_ask_for_time_for_potential_reservation": {
+      "slots": []
+    },
+    "action_set_temp_times_slot": {
+      "slots": [
+        "temp_times"
+      ]
     }
   },
   "rasa_core": "0.12.1",
@@ -47,5 +58,5 @@
     "rasa_core.policies.memoization.MemoizationPolicy",
     "rasa_core.policies.fallback.FallbackPolicy"
   ],
-  "trained_at": "20190122-063211"
+  "trained_at": "20190123-040500"
 }
