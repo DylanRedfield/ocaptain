@@ -2,23 +2,30 @@
 ---
 actions:
 - action_listen
+- action_clear_temp_times_slot
+- action_set_temp_times_slot_from_potential_hour
+- action_brancher_validate_with_temp_times_and_time_entity_to_modify_temp_time_from_day_or_period_grain
+- action_brancher_with_temp_times_to_fill_potential_times
 - action_checkpoint_with_potential_size_to_validate_and_fill_size
 - action_checkpoint_with_temp_times_to_fill_potential_times
 - action_brancher_reservation_slot_filling_base
 - action_brancher_to_save_new_reservation
 - action_blank_for_slots
+- action_clear_size_slot
 - utter_unhappy_doing_no_number_recognized
 - action_test_bed
 - action_clear_potential_times_slot
 - action_set_potential_hour_slot
+- action_clear_potential_hour_slot
 - utter_ask_for_number_on_reservation_size
 - utter_unhappy_doing_invalid_size_AND_ask_for_size_greater_than_zero
 - utter_ask_for_polar_and_or_time_on_alternative_potential_reservation_time
+- action_blank_checkpoint_with_size_and_no_alternatives
 - utter_ask_for_time_for_more_specific
 - action_set_scheduled_time_slot
 - utter_ask_for_polar_on_general_correctness_confirmatioutter_ask_for_polar_on_general_correctness_confirmation
 - utter_unhappy_time_in_past_AND_ask_for_time_for_alternative_potential_time
-- utter_unhappy_time_too_far_in_future_AND_ask_for_time_for_alternative_potential_time
+- utter_unhappy_time_too_far_in_future_AND_ask_for_time_for_alternative_potential_times
 - action_set_temp_times_slot
 - utter_doing_greet
 - action_blank_alert_potential_size_slot_set
@@ -26,6 +33,8 @@ actions:
 - action_blank_alert_temp_times_slot_set
 - action_blank_alert_potential_times_slot_set
 - action_blank_alert_potential_hour_slot_set
+- action_blank_alert_scheduled_time_slot_set
+- action_blank_alert_alternative_times_slot_set
 - action_checkpoint_with_potential_time_to_validate_and_fill_size
 - action_brancher_validate_number_size
 - action_set_potential_size_slot
@@ -48,7 +57,8 @@ actions:
 - action_brancher_with_temp_times_to_determine_next_from_times_length
 - action_brancher_with_temp_times_validate_single_temp_times
 - action_brancher_validate_potential_hour_slot
-- action_brancher_validate_with_temp_times_and_time_entity_to_modify_temp_times_from_day_grain
+- action_modify_temp_times_slot_pm
+- action_modify_temp_times_slot_am
 - action_checkpoint_with_single_time_times_to_fill_potential_timees
 - utter_doing_no_tables_available_near_that_time_AND_ask_for_polar_or_time_on_alternative
 - utter_requested_time_too_soon_AND_ask_for_polar_or_time_on_alternative
@@ -70,6 +80,7 @@ actions:
 - action_checkpoint_with_size_and_single_potential_times_to_fill_scheduled_time
 - action_checkpoint_with_several_alternative_times_to_select
 - action_utter_post_reservation_AND_ask_for_next_general_request
+- utter_ask_for_next_general_request
 config:
   store_entities_as_slots: true
 entities:
@@ -172,6 +183,8 @@ slots:
 templates:
   utter_ask_for_name_on_reservation:
   - text: What's the name for the reservation?
+  utter_ask_for_next_general_request:
+  - text: Is there anything else we can do for you?
   utter_ask_for_number_on_reservation_size:
   - text: What's the size of the party?
   utter_ask_for_polar_on_general_correctness_confirmation:
@@ -196,7 +209,7 @@ templates:
   - text: It can never hurt
   utter_respond_with_affirm_restaurant_accepts_reservations_AND_ask_for_polar_on_if_reservation_wanted:
   - text: Yes! Would you like to make one?
-  ? utter_respond_with_informing_no_reservation_availability_at_specificied_time_AND_ask_for_polar_and_or_time_for_alternative_potential_reservation_time
+  ? utter_respond_with_informing_no_reservation_availability_at_specificied_time_AND_ask_for_polar_and_or_time_for_alternative_potential_reservation_times
   : - text: Sorry, but we don't have any reservations available at that time, do you
         have another time in mind?
   utter_restart:

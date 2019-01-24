@@ -40,16 +40,22 @@ func (bot *Bot) HandleAction(req *RasaRequest) (*RasaResponse, error) {
 		bot.ActionTestBed(req, resp)
   case "action_set_temp_times_slot":
     bot.ActionSetTempTimesSlot(req, resp)
+  case "action_set_temp_times_slot_from_potential_hour":
+    bot.ActionSetTempTimesSlotFromPotentialHour(req, resp)
   case "action_set_potential_hour_slot":
     bot.ActionSetPotentialHourSlot(req, resp)
   case "action_brancher_with_temp_times_to_determine_next_from_times_length":
     bot.ActionBrancherWithTempTimesToDetermineNextFromTimesLength(req, resp)
+  case "action_modify_temp_times_slot_pm":
+    bot.ActionModifyTempTimesSlotPm(req, resp)
+  case "action_modify_temp_times_slot_am":
+    bot.ActionModifyTempTimesSlotAm(req, resp)
   case "action_brancher_with_temp_times_validate_single_temp_times":
     bot.ActionBrancherWithTempTimesValidateSingleTempTimes(req, resp)
   case "action_brancher_validate_potential_hour_slot":
     bot.ActionBrancherValidatePotentialHourSlot(req, resp)
-  case "action_brancher_validate_with_temp_times_and_time_entity_to_modify_temp_times_from_day_grain":
-    bot.ActionBrancherValidateWithTempTimesAndTimeEntityToModifyTempTimeFromDayGrain(req, resp)
+  case "action_brancher_validate_with_temp_times_and_time_entity_to_modify_temp_times_from_day_or_period_grain":
+    bot.ActionBrancherValidateWithTempTimesAndTimeEntityToModifyTempTimeFromDayOrPeriodGrain(req, resp)
   case "action_brancher_reservation_slot_filling_base":
     bot.ActionBrancherReservationSlotFillingBase(req, resp)
   case "action_brancher_to_save_new_reservation":
@@ -128,7 +134,7 @@ func (bot *Bot) ActionBrancherReservationSlotFillingBase(req *RasaRequest, resp 
       if reflect.TypeOf(tempTimes) == nil {
         event.Name = "utter_ask_for_time_for_potential_reservation"
       } else {
-        event.Name = "action_brancher_with_temp_times_to_fill_potential_times"
+        event.Name = "action_brancher_with_temp_times_to_determine_next_from_times_length"
       }
     } else {
       event.Name = "action_brancher_with_size_and_single_potential_times_query_reservation_platform"
@@ -517,6 +523,7 @@ func (bot *Bot) ActionNeedEmployeeBecauseError(req *RasaRequest, resp *RasaRespo
 	event := Event{Event: "pause"}
 	resp.Events = append(resp.Events, event)
 }
+
 func (bot *Bot) ActionSetTempTimesSlotFromPotentialHour(req *RasaRequest, resp *RasaResponse) {
   // Set's the temp_times[0] to the current time but with the potential time as the potential_hour + 12 if less than 12
   // and greater than 0
@@ -606,19 +613,92 @@ func (bot *Bot) ActionSetPotentialHourSlot(req *RasaRequest, resp *RasaResponse)
   resp.Events = append(resp.Events, event)
 }
 func (bot *Bot) ActionBrancherWithTempTimesToDetermineNextFromTimesLength(req *RasaRequest, resp *RasaResponse) {
-	switch v := req.Tracker.Slots["time_times"].(type) {
-	case []interface{}:
-		if len(v) == 1 {
-			event := Event{Event: FOLLOWUP, Name: "action_brancher_validate_single_temp_times"}
-			resp.Events = append(resp.Events, event)
-		} else {
-			event := Event{Event: FOLLOWUP, Name: "action_brancher_validate_single_temp_times"}
-			resp.Events = append(resp.Events, event)
-		}
-	default:
+  rawTempTimes := req.Tracker.Slots["temp_times"]
+
+  if reflect.TypeOf(rawTempTimes) == nil {
 		event := Event{Event: FOLLOWUP, Name: "utter_ask_for_time_for_potential_reservation"}
 		resp.Events = append(resp.Events, event)
-	}
+  } else {
+    tempTimes := rawTempTimes.([]interface{})
+    if len(tempTimes) == 0 {
+      event := Event{Event: FOLLOWUP, Name: "utter_ask_for_time_for_potential_reservation"}
+      resp.Events = append(resp.Events, event)
+    } else if len(tempTimes) == 1 {
+			event := Event{Event: FOLLOWUP, Name: "action_brancher_with_temp_times_validate_single_temp_times"}
+			resp.Events = append(resp.Events, event)
+		} else {
+			event := Event{Event: FOLLOWUP, Name: "action_brancher_with_temp_times_validate_single_temp_times"}
+			resp.Events = append(resp.Events, event)
+		}
+  }
+}
+
+func (bot *Bot) ActionModifyTempTimesSlotAm(req *RasaRequest, resp *RasaResponse) {
+  rawTempTime := req.Tracker.Slots["temp_times"].([]interface{})[0]
+
+  time_map := rawTempTime.(map[string]interface{})
+  var rasaTime RasaTime
+  err := mapstructure.Decode(time_map, &rasaTime)
+
+  if err != nil {
+    log.Println(err)
+    return
+  }
+
+  timeObj, err := time.Parse(time.RFC3339, rasaTime.Value)
+
+  if err != nil {
+    log.Println(err)
+    return
+  }
+
+  hour := timeObj.Hour()
+
+  if hour >= 12 {
+    hour = hour - 12
+  }
+
+  newTime := time.Date(timeObj.Year(), timeObj.Month(), timeObj.Day(), hour, timeObj.Minute(), 0, 0, time.UTC)
+
+  rasaTime.Value = newTime.Format(time.RFC3339)
+
+  event := Event{Event: SLOT, Name: "temp_times", Value : []RasaTime{rasaTime}}
+  resp.Events = append(resp.Events, event)
+
+}
+
+func (bot *Bot) ActionModifyTempTimesSlotPm(req *RasaRequest, resp *RasaResponse) {
+  rawTempTime := req.Tracker.Slots["temp_times"].([]interface{})[0]
+
+  time_map := rawTempTime.(map[string]interface{})
+  var rasaTime RasaTime
+  err := mapstructure.Decode(time_map, &rasaTime)
+
+  if err != nil {
+    log.Println(err)
+    return
+  }
+
+  timeObj, err := time.Parse(time.RFC3339, rasaTime.Value)
+
+  if err != nil {
+    log.Println(err)
+    return
+  }
+
+  hour := timeObj.Hour()
+
+  if hour >= 0 && hour <= 11 {
+    hour = hour + 12
+  }
+
+  newTime := time.Date(timeObj.Year(), timeObj.Month(), timeObj.Day(), hour, timeObj.Minute(), 0, 0, time.UTC)
+
+  rasaTime.Value = newTime.Format(time.RFC3339)
+
+  event := Event{Event: SLOT, Name: "temp_times", Value : []RasaTime{rasaTime}}
+  resp.Events = append(resp.Events, event)
+
 }
 
 func (bot *Bot) ActionBrancherWithTempTimesValidateSingleTempTimes(req *RasaRequest, resp *RasaResponse) {
@@ -631,6 +711,7 @@ func (bot *Bot) ActionBrancherWithTempTimesValidateSingleTempTimes(req *RasaRequ
 
 			if err != nil {
 				log.Println(err)
+        // TODO
 				break
 			}
 
@@ -663,7 +744,7 @@ func (bot *Bot) ActionBrancherWithTempTimesValidateSingleTempTimes(req *RasaRequ
 					event := Event{Event: FOLLOWUP, Name: "action_blank_alert_potential_times_slot_set"}
 					resp.Events = append(resp.Events, event)
 					// So set it as the first item in temp_temps
-					event = Event{Event: SLOT, Name: "potential_times", Value: v[0]}
+          event = Event{Event: SLOT, Name: "potential_times", Value: []string{rasaTime.Value}}
 					resp.Events = append(resp.Events, event)
 				}
 
@@ -684,7 +765,7 @@ func (bot *Bot) ActionBrancherValidatePotentialHourSlot(req *RasaRequest, resp *
 	if reflect.TypeOf(temp_times) == nil {
 		event = Event{Event: FOLLOWUP, Name: "utter_ask_for_time_for_potential_reservation"}
 	} else if reflect.TypeOf(potential_hour) == nil {
-		event = Event{Event: FOLLOWUP, Name: "action_brancher_with_temp_times_validate_single_temp_time"}
+		event = Event{Event: FOLLOWUP, Name: "action_brancher_with_temp_times_validate_single_temp_times"}
 	} else {
 		switch v := potential_hour.(type) {
 		case float64:
@@ -706,7 +787,7 @@ func (bot *Bot) ActionBrancherValidatePotentialHourSlot(req *RasaRequest, resp *
 	resp.Events = append(resp.Events, event)
 }
 
-func (bot *Bot) ActionBrancherValidateWithTempTimesAndTimeEntityToModifyTempTimeFromDayGrain(req *RasaRequest, resp *RasaResponse) {
+func (bot *Bot) ActionBrancherValidateWithTempTimesAndTimeEntityToModifyTempTimeFromDayOrPeriodGrain(req *RasaRequest, resp *RasaResponse) {
 	temp_times := req.Tracker.Slots["temp_times"]
 
 	entities := req.Tracker.LatestMessage.Entities

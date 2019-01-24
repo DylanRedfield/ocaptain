@@ -1,6 +1,6 @@
 policies:
   - name: "KerasPolicy"
-    epochs: 100
+    epochs: 25
     max_history: 5
     validation_split: 0.0
   - name: "MemoizationPolicy"
