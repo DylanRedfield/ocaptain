@@ -30,12 +30,16 @@ func (bot *Bot) HandleAction(req *RasaRequest) (*RasaResponse, error) {
 		bot.ActionNeedEmployee(req, resp)
 	case "action_set_size_slot":
 		bot.ActionSetSizeSlot(req, resp)
+  case "action_clear_name_slot":
+    bot.ActionClearNameSlot(req, resp)
 	case "action_set_potential_time_slot":
 		bot.ActionSetPotentialTimeSlot(req, resp)
 	case "action_clear_potential_times_slot":
 		bot.ActionClearPotentialTimesSlot(req, resp)
   case "action_clear_temp_ordinal_slot":
     bot.ActionClearTempOrdinalSlot(req, resp)
+  case "action_clear_scheduled_time_slot":
+    bot.ActionClearScheduledTimeSlot(req, resp)
 	case "action_test_bed":
 		bot.ActionTestBed(req, resp)
   case "action_set_temp_times_slot":
@@ -82,7 +86,7 @@ func (bot *Bot) HandleAction(req *RasaRequest) (*RasaResponse, error) {
     bot.ActionClearAlternativeTimes(req, resp)
   case "action_set_temp_ordinal_slot":
     bot.ActionSetTempOrdinalSlot(req, resp)
-  case "action_utter_post_reservation_AND_ask_for_next_general_request":
+  case "action_utter_post_reservation_save_AND_ask_for_next_general_request":
     bot.ActionUtterPostReservationAndAskForNextGeneralRequest(req, resp)
 
 	default:
@@ -722,7 +726,7 @@ func (bot *Bot) ActionBrancherWithTempTimesValidateSingleTempTimes(req *RasaRequ
 				event := Event{Event: FOLLOWUP, Name: "utter_with_temp_time_ask_for_number_or_time_on_need_hour_grain_from_day"}
 				resp.Events = append(resp.Events, event)
 			} else if rasaTime.Grain == "period" {
-				event := Event{Event: FOLLOWUP, Name: "utter_ask_for_polar_is_pm"}
+				event := Event{Event: FOLLOWUP, Name: "utter_ask_for_polar_on_is_pm"}
 				resp.Events = append(resp.Events, event)
 			} else {
 				searchTimeStr := rasaTime.Value
@@ -991,7 +995,10 @@ func (bot *Bot) ActionClearPotentialTimesSlot(req *RasaRequest, resp *RasaRespon
 	nextAction := Event{Event: SLOT, Name: "potential_times"}
 	resp.Events = append(resp.Events, nextAction)
 }
-
+func (bot *Bot) ActionClearNameSlot(req *RasaRequest, resp *RasaResponse) {
+	nextAction := Event{Event: SLOT, Name: "name"}
+	resp.Events = append(resp.Events, nextAction)
+}
 func (bot *Bot) ActionClearPotentialSizeSlot(req *RasaRequest, resp *RasaResponse) {
 	nextAction := Event{Event: SLOT, Name: "potential_size"}
 	resp.Events = append(resp.Events, nextAction)
@@ -1004,6 +1011,11 @@ func (bot *Bot) ActionClearTempOrdinalSlot(req *RasaRequest, resp *RasaResponse)
 
 func (bot *Bot) ActionClearAlternativeTimes(req *RasaRequest, resp *RasaResponse) {
 	nextAction := Event{Event: SLOT, Name: "alternative_times"}
+	resp.Events = append(resp.Events, nextAction)
+}
+
+func (bot *Bot) ActionClearScheduledTimeSlot(req *RasaRequest, resp *RasaResponse) {
+	nextAction := Event{Event: SLOT, Name: "scheduled_time"}
 	resp.Events = append(resp.Events, nextAction)
 }
 

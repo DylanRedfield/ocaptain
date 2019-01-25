@@ -7,13 +7,13 @@
     - action_brancher_reservation_slot_filling_base
     - followup{"name": "utter_ask_for_number_on_reservation_size"}
     - utter_ask_for_number_on_reservation_size
-> checkpoint_to_fill_potential_size
+    - action_blank_checkpoint_to_fill_potential_size
 
 ## checkpoint_reservation_slot_filling_base_return_4
     - action_brancher_reservation_slot_filling_base
     - followup{"name": "utter_ask_for_time_for_potential_reservation"}
     - utter_ask_for_time_for_potential_reservation
-> checkpoint_to_fill_temp_times
+    - action_blank_checkpoint_to_fill_temp_times
 
 ## checkpoint_reservation_slot_filling_base_return_5
     - action_brancher_reservation_slot_filling_base

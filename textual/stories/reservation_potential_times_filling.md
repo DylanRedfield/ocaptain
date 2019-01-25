@@ -1,12 +1,12 @@
 ## checkpoint_to_fill_temp_times_inform_time
-> checkpoint_to_fill_temp_times
+    - action_blank_checkpoint_to_fill_temp_times
 * inform{"time": "xxx"}
     - action_set_temp_times_slot
     - slot{"temp_times": "xxx"}
     - action_brancher_with_temp_times_to_determine_next_from_times_length
 
 ## checkpoint_to_fill_temp_times_inform_number
-> checkpoint_to_fill_temp_times
+    - action_blank_checkpoint_to_fill_temp_times
 * inform{"number": 8}
     - action_set_potential_hour_slot
     - slot{"potential_hour": 8}
@@ -20,7 +20,7 @@
     - action_brancher_with_temp_times_to_determine_next_from_times_length
     - followup{"name": "utter_ask_for_time_for_potential_reservation"}
     - utter_ask_for_time_for_potential_reservation
-> checkpoint_to_fill_temp_times
+    - action_blank_checkpoint_to_fill_temp_times
 
 ## action_brancher_with_temp_times_to_determine_next_from_times_length_1
     - action_brancher_with_temp_times_to_determine_next_from_times_length
@@ -31,7 +31,7 @@
     - action_brancher_with_temp_times_to_determine_next_from_times_length
     - followup{"name": "utter_ask_for_time_for_potential_reservation"}
     - utter_ask_for_time_for_potential_reservation
-> checkpoint_to_fill_temp_times
+    - action_blank_checkpoint_to_fill_temp_times
 
 ## action_brancher_with_temp_times_validate_single_temp_times_1
     - action_brancher_with_temp_times_to_determine_next_from_times_length
@@ -89,14 +89,14 @@
     - followup{"name": "utter_unhappy_time_in_past_AND_ask_for_time_on_alternative"}
     - utter_unhappy_time_in_past_AND_ask_for_time_on_alternative
     - action_clear_temp_times_slot
-> checkpoint_to_fill_temp_times
+    - action_blank_checkpoint_to_fill_temp_times
 
 ## action_brancher_with_temp_times_validate_single_temp_times_5
     - action_brancher_with_temp_times_to_determine_next_from_times_length
     - followup{"name": "utter_unhappy_time_too_far_in_future_AND_ask_for_time_for_alternative"}
     - utter_unhappy_time_too_far_in_future_AND_ask_for_time_for_alternative_potential_times
     - action_clear_temp_times_slot
-> checkpoint_to_fill_temp_times
+    - action_blank_checkpoint_to_fill_temp_times
 
 ## action_brancher_with_temp_times_validate_single_temp_times_6
     - action_brancher_with_temp_times_to_determine_next_from_times_length

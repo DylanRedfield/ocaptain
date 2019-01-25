@@ -1,26 +1,31 @@
 %YAML 1.1
 ---
 actions:
+- action_blank_checkpoint_with_several_alternative_times_to_select
 - action_listen
 - action_clear_temp_times_slot
 - action_set_temp_times_slot_from_potential_hour
 - action_brancher_validate_with_temp_times_and_time_entity_to_modify_temp_time_from_day_or_period_grain
 - action_brancher_with_temp_times_to_fill_potential_times
 - action_checkpoint_with_potential_size_to_validate_and_fill_size
+- action_blank_checkpoint_to_fill_temp_times
 - action_checkpoint_with_temp_times_to_fill_potential_times
 - action_brancher_reservation_slot_filling_base
 - action_brancher_to_save_new_reservation
 - action_blank_for_slots
 - action_clear_size_slot
+- action_clear_name_slot
 - utter_unhappy_doing_no_number_recognized
 - action_test_bed
 - action_clear_potential_times_slot
+- action_clear_scheduled_time_slot
 - action_set_potential_hour_slot
 - action_clear_potential_hour_slot
 - utter_ask_for_number_on_reservation_size
 - utter_unhappy_doing_invalid_size_AND_ask_for_size_greater_than_zero
 - utter_ask_for_polar_and_or_time_on_alternative_potential_reservation_time
 - action_blank_checkpoint_with_size_and_no_alternatives
+- action_blank_checkpoint_to_fill_potential_size
 - utter_ask_for_time_for_more_specific
 - action_set_scheduled_time_slot
 - utter_ask_for_polar_on_general_correctness_confirmatioutter_ask_for_polar_on_general_correctness_confirmation
@@ -62,6 +67,7 @@ actions:
 - action_checkpoint_with_single_time_times_to_fill_potential_timees
 - utter_doing_no_tables_available_near_that_time_AND_ask_for_polar_or_time_on_alternative
 - utter_requested_time_too_soon_AND_ask_for_polar_or_time_on_alternative
+- utter_ask_for_polar_or_time_on_alternative
 - action_utter_ask_for_polar_on_if_single_close_alternative_time_acceptable
 - action_utter_ask_for_polar_on_if_single_alternative_time_acceptable
 - action_utter_ask_for_polar_or_time_or_number_on_several_alternative_times
@@ -79,7 +85,7 @@ actions:
 - action_checkpoint_with_size_and_no_alternatives
 - action_checkpoint_with_size_and_single_potential_times_to_fill_scheduled_time
 - action_checkpoint_with_several_alternative_times_to_select
-- action_utter_post_reservation_AND_ask_for_next_general_request
+- action_utter_post_reservation_save_AND_ask_for_next_general_request
 - utter_ask_for_next_general_request
 
 config:
@@ -193,5 +199,8 @@ templates:
   - text: Sorry I don't recoginze a table size
   utter_ask_for_next_general_request:
   - text: Is there anything else we can do for you?
+  utter_ask_for_polar_or_time_on_alternative:
+  - text: Do you have another time in mind?
+
 
 
