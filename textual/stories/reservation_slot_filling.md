@@ -1,18 +1,13 @@
-## checkpoint_reservation_slot_filling_base_return_1
-    - action_brancher_reservation_slot_filling_base
-    - followup{"name": "utter_ask_for_number_on_reservation_size"}
-    - utter_ask_for_number_on_reservation_size
-> checkpoint_to_fill_potential_size
-
 ## checkpoint_reservation_slot_filling_base_return_2
     - action_brancher_reservation_slot_filling_base
     - followup{"name": "action_brancher_validate_reservation_potential_size"}
     - action_brancher_validate_reservation_potential_size
 
-## checkpoint_reservation_slot_filling_base_return_3
+## checkpoint_reservation_slot_filling_base_return_1
     - action_brancher_reservation_slot_filling_base
-    - followup{"name": "action_brancher_validate_reservation_potential_size"}
-    - action_brancher_validate_reservation_potential_size
+    - followup{"name": "utter_ask_for_number_on_reservation_size"}
+    - utter_ask_for_number_on_reservation_size
+> checkpoint_to_fill_potential_size
 
 ## checkpoint_reservation_slot_filling_base_return_4
     - action_brancher_reservation_slot_filling_base

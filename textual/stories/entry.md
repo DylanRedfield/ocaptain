@@ -6,6 +6,7 @@
     - slot{"recipient_contact": "+19084771280"}
     - action_brancher_reservation_slot_filling_base
 
+## entry2
 * make_reservation{"number": 5}
     - action_blank_for_slots
     - slot{"business_id": "MewuHeThW4QJGDxD9tTr"}
@@ -15,15 +16,17 @@
     - slot{"potential_size": 5}
     - action_brancher_reservation_slot_filling_base
 
+## entry3
 * make_reservation{"time": "xxxx"}
     - action_blank_for_slots
     - slot{"business_id": "MewuHeThW4QJGDxD9tTr"}
     - slot{"recipient_id": "BGeFfREAGGSRqRWrmLNx"}
     - slot{"recipient_contact": "+19084771280"}
     - action_set_temp_times_slot
-    - slot{"temp_times": ["xxx"]}
+    - slot{"temp_times": []}
     - action_brancher_reservation_slot_filling_base
 
+## entry4
 * make_reservation{"number": 8, "time": "xxxx"}
     - action_blank_for_slots
     - slot{"business_id": "MewuHeThW4QJGDxD9tTr"}

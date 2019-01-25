@@ -1,5 +1,13 @@
 {
   "action_fingerprints": {
+    "action_brancher_reservation_slot_filling_base": {
+      "slots": []
+    },
+    "action_listen": {
+      "slots": [
+        "name"
+      ]
+    },
     "action_brancher_validate_reservation_potential_size": {
       "slots": [
         "size"
@@ -10,14 +18,6 @@
         "potential_size"
       ]
     },
-    "action_listen": {
-      "slots": [
-        "name"
-      ]
-    },
-    "action_brancher_reservation_slot_filling_base": {
-      "slots": []
-    },
     "action_brancher_with_size_and_single_potential_times_query_reservation_platform": {
       "slots": []
     },
@@ -25,9 +25,6 @@
       "slots": [
         "potential_size"
       ]
-    },
-    "action_brancher_with_temp_times_to_determine_next_from_times_length": {
-      "slots": []
     },
     "action_set_potential_hour_slot": {
       "slots": [
@@ -44,18 +41,21 @@
         "potential_hour"
       ]
     },
+    "action_brancher_with_temp_times_to_determine_next_from_times_length": {
+      "slots": []
+    },
     "action_set_temp_times_slot": {
       "slots": [
         "temp_times"
       ]
     },
-    "action_blank_checkpoint_with_size_and_no_alternatives": {
+    "action_brancher_validate_with_temp_times_and_time_entity_to_modify_temp_time_from_day_or_period_grain": {
       "slots": []
     },
     "action_need_employee": {
       "slots": []
     },
-    "action_brancher_validate_with_temp_times_and_time_entity_to_modify_temp_time_from_day_or_period_grain": {
+    "action_brancher_with_temp_times_validate_single_temp_times": {
       "slots": []
     },
     "action_brancher_to_save_new_reservation": {
@@ -64,24 +64,18 @@
     "action_blank_for_slots": {
       "slots": [
         "business_id",
-        "recipient_contact",
-        "recipient_id"
+        "recipient_id",
+        "recipient_contact"
       ]
-    },
-    "utter_ask_for_time_for_potential_reservation": {
-      "slots": []
-    },
-    "action_brancher_with_temp_times_validate_single_temp_times": {
-      "slots": []
     },
     "action_blank_alert_temp_times_slot_set": {
       "slots": [
         "temp_times"
       ]
     },
-    "action_blank_alert_potential_times_slot_set": {
+    "action_blank_alert_scheduled_time_slot_set": {
       "slots": [
-        "potential_times"
+        "scheduled_time"
       ]
     },
     "action_blank_alert_alternative_times_slot_set": {
@@ -92,9 +86,9 @@
     "action_brancher_with_potential_times_and_alternative_times_to_fill_scheduled_time": {
       "slots": []
     },
-    "action_blank_alert_scheduled_time_slot_set": {
+    "action_blank_alert_potential_times_slot_set": {
       "slots": [
-        "scheduled_time"
+        "potential_times"
       ]
     }
   },
@@ -108,8 +102,8 @@
   "ensemble_name": "rasa_core.policies.ensemble.SimplePolicyEnsemble",
   "policy_names": [
     "rasa_core.policies.keras_policy.KerasPolicy",
-    "rasa_core.policies.memoization.MemoizationPolicy",
+    "rasa_core.policies.memoization.AugmentedMemoizationPolicy",
     "rasa_core.policies.fallback.FallbackPolicy"
   ],
-  "trained_at": "20190124-043220"
+  "trained_at": "20190125-003736"
 }

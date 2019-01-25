@@ -1,9 +1,13 @@
 policies:
   - name: "KerasPolicy"
-    epochs: 25
-    max_history: 5
+    epochs: 50
     validation_split: 0.0
-  - name: "MemoizationPolicy"
+    featurizer:
+      - name: MaxHistoryTrackerFeaturizer
+        max_history: 5
+        state_featurizer:
+          - name: BinarySingleStateFeaturizer
+  - name: "AugmentedMemoizationPolicy"
     max_history: 5
   - name: "FallbackPolicy"
     fallback_action_name: "action_default_fallback"
