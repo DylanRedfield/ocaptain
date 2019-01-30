@@ -30,64 +30,64 @@ func (bot *Bot) HandleAction(req *RasaRequest) (*RasaResponse, error) {
 		bot.ActionNeedEmployee(req, resp)
 	case "action_set_size_slot":
 		bot.ActionSetSizeSlot(req, resp)
-  case "action_clear_name_slot":
-    bot.ActionClearNameSlot(req, resp)
+	case "action_clear_name_slot":
+		bot.ActionClearNameSlot(req, resp)
 	case "action_set_potential_time_slot":
 		bot.ActionSetPotentialTimeSlot(req, resp)
 	case "action_clear_potential_times_slot":
 		bot.ActionClearPotentialTimesSlot(req, resp)
-  case "action_clear_temp_ordinal_slot":
-    bot.ActionClearTempOrdinalSlot(req, resp)
-  case "action_clear_scheduled_time_slot":
-    bot.ActionClearScheduledTimeSlot(req, resp)
+	case "action_clear_temp_ordinal_slot":
+		bot.ActionClearTempOrdinalSlot(req, resp)
+	case "action_clear_scheduled_time_slot":
+		bot.ActionClearScheduledTimeSlot(req, resp)
 	case "action_test_bed":
 		bot.ActionTestBed(req, resp)
-  case "action_set_temp_times_slot":
-    bot.ActionSetTempTimesSlot(req, resp)
-  case "action_set_temp_times_slot_from_potential_hour":
-    bot.ActionSetTempTimesSlotFromPotentialHour(req, resp)
-  case "action_set_potential_hour_slot":
-    bot.ActionSetPotentialHourSlot(req, resp)
-  case "action_brancher_with_temp_times_to_determine_next_from_times_length":
-    bot.ActionBrancherWithTempTimesToDetermineNextFromTimesLength(req, resp)
-  case "action_modify_temp_times_slot_pm":
-    bot.ActionModifyTempTimesSlotPm(req, resp)
-  case "action_modify_temp_times_slot_am":
-    bot.ActionModifyTempTimesSlotAm(req, resp)
-  case "action_brancher_with_temp_times_validate_single_temp_times":
-    bot.ActionBrancherWithTempTimesValidateSingleTempTimes(req, resp)
-  case "action_brancher_validate_potential_hour_slot":
-    bot.ActionBrancherValidatePotentialHourSlot(req, resp)
-  case "action_brancher_validate_with_temp_times_and_time_entity_to_modify_temp_times_from_day_or_period_grain":
-    bot.ActionBrancherValidateWithTempTimesAndTimeEntityToModifyTempTimeFromDayOrPeriodGrain(req, resp)
-  case "action_brancher_reservation_slot_filling_base":
-    bot.ActionBrancherReservationSlotFillingBase(req, resp)
-  case "action_brancher_to_save_new_reservation":
-    bot.ActionBrancherToSaveNewReservation(req, resp)
-  case "action_need_employee_because_error_saving":
-    bot.ActionNeedEmployeeBecauseErrorSaving(req, resp)
-  case "action_brancher_with_size_and_single_potential_times_query_reservation_platform":
-    bot.ActionBrancherWithSizeAndSinglePotentialTimesQueryReservationPlatform(req, resp)
-  case "action_brancher_with_potential_times_and_alternative_times_to_fill_scheduled_time":
-    bot.ActionBrancherWithPotentialTimesAndAlterativeTimesToFillScheduledTime(req, resp)
-  case "action_utter_ask_for_polar_on_if_single_close_alternative_time_acceptable":
-    bot.ActionUtterAskForPolarOnIfSingleCloseAlternativeTimeAcceptable(req, resp)
-  case "action_utter_ask_for_polar_or_time_or_number_on_serveral_alternative_times":
-    bot.ActionUtterAskForPolarOrTimeOrNumberOnSeveralAlternativeTimes(req, resp)
-  case "action_utter_ask_with_alternative_times_for_time_or_number_or_ordinal_on_more_specific_alternative_time":
-    bot.ActionUtterAskWithAlternativeTimesForTimeOrNumberOrOrdinalOnMoreSpecificAlternativeTime(req, resp)
-  case "action_need_employee_because_error":
-    bot.ActionNeedEmployeeBecauseError(req, resp)
-  case "action_brancher_with_alternative_times_and_ordinal_validate_ordinal_to_select_alternative_time":
-    bot.ActionBrancherWithAlternativeTimesAndOrdinalValidateOrdinalToSelectAlternativeTime(req, resp)
-  case "action_brancher_validate_temp_time_to_select_alternative_time_to_set_scheduled_time_slot":
-    bot.ActionBrancherValidateTempTimeToSelectAlternativeTimeToSetScheduledTimeSlot(req, resp)
-  case "action_clear_alternative_times_slot":
-    bot.ActionClearAlternativeTimes(req, resp)
-  case "action_set_temp_ordinal_slot":
-    bot.ActionSetTempOrdinalSlot(req, resp)
-  case "action_utter_post_reservation_save_AND_ask_for_next_general_request":
-    bot.ActionUtterPostReservationAndAskForNextGeneralRequest(req, resp)
+	case "action_set_temp_times_slot":
+		bot.ActionSetTempTimesSlot(req, resp)
+	case "action_set_temp_times_slot_from_potential_hour":
+		bot.ActionSetTempTimesSlotFromPotentialHour(req, resp)
+	case "action_set_potential_hour_slot":
+		bot.ActionSetPotentialHourSlot(req, resp)
+	case "action_brancher_with_temp_times_to_determine_next_from_times_length":
+		bot.ActionBrancherWithTempTimesToDetermineNextFromTimesLength(req, resp)
+	case "action_modify_temp_times_slot_pm":
+		bot.ActionModifyTempTimesSlotPm(req, resp)
+	case "action_modify_temp_times_slot_am":
+		bot.ActionModifyTempTimesSlotAm(req, resp)
+	case "action_brancher_with_temp_times_validate_single_temp_times":
+		bot.ActionBrancherWithTempTimesValidateSingleTempTimes(req, resp)
+	case "action_brancher_validate_potential_hour_slot":
+		bot.ActionBrancherValidatePotentialHourSlot(req, resp)
+	case "action_brancher_validate_with_temp_times_and_time_entity_to_modify_temp_times_from_day_or_period_grain":
+		bot.ActionBrancherValidateWithTempTimesAndTimeEntityToModifyTempTimeFromDayOrPeriodGrain(req, resp)
+	case "action_brancher_reservation_slot_filling_base":
+		bot.ActionBrancherReservationSlotFillingBase(req, resp)
+	case "action_brancher_to_save_new_reservation":
+		bot.ActionBrancherToSaveNewReservation(req, resp)
+	case "action_need_employee_because_error_saving":
+		bot.ActionNeedEmployeeBecauseErrorSaving(req, resp)
+	case "action_brancher_with_size_and_single_potential_times_query_reservation_platform":
+		bot.ActionBrancherWithSizeAndSinglePotentialTimesQueryReservationPlatform(req, resp)
+	case "action_brancher_with_potential_times_and_alternative_times_to_fill_scheduled_time":
+		bot.ActionBrancherWithPotentialTimesAndAlterativeTimesToFillScheduledTime(req, resp)
+	case "action_utter_ask_for_polar_on_if_single_close_alternative_time_acceptable":
+		bot.ActionUtterAskForPolarOnIfSingleCloseAlternativeTimeAcceptable(req, resp)
+	case "action_utter_ask_for_polar_or_time_or_number_on_serveral_alternative_times":
+		bot.ActionUtterAskForPolarOrTimeOrNumberOnSeveralAlternativeTimes(req, resp)
+	case "action_utter_ask_with_alternative_times_for_time_or_number_or_ordinal_on_more_specific_alternative_time":
+		bot.ActionUtterAskWithAlternativeTimesForTimeOrNumberOrOrdinalOnMoreSpecificAlternativeTime(req, resp)
+	case "action_need_employee_because_error":
+		bot.ActionNeedEmployeeBecauseError(req, resp)
+	case "action_brancher_with_alternative_times_and_ordinal_validate_ordinal_to_select_alternative_time":
+		bot.ActionBrancherWithAlternativeTimesAndOrdinalValidateOrdinalToSelectAlternativeTime(req, resp)
+	case "action_brancher_validate_temp_time_to_select_alternative_time_to_set_scheduled_time_slot":
+		bot.ActionBrancherValidateTempTimeToSelectAlternativeTimeToSetScheduledTimeSlot(req, resp)
+	case "action_clear_alternative_times_slot":
+		bot.ActionClearAlternativeTimes(req, resp)
+	case "action_set_temp_ordinal_slot":
+		bot.ActionSetTempOrdinalSlot(req, resp)
+	case "action_utter_post_reservation_save_AND_ask_for_next_general_request":
+		bot.ActionUtterPostReservationAndAskForNextGeneralRequest(req, resp)
 
 	default:
 		log.Println(action)
@@ -109,247 +109,245 @@ func (bot *Bot) ActionTestBed(req *RasaRequest, resp *RasaResponse) {
 }
 
 func (bot *Bot) ActionBrancherReservationSlotFillingBase(req *RasaRequest, resp *RasaResponse) {
-  slots := req.Tracker.Slots
+	slots := req.Tracker.Slots
 
-  size := slots["size"]
-  potentialSize := slots["potential_size"]
+	size := slots["size"]
+	potentialSize := slots["potential_size"]
 
-  scheduledTime := slots["scheduled_time"]
-  tempTimes := slots["temp_times"]
-  potentialTimes := slots["potential_times"]
+	scheduledTime := slots["scheduled_time"]
+	tempTimes := slots["temp_times"]
+	potentialTimes := slots["potential_times"]
 
-  name := slots["name"]
+	name := slots["name"]
 
-  event := Event{}
-//  zero := reflect.Zero(reflect.TypeOf(size))
+	event := Event{}
+	//  zero := reflect.Zero(reflect.TypeOf(size))
 
-  if reflect.TypeOf(size) == nil {
-    event.Event = FOLLOWUP
-    if reflect.TypeOf(potentialSize) == nil {
-      event.Name = "utter_ask_for_number_on_reservation_size"
-    } else {
-      event.Name = "action_brancher_validate_reservation_potential_size"
-    }
-  } else if reflect.TypeOf(scheduledTime) == nil {
-    event.Event = FOLLOWUP
+	if reflect.TypeOf(size) == nil {
+		event.Event = FOLLOWUP
+		if reflect.TypeOf(potentialSize) == nil {
+			event.Name = "utter_ask_for_number_on_reservation_size"
+		} else {
+			event.Name = "action_brancher_validate_reservation_potential_size"
+		}
+	} else if reflect.TypeOf(scheduledTime) == nil {
+		event.Event = FOLLOWUP
 
-    if reflect.TypeOf(potentialTimes) == nil {
+		if reflect.TypeOf(potentialTimes) == nil {
 
-      if reflect.TypeOf(tempTimes) == nil {
-        event.Name = "utter_ask_for_time_for_potential_reservation"
-      } else {
-        event.Name = "action_brancher_with_temp_times_to_determine_next_from_times_length"
-      }
-    } else {
-      event.Name = "action_brancher_with_size_and_single_potential_times_query_reservation_platform"
-    }
-  } else if reflect.TypeOf(name) == nil {
-    event.Name = "utter_ask_for_name"
-  } else {
-    event.Name = "action_brancher_to_save_new_reservation"
-  }
+			if reflect.TypeOf(tempTimes) == nil {
+				event.Name = "utter_ask_for_time_for_potential_reservation"
+			} else {
+				event.Name = "action_brancher_with_temp_times_to_determine_next_from_times_length"
+			}
+		} else {
+			event.Name = "action_brancher_with_size_and_single_potential_times_query_reservation_platform"
+		}
+	} else if reflect.TypeOf(name) == nil {
+		event.Name = "utter_ask_for_name"
+	} else {
+		event.Name = "action_brancher_to_save_new_reservation"
+	}
 
-  resp.Events = append(resp.Events, event)
+	resp.Events = append(resp.Events, event)
 }
 
 func (bot *Bot) ActionBrancherWithAlternativeTimesAndOrdinalValidateOrdinalToSelectAlternativeTime(req *RasaRequest, resp *RasaResponse) {
-  slots := req.Tracker.Slots
+	slots := req.Tracker.Slots
 
-  rawOrdinal := slots["temp_ordinal"]
-  rawAlternativeTimes := slots["alternative_times"]
+	rawOrdinal := slots["temp_ordinal"]
+	rawAlternativeTimes := slots["alternative_times"]
 
-  event := Event{Event: FOLLOWUP}
+	event := Event{Event: FOLLOWUP}
 
-  if reflect.TypeOf(rawAlternativeTimes) == nil {
-    event.Name = "action_need_employee"
-  } else if reflect.TypeOf(rawOrdinal) == nil {
-    event.Name = "action_need_employee"
-  } else {
-    ordinalStr := rawOrdinal.(string)
+	if reflect.TypeOf(rawAlternativeTimes) == nil {
+		event.Name = "action_need_employee"
+	} else if reflect.TypeOf(rawOrdinal) == nil {
+		event.Name = "action_need_employee"
+	} else {
+		ordinalStr := rawOrdinal.(string)
 
-    ordinalValue, err := strconv.Atoi(ordinalStr)
-    if err != nil {
-      event.Name = "action_need_employee_because_error"
-      resp.Events = append(resp.Events, event)
-      return
-    }
+		ordinalValue, err := strconv.Atoi(ordinalStr)
+		if err != nil {
+			event.Name = "action_need_employee_because_error"
+			resp.Events = append(resp.Events, event)
+			return
+		}
 
-    alternativeTimesArr := rawAlternativeTimes.([]interface{})
+		alternativeTimesArr := rawAlternativeTimes.([]interface{})
 
-    if ordinalValue <= 0 || ordinalValue >= len(alternativeTimesArr) {
-      event.Name = "action_need_employee"
-    } else {
-      // Valid
-      alternativeTimesStr := rawAlternativeTimes.([]string)
-      event.Event = SLOT
-      event.Name = "scheduled_time"
-      event.Value = alternativeTimesStr[ordinalValue - 1]
-      resp.Events = append(resp.Events, event)
+		if ordinalValue <= 0 || ordinalValue >= len(alternativeTimesArr) {
+			event.Name = "action_need_employee"
+		} else {
+			// Valid
+			alternativeTimesStr := rawAlternativeTimes.([]string)
+			event.Event = SLOT
+			event.Name = "scheduled_time"
+			event.Value = alternativeTimesStr[ordinalValue-1]
+			resp.Events = append(resp.Events, event)
 
-      event = Event { Event : FOLLOWUP, Name: "action_blank_alert_scheduled_time_slot_set"}
+			event = Event{Event: FOLLOWUP, Name: "action_blank_alert_scheduled_time_slot_set"}
 
-    }
-  }
-  
-  resp.Events = append(resp.Events, event)
+		}
+	}
+
+	resp.Events = append(resp.Events, event)
 }
 
 func (bot *Bot) ActionBrancherValidateTempTimeToSelectAlternativeTimeToSetScheduledTimeSlot(req *RasaRequest, resp *RasaResponse) {
-  slots := req.Tracker.Slots
+	slots := req.Tracker.Slots
 
-  rawTempTimes := slots["temp_times"]
-  rawAltTimes := slots["alternative_times"]
+	rawTempTimes := slots["temp_times"]
+	rawAltTimes := slots["alternative_times"]
 
-  event := Event{Event: FOLLOWUP}
+	event := Event{Event: FOLLOWUP}
 
-  if reflect.TypeOf(rawTempTimes) == nil {
-    event.Name = "action_need_employee"
-  } else if reflect.TypeOf(rawAltTimes) == nil {
-    event.Name = "action_need_employee"
-  } else {
-    tempTime := rawTempTimes.([]interface{})[0]
+	if reflect.TypeOf(rawTempTimes) == nil {
+		event.Name = "action_need_employee"
+	} else if reflect.TypeOf(rawAltTimes) == nil {
+		event.Name = "action_need_employee"
+	} else {
+		tempTime := rawTempTimes.([]interface{})[0]
 
-    var rasaTime RasaTime
-    err := mapstructure.Decode(tempTime.(map[string]interface{}), &rasaTime)
+		var rasaTime RasaTime
+		err := mapstructure.Decode(tempTime.(map[string]interface{}), &rasaTime)
 
-    if err != nil {
-      log.Println(err)
-      event = Event{Event: FOLLOWUP, Name: "action_need_employee_because_error"}
-      resp.Events = append(resp.Events, event)
-      return
-    }
+		if err != nil {
+			log.Println(err)
+			event = Event{Event: FOLLOWUP, Name: "action_need_employee_because_error"}
+			resp.Events = append(resp.Events, event)
+			return
+		}
 
-    tempTimeObj, err := time.Parse(time.RFC3339, rasaTime.Value)
-    if err != nil {
-      log.Println(err)
-      event = Event{Event: FOLLOWUP, Name: "action_need_employee_because_error"}
-      resp.Events = append(resp.Events, event)
-      return
-    }
+		tempTimeObj, err := time.Parse(time.RFC3339, rasaTime.Value)
+		if err != nil {
+			log.Println(err)
+			event = Event{Event: FOLLOWUP, Name: "action_need_employee_because_error"}
+			resp.Events = append(resp.Events, event)
+			return
+		}
 
-    tempHour := tempTimeObj.Hour()
-    tempMinutes := tempTimeObj.Minute()
+		tempHour := tempTimeObj.Hour()
+		tempMinutes := tempTimeObj.Minute()
 
-    // Assume PM
-    if rasaTime.Grain == "period" {
-      if tempHour >= 0 && tempHour <= 11 {
-        tempHour += 12
-      }
-    }
+		// Assume PM
+		if rasaTime.Grain == "period" {
+			if tempHour >= 0 && tempHour <= 11 {
+				tempHour += 12
+			}
+		}
 
-    // convert alt time strings into time objects
-    altTimesStr := rawAltTimes.([]string)
-    altTimes := []time.Time{}
+		// convert alt time strings into time objects
+		altTimesStr := rawAltTimes.([]string)
+		altTimes := []time.Time{}
 
-    for _, v := range altTimesStr {
-      altTime, err := time.Parse(time.RFC3339, v)
-      if err != nil {
-        log.Println(err)
-        event = Event{Event: FOLLOWUP, Name: "action_need_employee_because_error"}
-        resp.Events = append(resp.Events, event)
-        return
-      }
+		for _, v := range altTimesStr {
+			altTime, err := time.Parse(time.RFC3339, v)
+			if err != nil {
+				log.Println(err)
+				event = Event{Event: FOLLOWUP, Name: "action_need_employee_because_error"}
+				resp.Events = append(resp.Events, event)
+				return
+			}
 
-      altTimes = append(altTimes, altTime)
+			altTimes = append(altTimes, altTime)
 
-    }
+		}
 
-    minuteMatch := false
-    hourMatches := 0
-    index := -1
-    // Try to match
-    for i, v := range altTimes {
-      if tempHour == v.Hour() {
-        index = i
-        if tempMinutes == v.Minute() {
-          minuteMatch = true
-          break
-        } else {
-          hourMatches++
-        }
-      }
-    }
+		minuteMatch := false
+		hourMatches := 0
+		index := -1
+		// Try to match
+		for i, v := range altTimes {
+			if tempHour == v.Hour() {
+				index = i
+				if tempMinutes == v.Minute() {
+					minuteMatch = true
+					break
+				} else {
+					hourMatches++
+				}
+			}
+		}
 
-    if minuteMatch {
-      event.Event = SLOT
-      event.Name = "scheduled_time"
-      event.Value = altTimesStr[index]
-      resp.Events = append(resp.Events, event)
-      event = Event{Event: FOLLOWUP, Name: "action_blank_alert_scheduled_time_set"}
-    } else {
-      if hourMatches == 0 {
-        event.Name = "action_alert_employee"
-      } else if hourMatches == 1 {
-        event.Event = SLOT
-        event.Name = "scheduled_time"
-        event.Value = altTimesStr[index]
-        resp.Events = append(resp.Events, event)
-        event = Event{Event: FOLLOWUP, Name: "action_blank_alert_scheduled_time_set"}
-      } else {
-        newAltTimesStr := []string{}
+		if minuteMatch {
+			event.Event = SLOT
+			event.Name = "scheduled_time"
+			event.Value = altTimesStr[index]
+			resp.Events = append(resp.Events, event)
+			event = Event{Event: FOLLOWUP, Name: "action_blank_alert_scheduled_time_set"}
+		} else {
+			if hourMatches == 0 {
+				event.Name = "action_alert_employee"
+			} else if hourMatches == 1 {
+				event.Event = SLOT
+				event.Name = "scheduled_time"
+				event.Value = altTimesStr[index]
+				resp.Events = append(resp.Events, event)
+				event = Event{Event: FOLLOWUP, Name: "action_blank_alert_scheduled_time_set"}
+			} else {
+				newAltTimesStr := []string{}
 
-        for i, v := range altTimes {
-          if tempHour == v.Hour() {
-            newAltTimesStr = append(newAltTimesStr, altTimesStr[i])
-          }
-        }
+				for i, v := range altTimes {
+					if tempHour == v.Hour() {
+						newAltTimesStr = append(newAltTimesStr, altTimesStr[i])
+					}
+				}
 
-        event.Event = SLOT
-        event.Name = "alternative_times"
-        event.Value = altTimesStr
-        resp.Events = append(resp.Events, event)
-        event = Event{Event: FOLLOWUP, Name: "action_blank_alert_alternative_times_set"}
-      }
-    }
+				event.Event = SLOT
+				event.Name = "alternative_times"
+				event.Value = altTimesStr
+				resp.Events = append(resp.Events, event)
+				event = Event{Event: FOLLOWUP, Name: "action_blank_alert_alternative_times_set"}
+			}
+		}
 
-  }
+	}
 
-  resp.Events = append(resp.Events, event)
+	resp.Events = append(resp.Events, event)
 }
 
-
 func (bot *Bot) ActionBrancherWithPotentialTimesAndAlterativeTimesToFillScheduledTime(req *RasaRequest, resp *RasaResponse) {
-  slots := req.Tracker.Slots
+	slots := req.Tracker.Slots
 
-  rawPotentialTimes := slots["potential_times"]
-  rawAlternativeTimes := slots["alternative_times"]
+	rawPotentialTimes := slots["potential_times"]
+	rawAlternativeTimes := slots["alternative_times"]
 
-  event := Event{Event: FOLLOWUP}
+	event := Event{Event: FOLLOWUP}
 
-  if reflect.TypeOf(rawPotentialTimes) == nil {
-    event.Name = "utter_ask_for_time_on_potential_reservation"
-  } else if reflect.TypeOf(rawAlternativeTimes) == nil {
-    event.Name = "action_brancher_with_size_and_single_potential_times_query_reservation_platform"
-  } else {
-    potentialTimes := rawPotentialTimes.([]interface{})
-    rawPotentialTime := potentialTimes[0]
-    potentialTimeStr := rawPotentialTime.(string)
+	if reflect.TypeOf(rawPotentialTimes) == nil {
+		event.Name = "utter_ask_for_time_on_potential_reservation"
+	} else if reflect.TypeOf(rawAlternativeTimes) == nil {
+		event.Name = "action_brancher_with_size_and_single_potential_times_query_reservation_platform"
+	} else {
+		potentialTimes := rawPotentialTimes.([]interface{})
+		rawPotentialTime := potentialTimes[0]
+		potentialTimeStr := rawPotentialTime.(string)
 
-    potentialTime, err := time.Parse(time.RFC3339, potentialTimeStr)
+		potentialTime, err := time.Parse(time.RFC3339, potentialTimeStr)
 
-    if err != nil {
-      event.Name = "action_need_employee_because_error"
-      
-      resp.Events = append(resp.Events, event)
-      return
-    }
+		if err != nil {
+			event.Name = "action_need_employee_because_error"
 
-    altTimes := []time.Time{}
+			resp.Events = append(resp.Events, event)
+			return
+		}
 
-    altTimesArr := rawAlternativeTimes.([]interface{})
-    for _, v := range altTimesArr {
-      altTime, err := time.Parse(time.RFC3339, v.(string))
+		altTimes := []time.Time{}
 
-      if err != nil {
-        event.Name = "action_need_employee_because_error"
-        
-        resp.Events = append(resp.Events, event)
-        return
-      }
+		altTimesArr := rawAlternativeTimes.([]interface{})
+		for _, v := range altTimesArr {
+			altTime, err := time.Parse(time.RFC3339, v.(string))
 
-      altTimes = append(altTimes, altTime)
-    }
+			if err != nil {
+				event.Name = "action_need_employee_because_error"
 
+				resp.Events = append(resp.Events, event)
+				return
+			}
+
+			altTimes = append(altTimes, altTime)
+		}
 
 		// Check if any are within 15 minutes and if so ask if that is fine
 		lessThan15 := false
@@ -359,190 +357,189 @@ func (bot *Bot) ActionBrancherWithPotentialTimesAndAlterativeTimesToFillSchedule
 			}
 		}
 
-    if lessThan15 {
-      event.Name = "action_utter_ask_for_polar_on_if_single_close_alternative_time_acceptable"
-    } else if len(altTimes) > 1 {
-      event.Name = "action_utter_ask_for_polar_or_time_or_number_or_ordinal_on_serveral_alternative_times"
-    } else {
-      event.Name = "action_utter_ask_for_polar_on_if_single_alternative_times_acceptable"
-    }
+		if lessThan15 {
+			event.Name = "action_utter_ask_for_polar_on_if_single_close_alternative_time_acceptable"
+		} else if len(altTimes) > 1 {
+			event.Name = "action_utter_ask_for_polar_or_time_or_number_or_ordinal_on_serveral_alternative_times"
+		} else {
+			event.Name = "action_utter_ask_for_polar_on_if_single_alternative_times_acceptable"
+		}
 
-  }
+	}
 
-  resp.Events = append(resp.Events, event)
+	resp.Events = append(resp.Events, event)
 }
 
 func (bot *Bot) ActionBrancherToSaveNewReservation(req *RasaRequest, resp *RasaResponse) {
-  slots := req.Tracker.Slots
+	slots := req.Tracker.Slots
 
-  rawSize := slots["size"]
-  rawName := slots["name"]
-  rawScheduledTime := slots["scheduled_time"]
+	rawSize := slots["size"]
+	rawName := slots["name"]
+	rawScheduledTime := slots["scheduled_time"]
 
 	businessId := req.Tracker.Slots[BUSINESS_ID].(string)
 	recipientId := req.Tracker.Slots[RECIPIENT_ID].(string)
 	contact := req.Tracker.Slots[RECIPIENT_CONTACT].(string)
 
-  event := Event{}
-  if reflect.TypeOf(rawSize) == nil || reflect.TypeOf(rawName) == nil || reflect.TypeOf(rawScheduledTime) == nil {
-    event.Event = FOLLOWUP
-    event.Name = "action_brancher_reservation_slot_filling"
-  } else {
-    name := rawName.(string)
-    scheduledTimeStr := rawScheduledTime.(string)
+	event := Event{}
+	if reflect.TypeOf(rawSize) == nil || reflect.TypeOf(rawName) == nil || reflect.TypeOf(rawScheduledTime) == nil {
+		event.Event = FOLLOWUP
+		event.Name = "action_brancher_reservation_slot_filling"
+	} else {
+		name := rawName.(string)
+		scheduledTimeStr := rawScheduledTime.(string)
 
-    // We want to round down anyway
-    size := int(rawSize.(float64))
+		// We want to round down anyway
+		size := int(rawSize.(float64))
 
-    scheduledTime, err := time.Parse(time.RFC3339, scheduledTimeStr)
+		scheduledTime, err := time.Parse(time.RFC3339, scheduledTimeStr)
 
-    if err != nil {
-      event.Event = FOLLOWUP
-      event.Name = "action_need_employee_because_error_saving"
-      
-      resp.Events = append(resp.Events, event)
-      return
-    }
+		if err != nil {
+			event.Event = FOLLOWUP
+			event.Name = "action_need_employee_because_error_saving"
 
-    timeAsFloat := scheduledTime.UnixNano() / 1000000
+			resp.Events = append(resp.Events, event)
+			return
+		}
 
-    reservation := Reservation{
-      Name:          name,
-      NumPeople:     size,
-      RecipientId:   recipientId,
-      ScheduledTime: timeAsFloat,
-      IsVisible:     true,
-      Contact:       contact,
-    }
+		timeAsFloat := scheduledTime.UnixNano() / 1000000
 
-    reservationsRef := bot.Client.Collection(Businesses).Doc(businessId).Collection(Reservations)
-    _, _, err = reservationsRef.Add(bot.Ctx, reservation)
+		reservation := Reservation{
+			Name:          name,
+			NumPeople:     size,
+			RecipientId:   recipientId,
+			ScheduledTime: timeAsFloat,
+			IsVisible:     true,
+			Contact:       contact,
+		}
 
-    event.Event = FOLLOWUP
-    if err != nil {
-      event.Name = "action_need_employee_because_error_saving"
-    } else {
-      event.Name = "action_utter_post_reservation_save_AND_ask_for_next_general_request"
-    }
+		reservationsRef := bot.Client.Collection(Businesses).Doc(businessId).Collection(Reservations)
+		_, _, err = reservationsRef.Add(bot.Ctx, reservation)
 
-  }
+		event.Event = FOLLOWUP
+		if err != nil {
+			event.Name = "action_need_employee_because_error_saving"
+		} else {
+			event.Name = "action_utter_post_reservation_save_AND_ask_for_next_general_request"
+		}
 
-  resp.Events = append(resp.Events, event)
+	}
+
+	resp.Events = append(resp.Events, event)
 }
 
 func (bot *Bot) ActionBrancherWithSizeAndSinglePotentialTimesQueryReservationPlatform(req *RasaRequest, resp *RasaResponse) {
-  slots := req.Tracker.Slots
+	slots := req.Tracker.Slots
 
-  rawSize := slots["size"]
-  rawPotentialTimes := slots["potential_times"]
+	rawSize := slots["size"]
+	rawPotentialTimes := slots["potential_times"]
 
 	businessId := req.Tracker.Slots[BUSINESS_ID].(string)
 
-  event := Event{}
-  event.Event = FOLLOWUP
+	event := Event{}
+	event.Event = FOLLOWUP
 
-  if reflect.TypeOf(rawSize) == nil {
-    event.Name = "utter_ask_for_number_on_reservation_size"
-  } else if reflect.TypeOf(rawPotentialTimes) == nil {
-    event.Name = "utter_ask_for_time_for_potential_reservation"
-  } else {
-    business, err := bot.getBusinessFromId(businessId)
+	if reflect.TypeOf(rawSize) == nil {
+		event.Name = "utter_ask_for_number_on_reservation_size"
+	} else if reflect.TypeOf(rawPotentialTimes) == nil {
+		event.Name = "utter_ask_for_time_for_potential_reservation"
+	} else {
+		business, err := bot.getBusinessFromId(businessId)
 
-    if err != nil {
-      event.Name = "action_need_employee"
+		if err != nil {
+			event.Name = "action_need_employee"
 
-      resp.Events = append(resp.Events, event)
-    }
+			resp.Events = append(resp.Events, event)
+		}
 
-    // open table query takes in a string for now
-    size := string(int(rawSize.(float64)))
+		// open table query takes in a string for now
+		size := string(int(rawSize.(float64)))
 
-    potentialTimes := rawPotentialTimes.([]interface{})
-    rawPotentialTime := potentialTimes[0]
-    potentialTimeStr := rawPotentialTime.(string)
+		potentialTimes := rawPotentialTimes.([]interface{})
+		rawPotentialTime := potentialTimes[0]
+		potentialTimeStr := rawPotentialTime.(string)
 
-    potentialTime, err := time.Parse(time.RFC3339, potentialTimeStr)
+		potentialTime, err := time.Parse(time.RFC3339, potentialTimeStr)
 
-    if err != nil {
-      event.Name = "action_need_employee_because_error"
-      resp.Events = append(resp.Events, event)
-      return
-    }
-    reservationResult, err := Query(business.ReservationPlatformId, potentialTime, size)
+		if err != nil {
+			event.Name = "action_need_employee_because_error"
+			resp.Events = append(resp.Events, event)
+			return
+		}
+		reservationResult, err := Query(business.ReservationPlatformId, potentialTime, size)
 
-    if err != nil {
-      event.Name = "action_need_employee_because_error"
-      return
-    }
+		if err != nil {
+			event.Name = "action_need_employee_because_error"
+			return
+		}
 
-    if reservationResult.Message == NO_AVAILABLE {
-      event.Name = "utter_doing_no_tables_available_near_that_time_AND_ask_for_polar_or_time_on_alternative"
-    } else if reservationResult.Message == IN_ADVANCE {
-      event.Name = "utter_requested_time_too_soon_AND_ask_for_polar_or_time_on_alternative"
-    } else {
+		if reservationResult.Message == NO_AVAILABLE {
+			event.Name = "utter_doing_no_tables_available_near_that_time_AND_ask_for_polar_or_time_on_alternative"
+		} else if reservationResult.Message == IN_ADVANCE {
+			event.Name = "utter_requested_time_too_soon_AND_ask_for_polar_or_time_on_alternative"
+		} else {
 
-      if len(reservationResult.Results) == 0 {
-        event.Name = "action_need_employee"
-      } else {
+			if len(reservationResult.Results) == 0 {
+				event.Name = "action_need_employee"
+			} else {
 
-        found := false
-        for _, result := range(reservationResult.Results) {
-          if result.Equal(potentialTime) {
-            found = true
+				found := false
+				for _, result := range reservationResult.Results {
+					if result.Equal(potentialTime) {
+						found = true
 
-		        matchTimeStr := result.Format(time.RFC3339)
+						matchTimeStr := result.Format(time.RFC3339)
 
-            event.Event = SLOT
-            event.Name = "scheduled_time"
-            event.Value = matchTimeStr
+						event.Event = SLOT
+						event.Name = "scheduled_time"
+						event.Value = matchTimeStr
 
-	          resp.Events = append(resp.Events, event)
-            event.Event = FOLLOWUP
-            event.Value = nil
-            break
-          }
-        }
+						resp.Events = append(resp.Events, event)
+						event.Event = FOLLOWUP
+						event.Value = nil
+						break
+					}
+				}
 
-        if found {
-          event.Name = "action_alert_scheduled_time_slot_set"
-        } else {
-          event.Name = "action_alert_alternative_times_slot_set"
-        }
-      }
-    }
+				if found {
+					event.Name = "action_alert_scheduled_time_slot_set"
+				} else {
+					event.Name = "action_alert_alternative_times_slot_set"
+				}
+			}
+		}
 
-  }
+	}
 
 	resp.Events = append(resp.Events, event)
 }
 
 func (bot *Bot) ActionNeedEmployeeBecauseErrorSaving(req *RasaRequest, resp *RasaResponse) {
-  // TODO
+	// TODO
 	event := Event{Event: "pause"}
 	resp.Events = append(resp.Events, event)
 }
 
 func (bot *Bot) ActionNeedEmployeeBecauseError(req *RasaRequest, resp *RasaResponse) {
-  // TODO
+	// TODO
 	event := Event{Event: "pause"}
 	resp.Events = append(resp.Events, event)
 }
 
 func (bot *Bot) ActionSetTempTimesSlotFromPotentialHour(req *RasaRequest, resp *RasaResponse) {
-  // Set's the temp_times[0] to the current time but with the potential time as the potential_hour + 12 if less than 12
-  // and greater than 0
-  potentialHour := req.Tracker.Slots["potential_hour"].(float64)
+	// Set's the temp_times[0] to the current time but with the potential time as the potential_hour + 12 if less than 12
+	// and greater than 0
+	potentialHour := req.Tracker.Slots["potential_hour"].(float64)
 
-  now := time.Now()
+	now := time.Now()
 
-  newTime := time.Date(now.Year(), now.Month(), now.Day(), int(potentialHour), 0, 0, 0, time.UTC)
-  newTimeStr := newTime.Format(time.RFC3339)
+	newTime := time.Date(now.Year(), now.Month(), now.Day(), int(potentialHour), 0, 0, 0, time.Local)
+	newTimeStr := newTime.Format(time.RFC3339)
 
-  tempTime := RasaTime{Value: newTimeStr, Grain: "hour", Type: "value"}
+	tempTime := RasaTime{Value: newTimeStr, Grain: "hour", Type: "value"}
 
-  event := Event{Event: SLOT, Name: "temp_times", Value: []interface{}{tempTime}}
-  resp.Events = append(resp.Events, event)
-
+	event := Event{Event: SLOT, Name: "temp_times", Value: []interface{}{tempTime}}
+	resp.Events = append(resp.Events, event)
 
 }
 
@@ -570,7 +567,7 @@ func (bot *Bot) ActionUtterPostReservationAndAskForNextGeneralRequest(req *RasaR
 
 	datetime, _ := time.Parse(time.RFC3339, scheduledTime)
 
-  reply := fmt.Sprintf("Great, you're all set. We'll see you at %s. Is there anything else we can do for you?", datetime.Format("3:04 PM"))
+	reply := fmt.Sprintf("Great, you're all set. We'll see you at %s. Is there anything else we can do for you?", datetime.Format("3:04 PM"))
 	resp.Responses = append(resp.Responses, Response{Text: reply})
 
 }
@@ -582,175 +579,184 @@ func (bot *Bot) ActionNeedEmployee(req *RasaRequest, resp *RasaResponse) {
 }
 
 func (bot *Bot) ActionSetTempTimesSlot(req *RasaRequest, resp *RasaResponse) {
-  entities := req.Tracker.LatestMessage.Entities
+	entities := req.Tracker.LatestMessage.Entities
 
-  entityTime := Entity{}
-  for _, v := range(entities) {
-    if v.Entity == "time" {
-      entityTime = v
-    }
-  }
+	entityTime := Entity{}
+	for _, v := range entities {
+		if v.Entity == "time" {
+			entityTime = v
+		}
+	}
 
-  event := Event{Event: SLOT, Name: "temp_times", Value: []interface{}{entityTime.AdditionalInfo}}
-  resp.Events = append(resp.Events, event)
+	event := Event{Event: SLOT, Name: "temp_times", Value: []interface{}{entityTime.AdditionalInfo}}
+	resp.Events = append(resp.Events, event)
 }
 
 func (bot *Bot) ActionSetPotentialHourSlot(req *RasaRequest, resp *RasaResponse) {
-  entities := req.Tracker.LatestMessage.Entities
+	entities := req.Tracker.LatestMessage.Entities
 
-  potentialHour := 0.0
+	potentialHour := 0.0
 
-  for _, v := range(entities) {
-    if v.Entity == "number" {
-      potentialHour = v.Value.(float64)
-    }
-  }
+	for _, v := range entities {
+		if v.Entity == "number" {
+			potentialHour = v.Value.(float64)
+		}
+	}
 
-  potentialHour = math.Abs(potentialHour)
+	potentialHour = math.Abs(potentialHour)
 
-  if potentialHour >= 1 && potentialHour <= 11 {
-    potentialHour += 12
-  }
+	if potentialHour >= 1 && potentialHour <= 11 {
+		potentialHour += 12
+	}
 
-
-  event := Event{Event: SLOT, Name: "potential_hour", Value: potentialHour}
-  resp.Events = append(resp.Events, event)
+	event := Event{Event: SLOT, Name: "potential_hour", Value: potentialHour}
+	resp.Events = append(resp.Events, event)
 }
 func (bot *Bot) ActionBrancherWithTempTimesToDetermineNextFromTimesLength(req *RasaRequest, resp *RasaResponse) {
-  rawTempTimes := req.Tracker.Slots["temp_times"]
+	rawTempTimes := req.Tracker.Slots["temp_times"]
 
-  if reflect.TypeOf(rawTempTimes) == nil {
+	if reflect.TypeOf(rawTempTimes) == nil {
 		event := Event{Event: FOLLOWUP, Name: "utter_ask_for_time_for_potential_reservation"}
 		resp.Events = append(resp.Events, event)
-  } else {
-    tempTimes := rawTempTimes.([]interface{})
-    if len(tempTimes) == 0 {
-      event := Event{Event: FOLLOWUP, Name: "utter_ask_for_time_for_potential_reservation"}
-      resp.Events = append(resp.Events, event)
-    } else if len(tempTimes) == 1 {
+	} else {
+		tempTimes := rawTempTimes.([]interface{})
+		if len(tempTimes) == 0 {
+			event := Event{Event: FOLLOWUP, Name: "utter_ask_for_time_for_potential_reservation"}
+			resp.Events = append(resp.Events, event)
+		} else if len(tempTimes) == 1 {
 			event := Event{Event: FOLLOWUP, Name: "action_brancher_with_temp_times_validate_single_temp_times"}
 			resp.Events = append(resp.Events, event)
 		} else {
 			event := Event{Event: FOLLOWUP, Name: "action_brancher_with_temp_times_validate_single_temp_times"}
 			resp.Events = append(resp.Events, event)
 		}
-  }
+	}
 }
 
 func (bot *Bot) ActionModifyTempTimesSlotAm(req *RasaRequest, resp *RasaResponse) {
-  rawTempTime := req.Tracker.Slots["temp_times"].([]interface{})[0]
+	rawTempTime := req.Tracker.Slots["temp_times"].([]interface{})[0]
 
-  time_map := rawTempTime.(map[string]interface{})
-  var rasaTime RasaTime
-  err := mapstructure.Decode(time_map, &rasaTime)
+	time_map := rawTempTime.(map[string]interface{})
+	var rasaTime RasaTime
+	err := mapstructure.Decode(time_map, &rasaTime)
 
-  if err != nil {
-    log.Println(err)
-    return
-  }
+	if err != nil {
+		log.Println(err)
+		return
+	}
 
-  timeObj, err := time.Parse(time.RFC3339, rasaTime.Value)
+	timeObj, err := time.Parse(time.RFC3339, rasaTime.Value)
 
-  if err != nil {
-    log.Println(err)
-    return
-  }
+	if err != nil {
+		log.Println(err)
+		return
+	}
 
-  hour := timeObj.Hour()
+	hour := timeObj.Hour()
 
-  if hour >= 12 {
-    hour = hour - 12
-  }
+	if hour >= 12 {
+		hour = hour - 12
+	}
 
-  newTime := time.Date(timeObj.Year(), timeObj.Month(), timeObj.Day(), hour, timeObj.Minute(), 0, 0, time.UTC)
+	newTime := time.Date(timeObj.Year(), timeObj.Month(), timeObj.Day(), hour, timeObj.Minute(), 0, 0, time.Local)
 
-  rasaTime.Value = newTime.Format(time.RFC3339)
+	rasaTime.Value = newTime.Format(time.RFC3339)
 
-  event := Event{Event: SLOT, Name: "temp_times", Value : []RasaTime{rasaTime}}
-  resp.Events = append(resp.Events, event)
+	event := Event{Event: SLOT, Name: "temp_times", Value: []RasaTime{rasaTime}}
+	resp.Events = append(resp.Events, event)
 
 }
 
 func (bot *Bot) ActionModifyTempTimesSlotPm(req *RasaRequest, resp *RasaResponse) {
-  rawTempTime := req.Tracker.Slots["temp_times"].([]interface{})[0]
+	rawTempTime := req.Tracker.Slots["temp_times"].([]interface{})[0]
 
-  time_map := rawTempTime.(map[string]interface{})
-  var rasaTime RasaTime
-  err := mapstructure.Decode(time_map, &rasaTime)
+	time_map := rawTempTime.(map[string]interface{})
+	var rasaTime RasaTime
+	err := mapstructure.Decode(time_map, &rasaTime)
 
-  if err != nil {
-    log.Println(err)
-    return
-  }
+	if err != nil {
+		log.Println(err)
+		return
+	}
 
-  timeObj, err := time.Parse(time.RFC3339, rasaTime.Value)
+	timeObj, err := time.Parse(time.RFC3339, rasaTime.Value)
 
-  if err != nil {
-    log.Println(err)
-    return
-  }
+	if err != nil {
+		log.Println(err)
+		return
+	}
 
-  hour := timeObj.Hour()
+	hour := timeObj.Hour()
 
-  if hour >= 0 && hour <= 11 {
-    hour = hour + 12
-  }
+	if hour >= 0 && hour <= 11 {
+		hour = hour + 12
+	}
 
-  newTime := time.Date(timeObj.Year(), timeObj.Month(), timeObj.Day(), hour, timeObj.Minute(), 0, 0, time.UTC)
+	newTime := time.Date(timeObj.Year(), timeObj.Month(), timeObj.Day(), hour, timeObj.Minute(), 0, 0, time.Local)
 
-  rasaTime.Value = newTime.Format(time.RFC3339)
+	rasaTime.Value = newTime.Format(time.RFC3339)
 
-  event := Event{Event: SLOT, Name: "temp_times", Value : []RasaTime{rasaTime}}
-  resp.Events = append(resp.Events, event)
+	event := Event{Event: SLOT, Name: "temp_times", Value: []RasaTime{rasaTime}}
+	resp.Events = append(resp.Events, event)
 
 }
 
 func (bot *Bot) ActionBrancherWithTempTimesValidateSingleTempTimes(req *RasaRequest, resp *RasaResponse) {
-	switch v := req.Tracker.Slots["temp_times"].(type) {
-	case []interface{}:
-		switch time_map := v[0].(type) {
-		case map[string]interface{}:
-			var rasaTime RasaTime
-			err := mapstructure.Decode(time_map, &rasaTime)
+	rawTempTimes := req.Tracker.Slots["temp_times"]
+
+	if reflect.TypeOf(rawTempTimes) == nil {
+		event := Event{Event: FOLLOWUP, Name: "utter_ask_for_time_for_potential_reservation"}
+		resp.Events = append(resp.Events, event)
+	} else {
+		time_map := rawTempTimes.([]map[string]interface{})[0]
+		var rasaTime RasaTime
+		err := mapstructure.Decode(time_map, &rasaTime)
+
+		if err != nil {
+			log.Println(err)
+			// TODO
+			return
+		}
+
+		if rasaTime.Grain == "week" || rasaTime.Grain == "month" || rasaTime.Grain == "year" {
+			event := Event{Event: FOLLOWUP, Name: "action_need_employee"}
+			resp.Events = append(resp.Events, event)
+		} else if rasaTime.Grain == "day" {
+			event := Event{Event: FOLLOWUP, Name: "utter_with_temp_time_ask_for_number_or_time_on_need_hour_grain_from_day"}
+			resp.Events = append(resp.Events, event)
+		} else if rasaTime.Grain == "period" {
+			event := Event{Event: FOLLOWUP, Name: "utter_ask_for_polar_on_is_pm"}
+			resp.Events = append(resp.Events, event)
+		} else {
+			searchTimeStr := rasaTime.Value
+			searchTime, err := time.Parse(time.RFC3339, searchTimeStr)
 
 			if err != nil {
 				log.Println(err)
-        // TODO
-				break
 			}
 
-			if rasaTime.Grain == "week" || rasaTime.Grain == "month" || rasaTime.Grain == "year" {
-				event := Event{Event: FOLLOWUP, Name: "action_need_employee"}
+			MAX_TIME := float64(24 * 90)
+
+			if searchTime.Before(time.Now()) {
+				event := Event{Event: FOLLOWUP, Name: "utter_unhappy_time_in_past_AND_ask_for_time_on_alternative"}
 				resp.Events = append(resp.Events, event)
-			} else if rasaTime.Grain == "day" {
-				event := Event{Event: FOLLOWUP, Name: "utter_with_temp_time_ask_for_number_or_time_on_need_hour_grain_from_day"}
-				resp.Events = append(resp.Events, event)
-			} else if rasaTime.Grain == "period" {
-				event := Event{Event: FOLLOWUP, Name: "utter_ask_for_polar_on_is_pm"}
+			} else if searchTime.Sub(time.Now()).Hours() > MAX_TIME {
+				event := Event{Event: FOLLOWUP, Name: "utter_unhappy_time_too_far_in_future_AND_ask_for_time_on_alternative"}
 				resp.Events = append(resp.Events, event)
 			} else {
-				searchTimeStr := rasaTime.Value
-				searchTime, err := time.Parse(time.RFC3339, searchTimeStr)
+				event := Event{Event: FOLLOWUP, Name: "action_blank_alert_potential_times_slot_set"}
+				resp.Events = append(resp.Events, event)
+				// So set it as the first item in temp_temps
+				event = Event{Event: SLOT, Name: "potential_times", Value: []string{rasaTime.Value}}
+				resp.Events = append(resp.Events, event)
+			}
 
-				if err != nil {
-					log.Println(err)
-				}
-
-				MAX_TIME := float64(24 * 90)
-
-				if searchTime.Before(time.Now()) {
-					event := Event{Event: FOLLOWUP, Name: "utter_unhappy_time_in_past_AND_ask_for_time_on_alternative"}
-					resp.Events = append(resp.Events, event)
-				} else if searchTime.Sub(time.Now()).Hours() > MAX_TIME {
-					event := Event{Event: FOLLOWUP, Name: "utter_unhappy_time_too_far_in_future_AND_ask_for_time_on_alternative"}
-					resp.Events = append(resp.Events, event)
-				} else {
-					event := Event{Event: FOLLOWUP, Name: "action_blank_alert_potential_times_slot_set"}
-					resp.Events = append(resp.Events, event)
-					// So set it as the first item in temp_temps
-          event = Event{Event: SLOT, Name: "potential_times", Value: []string{rasaTime.Value}}
-					resp.Events = append(resp.Events, event)
-				}
+		}
+	}
+	/*switch v := req.Tracker.Slots["temp_times"].(type) {
+	case []interface{}:
+		switch time_map := v[0].(type) {
+		case map[string]interface{}:
 
 			}
 
@@ -758,7 +764,7 @@ func (bot *Bot) ActionBrancherWithTempTimesValidateSingleTempTimes(req *RasaRequ
 	default:
 		event := Event{Event: FOLLOWUP, Name: "utter_ask_for_time_for_potential_reservation"}
 		resp.Events = append(resp.Events, event)
-	}
+	}*/
 }
 
 func (bot *Bot) ActionBrancherValidatePotentialHourSlot(req *RasaRequest, resp *RasaResponse) {
@@ -780,8 +786,8 @@ func (bot *Bot) ActionBrancherValidatePotentialHourSlot(req *RasaRequest, resp *
 					v += 12
 				}
 				event = Event{Event: SLOT, Name: "potential_hour", Value: v}
-        event := Event{Event: FOLLOWUP, Name: "action_blank_alert_potential_hour_slot_set"}
-        resp.Events = append(resp.Events, event)
+				event := Event{Event: FOLLOWUP, Name: "action_blank_alert_potential_hour_slot_set"}
+				resp.Events = append(resp.Events, event)
 
 			}
 		default:
@@ -846,7 +852,7 @@ func (bot *Bot) ActionBrancherValidateWithTempTimesAndTimeEntityToModifyTempTime
 						}
 					}
 
-					newTime := time.Date(tempTime.Year(), tempTime.Month(), tempTime.Day(), entityTimeHours, tempTime.Minute(), 0, 0, time.UTC)
+					newTime := time.Date(tempTime.Year(), tempTime.Month(), tempTime.Day(), entityTimeHours, tempTime.Minute(), 0, 0, time.Local)
 
 					time_map["value"] = newTime.Format(time.RFC3339)
 
@@ -898,13 +904,13 @@ func (bot *Bot) ActionUtterAskWithAlternativeTimesForTimeOrNumberOrOrdinalOnMore
 func (bot *Bot) ActionUtterAskForPolarOnIfSingleAlternativeTimeAcceptable(req *RasaRequest, resp *RasaResponse) {
 	rawAltTime := req.Tracker.Slots["alternative_times"].([]interface{})[0].(string)
 
-  datetime, err := time.Parse(time.RFC3339, rawAltTime)
+	datetime, err := time.Parse(time.RFC3339, rawAltTime)
 
-  if err != nil {
-    log.Println(err)
-  }
+	if err != nil {
+		log.Println(err)
+	}
 
-  altTime := datetime.Format("3:04 PM")
+	altTime := datetime.Format("3:04 PM")
 
 	reply := fmt.Sprintf("The only close time is %s. Does that work?", altTime)
 	resp.Responses = append(resp.Responses, Response{Text: reply})
@@ -913,13 +919,13 @@ func (bot *Bot) ActionUtterAskForPolarOnIfSingleAlternativeTimeAcceptable(req *R
 func (bot *Bot) ActionUtterAskForPolarOnIfSingleCloseAlternativeTimeAcceptable(req *RasaRequest, resp *RasaResponse) {
 	rawAltTime := req.Tracker.Slots["alternative_times"].([]interface{})[0].(string)
 
-  datetime, err := time.Parse(time.RFC3339, rawAltTime)
+	datetime, err := time.Parse(time.RFC3339, rawAltTime)
 
-  if err != nil {
-    log.Println(err)
-  }
+	if err != nil {
+		log.Println(err)
+	}
 
-  altTime := datetime.Format("3:04 PM")
+	altTime := datetime.Format("3:04 PM")
 
 	reply := fmt.Sprintf("Is %s close enough?", altTime)
 	resp.Responses = append(resp.Responses, Response{Text: reply})
@@ -979,14 +985,14 @@ func (bot *Bot) ActionSetPotentialTimeSlot(req *RasaRequest, resp *RasaResponse)
 }
 
 func (bot *Bot) ActionSetTempOrdinalSlot(req *RasaRequest, resp *RasaResponse) {
-  ordinal := ""
-  for _, v := range req.Tracker.LatestMessage.Entities {
-    if v.Entity == "ordinal" {
-      ordinal = v.Value.(string)
-    }
-  }
+	ordinal := ""
+	for _, v := range req.Tracker.LatestMessage.Entities {
+		if v.Entity == "ordinal" {
+			ordinal = v.Value.(string)
+		}
+	}
 
-  nextAction := Event{Event: SLOT, Name: "temp_ordinal", Value: ordinal}
+	nextAction := Event{Event: SLOT, Name: "temp_ordinal", Value: ordinal}
 	resp.Events = append(resp.Events, nextAction)
 
 }
@@ -1030,11 +1036,9 @@ func (bot *Bot) ActionBrancherValidateReservationPotentialSize(req *RasaRequest,
 		potential_size = v
 		found = true
 	case float64:
-		log.Println("Wanted int but got float")
 		potential_size = int(v)
 		found = true
 	default:
-		log.Printf("%T\n", v)
 		event := Event{Event: FOLLOWUP, Name: "utter_ask_for_number_on_reservation_size"}
 		resp.Events = append(resp.Events, event)
 	}
@@ -1049,8 +1053,8 @@ func (bot *Bot) ActionBrancherValidateReservationPotentialSize(req *RasaRequest,
 		} else {
 			event := Event{Event: SLOT, Name: "size", Value: Abs(potential_size)}
 			resp.Events = append(resp.Events, event)
-      event = Event{Event: FOLLOWUP, Name: "action_blank_alert_size_slot_set"}
-      resp.Events = append(resp.Events, event)
+			event = Event{Event: FOLLOWUP, Name: "action_blank_alert_size_slot_set"}
+			resp.Events = append(resp.Events, event)
 
 		}
 	}

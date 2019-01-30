@@ -60,3 +60,107 @@ func TestActionBrancherValidateReservationsPotentialSize(t *testing.T) {
 
 }
 
+func TestActionBrancherWithTempTimesToDetermineNextFromMTimesLength(t *testing.T) {
+	slots := make(map[string]interface{})
+	tracker := Tracker{Slots: slots}
+	req := &RasaRequest{Tracker: tracker}
+	resp := NewRasaResponse()
+
+	bot.ActionBrancherWithTempTimesToDetermineNextFromTimesLength(req, resp)
+
+	if resp.Events[0].Name != "utter_ask_for_time_for_potential_reservation" {
+		t.Errorf("followed with: %s", resp.Events[0].Name)
+	}
+
+	resp = NewRasaResponse()
+	req.Tracker.Slots["temp_times"] = []interface{}{}
+	req.Tracker.Slots["temp_times"] = append(req.Tracker.Slots["temp_times"].([]interface{}), "xxx")
+
+	bot.ActionBrancherWithTempTimesToDetermineNextFromTimesLength(req, resp)
+	if resp.Events[0].Name != "action_brancher_with_temp_times_validate_single_temp_times" {
+		t.Errorf("followed with: %s", resp.Events[0].Name)
+	}
+
+}
+
+func TestActionBrancherWithTempTimesValidateSingleTempTimes(t *testing.T) {
+	slots := make(map[string]interface{})
+	tracker := Tracker{Slots: slots}
+	req := &RasaRequest{Tracker: tracker}
+	resp := NewRasaResponse()
+
+	tempTime := map[string]interface{}{}
+	tempTime["value"] = "2019-02-01T00:00:00.000+00:00"
+	tempTime["grain"] = "month"
+	tempTime["type"] = "value"
+
+	req.Tracker.Slots["temp_times"] = []map[string]interface{}{}
+
+	req.Tracker.Slots["temp_times"] = append(req.Tracker.Slots["temp_times"].([]map[string]interface{}), tempTime)
+
+	bot.ActionBrancherWithTempTimesValidateSingleTempTimes(req, resp)
+	if resp.Events[0].Name != "action_need_employee" {
+		t.Errorf("followed with: %s", resp.Events[0].Name)
+	}
+
+	resp = NewRasaResponse()
+
+	tempTime["grain"] = "day"
+
+	bot.ActionBrancherWithTempTimesValidateSingleTempTimes(req, resp)
+	if resp.Events[0].Name != "utter_with_temp_time_ask_for_number_or_time_on_need_hour_grain_from_day" {
+		t.Errorf("followed with: %s", resp.Events[0].Name)
+	}
+
+	resp = NewRasaResponse()
+
+	tempTime["grain"] = "period"
+
+	bot.ActionBrancherWithTempTimesValidateSingleTempTimes(req, resp)
+	if resp.Events[0].Name != "utter_ask_for_polar_on_is_pm" {
+		t.Errorf("followed with: %s", resp.Events[0].Name)
+	}
+
+	resp = NewRasaResponse()
+	// In past
+	tempTime["grain"] = "hour"
+	tempTime["value"] = "2019-01-01T00:00:00.000+00:00"
+
+	bot.ActionBrancherWithTempTimesValidateSingleTempTimes(req, resp)
+	if resp.Events[0].Name != "utter_unhappy_time_in_past_AND_ask_for_time_on_alternative" {
+		t.Errorf("followed with: %s", resp.Events[0].Name)
+	}
+
+	tempTime["grain"] = "minute"
+	tempTime["value"] = "2020-01-01T00:00:00.000+00:00"
+	resp = NewRasaResponse()
+
+	bot.ActionBrancherWithTempTimesValidateSingleTempTimes(req, resp)
+	if resp.Events[0].Name != "utter_unhappy_time_too_far_in_future_AND_ask_for_time_on_alternative" {
+		t.Errorf("followed with: %s", resp.Events[0].Name)
+	}
+
+	tempTime["grain"] = "minute"
+	tempTime["value"] = "2019-01-27T00:00:00.000+00:00"
+	resp = NewRasaResponse()
+
+	bot.ActionBrancherWithTempTimesValidateSingleTempTimes(req, resp)
+	if resp.Events[0].Name != "action_blank_alert_potential_times_slot_set" {
+		t.Errorf("followed with: %s", resp.Events[0].Name)
+	}
+
+}
+func TestActionBrancherValidatePotentialHourSlot(t *testing.T) {
+}
+func TestActionBrancherValidateWithTempTimesAndSinglePotentialTimesQueryReservationPlatform(t *testing.T) {
+}
+func TestActionBrancherWithPotentialTimesAndAlternativeTimesToFillScheduledTime(t *testing.T) {
+}
+func TestActionBrancherValidateTempTimeToSelectAlternativeTimeToSetScheduledTimeSlot(t *testing.T) {
+}
+func TestActionBrancherWithAlternativeTimesAndOrdinalValidateOrdinalToSelectAlternativeTime(t *testing.T) {
+}
+func TestActionBrancherToSaveNewReservation(t *testing.T) {
+}
+func TestActionBrancherReservationSlotFillingBase(t *testing.T) {
+}

@@ -46,7 +46,7 @@ class ExtendedDucklingHTTPExtractor(EntityExtractor):
 
         # timezone like Europe/Berlin
         # if not set the default timezone of Duckling is going to be used
-        "timezone": "Etc/GMT"
+        "timezone": "American/New_York"
     }
 
     def __init__(self, component_config=None, language=None):

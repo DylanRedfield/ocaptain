@@ -84,7 +84,7 @@ func Query(id string, datetime time.Time, partySize string) (OpenTableResult, er
 				if period == "PM" {
 					hour += 12
 				}
-				parsedTime := time.Date(searchYear, searchMonth, searchDay, hour, minutes, 0, 0, time.UTC)
+				parsedTime := time.Date(searchYear, searchMonth, searchDay, hour, minutes, 0, 0, time.Local)
 				result.Results = append(result.Results, parsedTime)
 			}
 		}
