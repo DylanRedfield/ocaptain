@@ -14,9 +14,11 @@ actions:
 - action_brancher_to_save_new_reservation
 - action_blank_for_slots
 - action_clear_size_slot
+- action_clear_name_slot
 - utter_unhappy_doing_no_number_recognized
 - action_test_bed
 - action_clear_potential_times_slot
+- action_clear_scheduled_time_slot
 - action_set_potential_hour_slot
 - action_clear_potential_hour_slot
 - utter_ask_for_number_on_reservation_size
@@ -83,7 +85,7 @@ actions:
 - action_checkpoint_with_size_and_no_alternatives
 - action_checkpoint_with_size_and_single_potential_times_to_fill_scheduled_time
 - action_checkpoint_with_several_alternative_times_to_select
-- action_utter_post_reservation_AND_ask_for_next_general_request
+- action_utter_post_reservation_save_AND_ask_for_next_general_request
 - utter_ask_for_next_general_request
 config:
   store_entities_as_slots: true

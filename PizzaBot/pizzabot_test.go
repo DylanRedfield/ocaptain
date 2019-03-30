@@ -90,7 +90,7 @@ func TestActionBrancherWithTempTimesValidateSingleTempTimes(t *testing.T) {
 	resp := NewRasaResponse()
 
 	tempTime := map[string]interface{}{}
-	tempTime["value"] = "2019-02-01T00:00:00.000+00:00"
+	tempTime["value"] = "2019-04-01T00:00:00.000+00:00"
 	tempTime["grain"] = "month"
 	tempTime["type"] = "value"
 
@@ -124,7 +124,7 @@ func TestActionBrancherWithTempTimesValidateSingleTempTimes(t *testing.T) {
 	resp = NewRasaResponse()
 	// In past
 	tempTime["grain"] = "hour"
-	tempTime["value"] = "2019-01-01T00:00:00.000+00:00"
+	tempTime["value"] = "2019-02-01T00:00:00.000+00:00"
 
 	bot.ActionBrancherWithTempTimesValidateSingleTempTimes(req, resp)
 	if resp.Events[0].Name != "utter_unhappy_time_in_past_AND_ask_for_time_on_alternative" {
@@ -141,7 +141,7 @@ func TestActionBrancherWithTempTimesValidateSingleTempTimes(t *testing.T) {
 	}
 
 	tempTime["grain"] = "minute"
-	tempTime["value"] = "2019-01-27T00:00:00.000+00:00"
+	tempTime["value"] = "2019-04-27T00:00:00.000+00:00"
 	resp = NewRasaResponse()
 
 	bot.ActionBrancherWithTempTimesValidateSingleTempTimes(req, resp)

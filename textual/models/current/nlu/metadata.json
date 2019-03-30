@@ -56,7 +56,7 @@
         },
         {
             "name": "ner_synonyms",
-            "synonyms_file": "entity_synonyms.json",
+            "synonyms_file": null,
             "class": "rasa_nlu.extractors.entity_synonyms.EntitySynonymMapper"
         },
         {
@@ -70,7 +70,7 @@
             ],
             "url": "http://localhost:8000",
             "locale": null,
-            "timezone": "Etc/GMT",
+            "timezone": "American/New_York",
             "name": "ner_extended_duckling_http",
             "class": "extended_duckling_http_extractor.ExtendedDucklingHTTPExtractor"
         },
@@ -97,6 +97,6 @@
         }
     ],
     "training_data": "training_data.json",
-    "trained_at": "20190122-005812",
-    "rasa_nlu_version": "0.13.7"
+    "trained_at": "20190222-133738",
+    "rasa_nlu_version": "0.14.3"
 }

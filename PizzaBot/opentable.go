@@ -31,13 +31,13 @@ func Query(id string, datetime time.Time, partySize string) (OpenTableResult, er
 	searchHour := datetime.Hour()
 	searchMinute := datetime.Minute()
 
-	baseUrl := "https://www.opentable.com/restaurant/profile/"
-	paramUrl := fmt.Sprintf("%s%s/reserve?restref=%s&datetime=%d-%d-%dT%d:%d&covers=%s",
+	baseUrl := "https://www.opentable.com/restref/client/"
+	paramUrl := fmt.Sprintf("%s?rid=%s&restref=%s&datetime=%d-%02d-%02dT%02d:%02d&partysize=%s",
 		baseUrl, id, id, searchYear, searchMonth, searchDay, searchHour, searchMinute, partySize)
 
-	log.Println(paramUrl)
 	res, err := http.Get(paramUrl)
 
+	fmt.Println(paramUrl)
 	if err != nil {
 		return result, err
 	}

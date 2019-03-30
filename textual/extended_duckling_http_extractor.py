@@ -16,7 +16,7 @@ from typing import Text
 
 from rasa_nlu.config import RasaNLUModelConfig
 from rasa_nlu.extractors import EntityExtractor
-from rasa_nlu.extractors.duckling_extractor import (
+from rasa_nlu.extractors.duckling_http_extractor import (
     filter_irrelevant_matches, convert_duckling_format_to_rasa)
 from rasa_nlu.model import Metadata
 from rasa_nlu.training_data import Message

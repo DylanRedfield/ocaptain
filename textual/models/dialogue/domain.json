@@ -42,6 +42,9 @@
     "prev_action_restart",
     "prev_action_default_fallback",
     "prev_action_deactivate_form",
+    "prev_action_revert_fallback_events",
+    "prev_action_default_ask_affirmation",
+    "prev_action_default_ask_rephrase",
     "prev_action_blank_checkpoint_with_several_alternative_times_to_select",
     "prev_action_clear_temp_times_slot",
     "prev_action_set_temp_times_slot_from_potential_hour",
@@ -54,9 +57,11 @@
     "prev_action_brancher_to_save_new_reservation",
     "prev_action_blank_for_slots",
     "prev_action_clear_size_slot",
+    "prev_action_clear_name_slot",
     "prev_utter_unhappy_doing_no_number_recognized",
     "prev_action_test_bed",
     "prev_action_clear_potential_times_slot",
+    "prev_action_clear_scheduled_time_slot",
     "prev_action_set_potential_hour_slot",
     "prev_action_clear_potential_hour_slot",
     "prev_utter_ask_for_number_on_reservation_size",
@@ -123,7 +128,7 @@
     "prev_action_checkpoint_with_size_and_no_alternatives",
     "prev_action_checkpoint_with_size_and_single_potential_times_to_fill_scheduled_time",
     "prev_action_checkpoint_with_several_alternative_times_to_select",
-    "prev_action_utter_post_reservation_AND_ask_for_next_general_request",
+    "prev_action_utter_post_reservation_save_AND_ask_for_next_general_request",
     "prev_utter_ask_for_next_general_request"
   ]
 }
