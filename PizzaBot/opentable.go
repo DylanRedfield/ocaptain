@@ -31,7 +31,7 @@ func Query(id string, datetime time.Time, partySize string) (OpenTableResult, er
 	searchHour := datetime.Hour()
 	searchMinute := datetime.Minute()
 
-	baseUrl := "https://www.opentable.com/restref/client/"
+	/*baseUrl := "https://www.opentable.com/restref/client/"
 	paramUrl := fmt.Sprintf("%s?rid=%s&restref=%s&datetime=%d-%02d-%02dT%02d:%02d&partysize=%s",
 		baseUrl, id, id, searchYear, searchMonth, searchDay, searchHour, searchMinute, partySize)
 	res, err := http.Get(paramUrl)
@@ -87,7 +87,9 @@ func Query(id string, datetime time.Time, partySize string) (OpenTableResult, er
 			}
 		}
 
-	})
+	})*/
+
+	result.Results = append(result.Results, datetime)
 
 	return result, nil
 }
