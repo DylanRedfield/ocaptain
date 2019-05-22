@@ -58,7 +58,7 @@ func main() {
 }
 
 func test() {
-	datetime := time.Date(2018, 11, 19, 14, 0, 0, 0, time.UTC)
+	datetime := time.Date(2018, 11, 19, 14, 0, 0, 0, time.Local)
 	result, err := Query("24712", datetime, "3")
 
 	if err != nil {

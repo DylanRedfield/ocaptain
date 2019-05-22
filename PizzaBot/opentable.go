@@ -1,12 +1,12 @@
 package main
 
 import (
-	"fmt"
-	"github.com/PuerkitoBio/goquery"
-	"log"
-	"net/http"
-	"regexp"
-	"strconv"
+	/*	"fmt"
+		"github.com/PuerkitoBio/goquery"
+		"log"
+		"net/http"
+		"regexp"
+		"strconv"*/
 	"time"
 )
 
