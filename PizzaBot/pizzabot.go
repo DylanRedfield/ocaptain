@@ -38,6 +38,8 @@ func (bot *Bot) HandleAction(req *RasaRequest) (*RasaResponse, error) {
 		bot.ActionClearPotentialTimesSlot(req, resp)
 	case "action_clear_temp_ordinal_slot":
 		bot.ActionClearTempOrdinalSlot(req, resp)
+	case "action_clear_temp_times_slot":
+		bot.ActionClearTempTimeSlot(req, resp)
 	case "action_clear_scheduled_time_slot":
 		bot.ActionClearScheduledTimeSlot(req, resp)
 	case "action_test_bed":
@@ -109,6 +111,7 @@ func (bot *Bot) ActionTestBed(req *RasaRequest, resp *RasaResponse) {
 }
 
 func (bot *Bot) ActionBrancherReservationSlotFillingBase(req *RasaRequest, resp *RasaResponse) {
+  log.Println("base")
 	slots := req.Tracker.Slots
 
 	size := slots["size"]
@@ -123,15 +126,14 @@ func (bot *Bot) ActionBrancherReservationSlotFillingBase(req *RasaRequest, resp 
 	event := Event{}
 	//  zero := reflect.Zero(reflect.TypeOf(size))
 
+	event.Event = FOLLOWUP
 	if reflect.TypeOf(size) == nil {
-		event.Event = FOLLOWUP
 		if reflect.TypeOf(potentialSize) == nil {
 			event.Name = "utter_ask_for_number_on_reservation_size"
 		} else {
 			event.Name = "action_brancher_validate_reservation_potential_size"
 		}
 	} else if reflect.TypeOf(scheduledTime) == nil {
-		event.Event = FOLLOWUP
 
 		if reflect.TypeOf(potentialTimes) == nil {
 
@@ -144,7 +146,7 @@ func (bot *Bot) ActionBrancherReservationSlotFillingBase(req *RasaRequest, resp 
 			event.Name = "action_brancher_with_size_and_single_potential_times_query_reservation_platform"
 		}
 	} else if reflect.TypeOf(name) == nil {
-		event.Name = "utter_ask_for_name"
+		event.Name = "utter_ask_for_name_on_reservation"
 	} else {
 		event.Name = "action_brancher_to_save_new_reservation"
 	}
@@ -278,7 +280,7 @@ func (bot *Bot) ActionBrancherValidateTempTimeToSelectAlternativeTimeToSetSchedu
 			event = Event{Event: FOLLOWUP, Name: "action_blank_alert_scheduled_time_set"}
 		} else {
 			if hourMatches == 0 {
-				event.Name = "action_alert_employee"
+				event.Name = "action_blank_alert_employee"
 			} else if hourMatches == 1 {
 				event.Event = SLOT
 				event.Name = "scheduled_time"
@@ -502,9 +504,9 @@ func (bot *Bot) ActionBrancherWithSizeAndSinglePotentialTimesQueryReservationPla
 				}
 
 				if found {
-					event.Name = "action_alert_scheduled_time_slot_set"
+					event.Name = "action_blank_alert_scheduled_time_slot_set"
 				} else {
-					event.Name = "action_alert_alternative_times_slot_set"
+					event.Name = "action_blank_alert_alternative_times_slot_set"
 				}
 			}
 		}
@@ -708,7 +710,8 @@ func (bot *Bot) ActionBrancherWithTempTimesValidateSingleTempTimes(req *RasaRequ
 		event := Event{Event: FOLLOWUP, Name: "utter_ask_for_time_for_potential_reservation"}
 		resp.Events = append(resp.Events, event)
 	} else {
-		time_map := rawTempTimes.([]map[string]interface{})[0]
+		time_map := rawTempTimes.([]interface{})[0]
+
 		var rasaTime RasaTime
 		err := mapstructure.Decode(time_map, &rasaTime)
 
@@ -1010,6 +1013,10 @@ func (bot *Bot) ActionClearPotentialSizeSlot(req *RasaRequest, resp *RasaRespons
 	resp.Events = append(resp.Events, nextAction)
 }
 
+func (bot *Bot) ActionClearTempTimeSlot(req *RasaRequest, resp *RasaResponse) {
+	nextAction := Event{Event: SLOT, Name: "temp_times"}
+	resp.Events = append(resp.Events, nextAction)
+}
 func (bot *Bot) ActionClearTempOrdinalSlot(req *RasaRequest, resp *RasaResponse) {
 	nextAction := Event{Event: SLOT, Name: "temp_ordinal"}
 	resp.Events = append(resp.Events, nextAction)
