@@ -1,29 +1,8 @@
 {
   "action_fingerprints": {
-    "action_brancher_with_temp_times_to_determine_next_from_times_length": {
-      "slots": []
-    },
     "action_listen": {
       "slots": [
         "name"
-      ]
-    },
-    "action_brancher_to_save_new_reservation": {
-      "slots": []
-    },
-    "action_clear_name_slot": {
-      "slots": [
-        "name"
-      ]
-    },
-    "action_clear_scheduled_time_slot": {
-      "slots": [
-        "scheduled_time"
-      ]
-    },
-    "action_clear_size_slot": {
-      "slots": [
-        "size"
       ]
     },
     "action_clear_alternative_times_slot": {
@@ -37,9 +16,6 @@
       ]
     },
     "action_blank_checkpoint_with_size_and_no_alternatives": {
-      "slots": []
-    },
-    "action_blank_checkpoint_to_fill_temp_times": {
       "slots": []
     },
     "action_set_potential_hour_slot": {
@@ -57,10 +33,7 @@
         "potential_hour"
       ]
     },
-    "action_brancher_validate_with_temp_times_and_time_entity_to_modify_temp_time_from_day_or_period_grain": {
-      "slots": []
-    },
-    "action_need_employee": {
+    "action_brancher_with_temp_times_to_determine_next_from_times_length": {
       "slots": []
     },
     "action_set_temp_times_slot": {
@@ -68,38 +41,22 @@
         "temp_times"
       ]
     },
-    "action_brancher_with_temp_times_validate_single_temp_times": {
-      "slots": []
-    },
     "action_brancher_reservation_slot_filling_base": {
       "slots": []
-    },
-    "action_blank_for_slots": {
-      "slots": [
-        "business_id",
-        "recipient_contact",
-        "recipient_id"
-      ]
-    },
-    "action_blank_alert_scheduled_time_slot_set": {
-      "slots": [
-        "scheduled_time"
-      ]
-    },
-    "action_set_scheduled_time_slot_from_close_alternative": {
-      "slots": [
-        "scheduled_time"
-      ]
     },
     "action_brancher_with_size_and_single_potential_times_query_reservation_platform": {
       "slots": []
     },
-    "action_set_scheduled_time_from_single_alternative": {
-      "slots": [
-        "scheduled_time"
-      ]
-    },
     "action_blank_checkpoint_to_fill_potential_size": {
+      "slots": []
+    },
+    "action_blank_checkpoint_with_several_alternative_times_to_select": {
+      "slots": []
+    },
+    "action_blank_checkpoint_to_fill_temp_times": {
+      "slots": []
+    },
+    "action_brancher_validate_with_temp_times_and_time_entity_to_modify_temp_time_from_day_or_period_grain": {
       "slots": []
     },
     "action_set_temp_ordinal_slot": {
@@ -110,22 +67,10 @@
     "action_brancher_with_alternative_times_and_ordinal_validate_ordinal_to_select_alternative_time": {
       "slots": []
     },
-    "action_blank_alert_potential_times_slot_set": {
-      "slots": [
-        "potential_times"
-      ]
+    "action_need_employee": {
+      "slots": []
     },
-    "action_set_potential_size_slot": {
-      "slots": [
-        "potential_size"
-      ]
-    },
-    "action_blank_alert_alternative_times_slot_set": {
-      "slots": [
-        "alternative_times"
-      ]
-    },
-    "action_brancher_with_potential_times_and_alternative_times_to_fill_scheduled_time": {
+    "action_brancher_to_save_new_reservation": {
       "slots": []
     },
     "action_brancher_validate_reservation_potential_size": {
@@ -138,15 +83,45 @@
         "potential_size"
       ]
     },
-    "action_clear_temp_times_slot": {
+    "action_set_scheduled_time_from_single_alternative": {
       "slots": [
-        "temp_times"
+        "scheduled_time"
       ]
     },
-    "action_brancher_validate_temp_time_to_select_alternative_time_to_set_scheduled_time_slot": {
+    "action_brancher_with_temp_times_validate_single_temp_times": {
       "slots": []
     },
     "action_need_employee_because_error_saving": {
+      "slots": []
+    },
+    "action_blank_alert_potential_times_slot_set": {
+      "slots": [
+        "potential_times"
+      ]
+    },
+    "action_blank_for_slots": {
+      "slots": [
+        "business_id",
+        "recipient_contact",
+        "recipient_id"
+      ]
+    },
+    "action_set_potential_size_slot": {
+      "slots": [
+        "potential_size"
+      ]
+    },
+    "action_blank_alert_scheduled_time_slot_set": {
+      "slots": [
+        "scheduled_time"
+      ]
+    },
+    "action_blank_alert_alternative_times_slot_set": {
+      "slots": [
+        "alternative_times"
+      ]
+    },
+    "action_brancher_with_potential_times_and_alternative_times_to_fill_scheduled_time": {
       "slots": []
     },
     "action_blank_alert_temp_times_slot_set": {
@@ -154,11 +129,22 @@
         "temp_times"
       ]
     },
-    "action_blank_checkpoint_with_several_alternative_times_to_select": {
+    "action_set_scheduled_time_slot_from_close_alternative": {
+      "slots": [
+        "scheduled_time"
+      ]
+    },
+    "action_clear_temp_times_slot": {
+      "slots": [
+        "temp_times"
+      ]
+    },
+    "action_brancher_validate_temp_time_to_select_alternative_time_to_set_scheduled_time_slot": {
       "slots": []
     }
   },
-  "python": "3.6.7",
+  "rasa_core": "0.12.1",
+  "python": "3.6.5",
   "max_histories": [
     5,
     5,
@@ -170,8 +156,5 @@
     "rasa_core.policies.memoization.AugmentedMemoizationPolicy",
     "rasa_core.policies.fallback.FallbackPolicy"
   ],
-  "trained_at": "20190222-134330",
-  "rasa_core": "0.13.2",
-  "tensorflow": "1.12.0",
-  "sklearn": "0.20.2"
+  "trained_at": "20190523-233020"
 }
