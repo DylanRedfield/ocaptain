@@ -90,6 +90,8 @@ func (bot *Bot) HandleAction(req *RasaRequest) (*RasaResponse, error) {
 		bot.ActionSetTempOrdinalSlot(req, resp)
 	case "action_utter_post_reservation_save_AND_ask_for_next_general_request":
 		bot.ActionUtterPostReservationAndAskForNextGeneralRequest(req, resp)
+	case "action_utter_answer_time":
+		bot.ActionUtterAnswerTime(req, resp)
 
 	default:
 		log.Println(action)
@@ -1154,6 +1156,41 @@ func (bot *Bot) ActionBrancherDetermineResponseToCheckIsCurrentlyOpen(req *RasaR
 		event := Event{Event: FOLLOWUP, Name: "action_utter_doing_deny_currently_open"}
 		resp.Events = append(resp.Events, event)
 
+	}
+
+}
+
+func (bot *Bot) ActionUtterAnswerTime(req *RasaRequest, resp *RasaResponse) {
+	// “ We are currently [open | closed] and will be [closed | open](requested) [from xx-xx](if requested is open that day)”
+	// Thus I need to see if they are currently open, check if there is an entiy (and if not se the day to today) and
+	// check if they are open on that day then print in the above format
+	businessId := req.Tracker.Slots["business_id"].(string)
+	business, err := bot.getBusinessFromId(businessId)
+
+	if err != nil {
+		event := Event{Event: FOLLOWUP, Name: "action_need_employee"}
+		resp.Events = append(resp.Events, event)
+	}
+
+	currentlyOpen := business.IsOpenOpenOnDay(time.Now())
+
+	// Check for entities
+	var entity Entity
+	for _, v := range req.Tracker.LatestMessage.Entities {
+		if v.Entity == "time" {
+			entity = v
+			break
+		}
+	}
+
+	if entity.Entity == "time" {
+		// time entity was input
+	}
+
+	t, err := time.Parse(time.RFC3339, entity.Value.(string))
+
+	if err != nil {
+		log.Println(err)
 	}
 
 }
