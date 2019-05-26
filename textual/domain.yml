@@ -86,6 +86,7 @@ actions:
 - action_checkpoint_with_size_and_single_potential_times_to_fill_scheduled_time
 - action_checkpoint_with_several_alternative_times_to_select
 - action_utter_post_reservation_save_AND_ask_for_next_general_request
+- action_utter_answer_time
 - utter_ask_for_next_general_request
 
 config:
@@ -104,33 +105,31 @@ forms: []
 intents:
 - make_reservation
 - inform
-- time_open
-- is_open
 - affirm
 - goodbye
 - greet: {triggers: utter_doing_greet}
 - thank
 - deny
-- time_close
 - menu_item
 - need_reservation
 - allow_reservations
 - order
 - restart
 - busy
-- question_serve_alcohol {triggers: utter_answer_serve_alcohol}
-- question_dress_code {triggers: utter_answer_dress_code}
-- question_gluten_free {triggers: utter_answer_gluten_free}
-- question_vegetarian {triggers: question_answer_vegetarian}
-- question_vegan {triggers: utter_answer_vegan}
-- question_kosher {triggers: utter_answer_kosher}
-- question_large_group {triggers: utter_answer_large_group}
-- question_kids_menu {triggers: utter_answer_answer_kids_menu}
-- question_bring_your_own_alcohol {triggers: utter_answer_bring_your_own_alcohol}
-- question_parking {triggers: utter_answer_parking}
-- question_handicap_accessible {triggers: utter_answer_handicap_accessible}
-- question_corking_fee {triggers: utter_answer_corking_fee}
-- question_polar_reservation {triggers: utter_answer_polar_reservation}
+- question_time
+- question_serve_alcohol: {triggers: utter_answer_serve_alcohol}
+- question_dress_code: {triggers: utter_answer_dress_code}
+- question_gluten_free: {triggers: utter_answer_gluten_free}
+- question_vegetarian: {triggers: question_answer_vegetarian}
+- question_vegan: {triggers: utter_answer_vegan}
+- question_kosher: {triggers: utter_answer_kosher}
+- question_large_group: {triggers: utter_answer_large_group}
+- question_kids_menu: {triggers: utter_answer_answer_kids_menu}
+- question_bring_your_own_alcohol: {triggers: utter_answer_bring_your_own_alcohol}
+- question_parking: {triggers: utter_answer_parking}
+- question_handicap_accessible: {triggers: utter_answer_handicap_accessible}
+- question_corking_fee: {triggers: utter_answer_corking_fee}
+- question_polar_reservation: {triggers: utter_answer_polar_reservation}
 
 slots:
   business_id:
