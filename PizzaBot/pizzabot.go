@@ -111,7 +111,7 @@ func (bot *Bot) ActionTestBed(req *RasaRequest, resp *RasaResponse) {
 }
 
 func (bot *Bot) ActionBrancherReservationSlotFillingBase(req *RasaRequest, resp *RasaResponse) {
-  log.Println("base")
+	log.Println("base")
 	slots := req.Tracker.Slots
 
 	size := slots["size"]
@@ -1211,7 +1211,7 @@ func (bot *Bot) ActionCheckIsOpenOnDay(req *RasaRequest, resp *RasaResponse) {
 	resp.Responses = append(resp.Responses, Response{Text: reply})
 }
 
-func (bot Bot) saveOrder(req *RasaRequest, order *Order) {
+func (bot *Bot) saveOrder(req *RasaRequest, order *Order) {
 	businessId := req.Tracker.Slots["business_id"].(string)
 	recipientId := req.Tracker.Slots["recipient_id"].(string)
 
