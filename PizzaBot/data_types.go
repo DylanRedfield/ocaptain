@@ -106,19 +106,23 @@ type Order struct {
 }
 
 type Business struct {
-	Id                    string               `firestore:"-"`
-	Approved              bool                 `firestore:"approved"`
-	Password              string               `firestore:"password"`
-	PhoneNumber           string               `firestore:"phoneNumber"`
-	Hours                 map[string]OpenClose `firestore:"hours"`
-	ReservationPlatform   string               `firestore:"reservationPlatform"`
-	ReservationPlatformId string               `firestore:"reservationPlatformId"`
+	Id                    string            `firestore:"-"`
+	Approved              bool              `firestore:"approved"`
+	Password              string            `firestore:"password"`
+	PhoneNumber           string            `firestore:"phoneNumber"`
+	Hours                 map[int]OpenClose `firestore:"hours"`
+	ReservationPlatform   string            `firestore:"reservationPlatform"`
+	ReservationPlatformId string            `firestore:"reservationPlatformId"`
 }
 
 type OpenClose struct {
-	IsOpen    bool  `firestore:"isOpen"`
-	OpenTime  int64 `firestore:"openTime"`
-	CloseTime int64 `firestore:"closeTime"`
+	IsOpen bool  `firestore:"isOpen"`
+	Open   int64 `firestore:"open"`
+	Close  int64 `firestore:"close"`
+}
+
+func (openClose OpenClose) ClosePastMidnight() bool {
+	return openClose.Close < openClose.Open
 }
 
 type Reservation struct {
@@ -135,9 +139,29 @@ func (business Business) TimeClose(day string) int64 {
 	return business.Hours[day].CloseTime
 }
 
-func (business Business) IsOpen() bool {
-	// TODO implement
-	return true
+func (business *Business) IsCurrentlyOpen() bool {
+}
+
+func (business *Business) IsOpenOnDay(day string) bool {
+}
+
+func (business *Business) IsOpenOnDateTime(dateTime string) bool {
+	dayOfWeek := int(time.Now().Weekday())
+
+	openClose := business.Hours[int]
+	isOpen := openClose.IsOpen
+
+	if !isOpen {
+		return false
+	}
+
+	currentTimeInt := time.Now().Hour*100 + time.Now().Minute
+
+	if openClose.ClosePastMidnight() {
+		return currentTimeInt >= openClose.Open || currentTimeInt <= openClose.Close
+	} else {
+		return openClose.Open <= currentTimeInt <= openClose.Close
+	}
 }
 
 type Tracker struct {
