@@ -140,7 +140,7 @@ func (business Business) TimeClose(day string) int64 {
 	return business.Hours[day].CloseTime
 }
 
-func (business *Business) IsOpenOnDay(day time.Time) bool {
+func (business *Business) GetOpenCloseOnDay(day time.Time) OpenClose {
 	dayOfWeek := int(day.Weekday())
 
 	dateString := fmt.Sprinf("%d-%d-%d", day.Year(), day.Month(), day.Day())
@@ -151,6 +151,23 @@ func (business *Business) IsOpenOnDay(day time.Time) bool {
 	} else {
 		openClose = business.Hours[dayOfWeek]
 	}
+
+	return openClose
+
+}
+
+// Will return error is the business is not open that day
+func (business *Business) TimeCloseOnDayString(day time.Time) string, err{
+	openClose := business.GetOpenCloseOnDay(day)
+
+}
+
+func (business *Business) TimeOpenOnDayString(day time.Time) string {
+	dateString := fmt.Sprinf("%d-%d-%d", day.Year(), day.Month(), day.Day())
+}
+
+func (business *Business) IsOpenOnDay(day time.Time) bool {
+	openClose := business.GetOpenCloseOnDay(day)
 	isOpen := openClose.IsOpen
 
 	if !isOpen {

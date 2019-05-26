@@ -1170,11 +1170,10 @@ func (bot *Bot) ActionUtterAnswerTime(req *RasaRequest, resp *RasaResponse) {
 	if err != nil {
 		event := Event{Event: FOLLOWUP, Name: "action_need_employee"}
 		resp.Events = append(resp.Events, event)
+		return
 	}
 
-	currentlyOpen := business.IsOpenOpenOnDay(time.Now())
-
-	// Check for entities
+	// First logic to determine if the customer is asking about today by checking for entities and if that entity is today
 	var entity Entity
 	for _, v := range req.Tracker.LatestMessage.Entities {
 		if v.Entity == "time" {
@@ -1183,14 +1182,32 @@ func (bot *Bot) ActionUtterAnswerTime(req *RasaRequest, resp *RasaResponse) {
 		}
 	}
 
+	requestTime := time.Now()
+	requestedToday := true
 	if entity.Entity == "time" {
 		// time entity was input
+		entityTime, err = time.Parse(time.RFC3339, entity.Value.(string))
+
+		if err != nil {
+			event := Event{Event: FOLLOWUP, Name: "action_need_employee"}
+			resp.Events = append(resp.Events, event)
+			return
+		}
+
+		if entityTime.Year() != time.Now().Year() || entityTime.Month() != time.Now().Month() != entityTime.Day() == time.Now().Day() {
+			// Time is not today
+			requestTime = entityTime
+			requestedToday := false
+		}
 	}
 
-	t, err := time.Parse(time.RFC3339, entity.Value.(string))
+	if requestedToday {
+		isOpen := business.IsOpenOnDay(requestTime)
 
-	if err != nil {
-		log.Println(err)
+		if isOpen {
+			// get the open close strings to print
+		}
+
 	}
 
 }
