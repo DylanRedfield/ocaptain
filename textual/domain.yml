@@ -116,7 +116,7 @@ intents:
 - order
 - restart
 - busy
-- question_time
+- question_time: {triggers: action_utter_answer_time}
 - question_serve_alcohol: {triggers: utter_answer_serve_alcohol}
 - question_dress_code: {triggers: utter_answer_dress_code}
 - question_gluten_free: {triggers: utter_answer_gluten_free}
