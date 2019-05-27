@@ -1093,73 +1093,6 @@ func (bot *Bot) ActionSetSizeSlot(req *RasaRequest, resp *RasaResponse) {
 	resp.Events = append(resp.Events, nextAction)
 }
 
-func (bot *Bot) ActionCheckTimeClose(req *RasaRequest, resp *RasaResponse) {
-	// Need to check the database to see if business is closed or not
-	// Then modifies the RasaResponse with the correct RasaResponse
-
-	businessId := req.Tracker.Slots["business_id"].(string)
-	business, err := bot.getBusinessFromId(businessId)
-
-	if err != nil {
-		log.Println(err)
-	}
-
-	// TODO make the response dynamic
-	reply := fmt.Sprintf("We close at %d", business.TimeClose(""))
-	resp.Responses = append(resp.Responses, Response{Text: reply})
-}
-
-func (bot *Bot) ActionCheckTimeCloseOnDay(req *RasaRequest, resp *RasaResponse) {
-	// Need to check the database to see if business is closed or not
-	// Then modifies the RasaResponse with the correct RasaResponse
-	businessId := req.Tracker.Slots["business_id"].(string)
-	business, err := bot.getBusinessFromId(businessId)
-
-	if err != nil {
-		log.Println(err)
-	}
-
-	var entity Entity
-	for _, v := range req.Tracker.LatestMessage.Entities {
-		if v.Entity == "time" {
-			entity = v
-			break
-		}
-	}
-
-	t, err := time.Parse(time.RFC3339, entity.Value.(string))
-
-	if err != nil {
-		log.Println(err)
-	}
-
-	// TODO make the response dynamic
-	reply := fmt.Sprintf("On %d/%d we close at %d", t.Month(), t.Day(), business.TimeClose(""))
-	resp.Responses = append(resp.Responses, Response{Text: reply})
-}
-
-func (bot *Bot) ActionBrancherDetermineResponseToCheckIsCurrentlyOpen(req *RasaRequest, resp *RasaResponse) {
-	// TODO check if they also input a time
-
-	businessId := req.Tracker.Slots["business_id"].(string)
-	business, err := bot.getBusinessFromId(businessId)
-
-	if err != nil {
-		event := Event{Event: FOLLOWUP, Name: "action_need_employee"}
-		resp.Events = append(resp.Events, event)
-	}
-
-	if business.IsOpen() {
-		event := Event{Event: FOLLOWUP, Name: "action_utter_doing_affirm_currently_open"}
-		resp.Events = append(resp.Events, event)
-	} else {
-		event := Event{Event: FOLLOWUP, Name: "action_utter_doing_deny_currently_open"}
-		resp.Events = append(resp.Events, event)
-
-	}
-
-}
-
 func (bot *Bot) ActionUtterAnswerTime(req *RasaRequest, resp *RasaResponse) {
 	// “ We are currently [open | closed] and will be [closed | open](requested) [from xx-xx](if requested is open that day)”
 	// Thus I need to see if they are currently open, check if there is an entiy (and if not se the day to today) and
@@ -1186,7 +1119,7 @@ func (bot *Bot) ActionUtterAnswerTime(req *RasaRequest, resp *RasaResponse) {
 	requestedToday := true
 	if entity.Entity == "time" {
 		// time entity was input
-		entityTime, err = time.Parse(time.RFC3339, entity.Value.(string))
+		entityTime, err := time.Parse(time.RFC3339, entity.Value.(string))
 
 		if err != nil {
 			event := Event{Event: FOLLOWUP, Name: "action_need_employee"}
@@ -1194,75 +1127,82 @@ func (bot *Bot) ActionUtterAnswerTime(req *RasaRequest, resp *RasaResponse) {
 			return
 		}
 
-		if entityTime.Year() != time.Now().Year() || entityTime.Month() != time.Now().Month() != entityTime.Day() == time.Now().Day() {
+		if entityTime.Year() != time.Now().Year() || entityTime.Month() != time.Now().Month() || entityTime.Day() == time.Now().Day() {
 			// Time is not today
 			requestTime = entityTime
 			requestedToday := false
 		}
 	}
 
+	isOpen := business.IsOpenOnDay(requestTime)
 	if requestedToday {
-		isOpen := business.IsOpenOnDay(requestTime)
 
 		if isOpen {
 			// get the open close strings to print
+			openString, err := business.TimeOpenOnDayString(requestTime)
+			closeString, err2 := business.TimeCloseOnDayString(requestTime)
+
+			if err != nil || err2 != nil {
+				event := Event{Event: FOLLOWUP, Name: "action_need_employee"}
+				resp.Events = append(resp.Events, event)
+				return
+			}
+
+			reply := fmt.Sprintf("We are currently open and will be %s - %s", openString, closeString)
+			resp.Responses = append(resp.Responses, Response{Text: reply})
+			return
+		} else {
+			// Find next available open day and times
+
+			nextOpenDay := business.GetNextOpenDayAfter(requestTime)
+
+			openString, err := business.TimeOpenOnDayString(nextOpenDay)
+			closeString, err2 := business.TimeCloseOnDayString(nextOpenDay)
+
+			if err != nil || err2 != nil {
+				event := Event{Event: FOLLOWUP, Name: "action_need_employee"}
+				resp.Events = append(resp.Events, event)
+				return
+			}
+
+			dayOfWeek := nextOpenDay.Weekday().String()
+
+			// We are currently closed but will be open Thursday (5/25) from 8:00am - 8:00pm
+			reply := fmt.Sprintf("We are currently closed but will be open %s (%d/%d) from %s - %s",
+				dayOfWeek, openString, closeString)
+
+			resp.Responses = append(resp.Responses, Response{Text: reply})
+			return
+
 		}
 
-	}
-
-}
-
-// No longer in use
-func (bot *Bot) ActionCheckIsOpen(req *RasaRequest, resp *RasaResponse) {
-	businessId := req.Tracker.Slots["business_id"].(string)
-	business, err := bot.getBusinessFromId(businessId)
-
-	if err != nil {
-		log.Println(err)
-	}
-
-	// TODO make dynamic
-	reply := ""
-	if business.IsOpen() {
-		reply = "Yes, we're open"
 	} else {
-		reply = "Sorry, no we're not"
-	}
-	resp.Responses = append(resp.Responses, Response{Text: reply})
-}
+		if isOpen {
+			openString, err := business.TimeOpenOnDayString(requestTime)
+			closeString, err2 := business.TimeCloseOnDayString(requestTime)
 
-func (bot *Bot) ActionCheckIsOpenOnDay(req *RasaRequest, resp *RasaResponse) {
-	businessId := req.Tracker.Slots["business_id"].(string)
-	business, err := bot.getBusinessFromId(businessId)
+			if err != nil || err2 != nil {
+				event := Event{Event: FOLLOWUP, Name: "action_need_employee"}
+				resp.Events = append(resp.Events, event)
+				return
+			}
 
-	if err != nil {
-		log.Println(err)
-	}
+			// "On Thursday (5/25) we'll be open from 8:00am - 8:00pm"
+			reply := fmt.Sprintf("On %s (%d/%d) we'll be open from %s - %s", dayOfWeek, openString, closeString)
 
-	var entity Entity
-	for _, v := range req.Tracker.LatestMessage.Entities {
-		if v.Entity == "time" {
-			entity = v
-			break
+			resp.Responses = append(resp.Responses, Response{Text: reply})
+			return
+
+		} else {
+			// "Sorry we'll be closed on Thursday (5/25)"
+			reply := fmt.Sprintf("Sorry we'll be closed on %s (%d/%d)", dayOfWeek, openString, closeString)
+
+			resp.Responses = append(resp.Responses, Response{Text: reply})
+			return
+
 		}
 	}
 
-	t, err := time.Parse(time.RFC3339, entity.Value.(string))
-
-	if err != nil {
-		log.Println(err)
-	}
-
-	// TODO make dynamic
-	reply := ""
-	if business.IsOpen() {
-		reply = "Yes, we're open"
-	} else {
-		reply = "Sorry, no we're not"
-	}
-
-	reply = fmt.Sprintf("%s on %d/%d", reply, t.Month(), t.Day())
-	resp.Responses = append(resp.Responses, Response{Text: reply})
 }
 
 func (bot *Bot) saveOrder(req *RasaRequest, order *Order) {

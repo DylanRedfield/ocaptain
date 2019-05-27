@@ -3,9 +3,12 @@ package main
 import (
 	"cloud.google.com/go/firestore"
 	"context"
+	"errors"
 	firebase "firebase.google.com/go"
+	"fmt"
 	"google.golang.org/api/option"
 	"log"
+	"time"
 )
 
 type Bot struct {
@@ -122,7 +125,7 @@ type OpenClose struct {
 	Close  int64 `firestore:"close"`
 }
 
-func (openClose OpenClose) ClosePastMidnight() bool {
+func (openClose *OpenClose) ClosePastMidnight() bool {
 	return openClose.Close < openClose.Open
 }
 
@@ -136,14 +139,10 @@ type Reservation struct {
 	IsVisible     bool   `firestore:"visible"`
 }
 
-func (business Business) TimeClose(day string) int64 {
-	return business.Hours[day].CloseTime
-}
-
 func (business *Business) GetOpenCloseOnDay(day time.Time) OpenClose {
 	dayOfWeek := int(day.Weekday())
 
-	dateString := fmt.Sprinf("%d-%d-%d", day.Year(), day.Month(), day.Day())
+	dateString := fmt.Sprintf("%d-%d-%d", day.Year(), day.Month(), day.Day())
 
 	openClose := OpenClose{}
 	if val, exists := business.HoursExcpetions[dateString]; exists {
@@ -156,14 +155,65 @@ func (business *Business) GetOpenCloseOnDay(day time.Time) OpenClose {
 
 }
 
-// Will return error is the business is not open that day
-func (business *Business) TimeCloseOnDayString(day time.Time) string, err{
-	openClose := business.GetOpenCloseOnDay(day)
+func (business *Business) GetNextOpenDayAfter(day time.Time) time.Time {
+	// Find the next available open time by add a day at a time in a while loop until the business is open
+
+	// First check if the current day is the next open day by checking if the requested time is less than the open time
+
+	requestedTimeInt := int64(day.Hour()*100 + day.Minute())
+
+	if requestedTimeInt < business.GetOpenCloseOnDay(day).Open {
+		return day
+	}
+
+	day = day.Add(time.Hour * 24)
+
+	for !business.GetOpenCloseOnDay(day).IsOpen {
+		day = day.Add(time.Hour * 24)
+	}
+
+	return day
+}
+
+func formatIntTimeTwelveHourString(inputTime int64) string {
+	period := "am"
+
+	if inputTime >= 1200 {
+		period = "pm"
+		inputTime = inputTime - 1200
+	}
+
+	if inputTime == 0 {
+		inputTime = inputTime + 1200
+	}
+
+	minutes := inputTime % 100
+	hour := inputTime / 100
+
+	return fmt.Sprintf("%d:%02d %s", hour, minutes, period)
 
 }
 
-func (business *Business) TimeOpenOnDayString(day time.Time) string {
-	dateString := fmt.Sprinf("%d-%d-%d", day.Year(), day.Month(), day.Day())
+// Will return error is the business is not open that day
+func (business *Business) TimeCloseOnDayString(day time.Time) (string, error) {
+	openClose := business.GetOpenCloseOnDay(day)
+
+	if !openClose.IsOpen {
+		return "", errors.New("Restaurant closed")
+	}
+
+	return formatIntTimeTwelveHourString(openClose.Close), nil
+}
+
+func (business *Business) TimeOpenOnDayString(day time.Time) (string, error) {
+	openClose := business.GetOpenCloseOnDay(day)
+
+	if !openClose.IsOpen {
+		return "", errors.New("Restaurant closed")
+	}
+
+	return formatIntTimeTwelveHourString(openClose.Open), nil
+
 }
 
 func (business *Business) IsOpenOnDay(day time.Time) bool {
@@ -174,17 +224,14 @@ func (business *Business) IsOpenOnDay(day time.Time) bool {
 		return false
 	}
 
-	currentTimeInt := day.Hour()*100 + day.Minute()
+	currentTimeInt := int64(day.Hour()*100 + day.Minute())
 
 	if openClose.ClosePastMidnight() {
 		return currentTimeInt >= openClose.Open || currentTimeInt <= openClose.Close
 	} else {
-		return openClose.Open <= currentTimeInt <= openClose.Close
+		return openClose.Open <= currentTimeInt && currentTimeInt <= openClose.Close
 	}
 
-}
-
-func (business *Business) IsOpenOnDateTime(dateTime string) bool {
 }
 
 type Tracker struct {
