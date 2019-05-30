@@ -87,6 +87,20 @@ actions:
 - action_checkpoint_with_several_alternative_times_to_select
 - action_utter_post_reservation_save_AND_ask_for_next_general_request
 - utter_ask_for_next_general_request
+- action_utter_answer_time
+- utter_answer_serve_alcohol
+- utter_answer_dress_code
+- utter_answer_gluten_free
+- utter_answer_vegetarian
+- utter_answer_vegan
+- utter_answer_kosher
+- utter_answer_large_group
+- utter_answer_kids_menu
+- utter_answer_bring_your_own_alcohol
+- utter_answer_parking
+- utter_answer_handicap_accessible
+- utter_answer_corking_fee
+- utter_answer_polar_reservation
 config:
   store_entities_as_slots: true
 entities:
@@ -105,21 +119,15 @@ intents:
     use_entities: true
 - inform:
     use_entities: true
-- time_open:
-    use_entities: true
-- is_open:
-    use_entities: true
 - affirm:
     use_entities: true
 - goodbye:
     use_entities: true
 - greet:
-    use_entities: true
+    triggers: utter_doing_greet
 - thank:
     use_entities: true
 - deny:
-    use_entities: true
-- time_close:
     use_entities: true
 - menu_item:
     use_entities: true
@@ -133,6 +141,34 @@ intents:
     use_entities: true
 - busy:
     use_entities: true
+- question_time:
+    triggers: action_utter_answer_time
+- question_serve_alcohol:
+    triggers: utter_answer_serve_alcohol
+- question_dress_code:
+    triggers: utter_answer_dress_code
+- question_gluten_free:
+    triggers: utter_answer_gluten_free
+- question_vegetarian:
+    triggers: utter_answer_vegetarian
+- question_vegan:
+    triggers: utter_answer_vegan
+- question_kosher:
+    triggers: utter_answer_kosher
+- question_large_group:
+    triggers: utter_answer_large_group
+- question_kids_menu:
+    triggers: utter_answer_answer_kids_menu
+- question_bring_your_own_alcohol:
+    triggers: utter_answer_bring_your_own_alcohol
+- question_parking:
+    triggers: utter_answer_parking
+- question_handicap_accessible:
+    triggers: utter_answer_handicap_accessible
+- question_corking_fee:
+    triggers: utter_answer_corking_fee
+- question_polar_reservation:
+    triggers: utter_answer_polar_reservation
 slots:
   alternative_times:
     auto_fill: false
@@ -187,6 +223,32 @@ slots:
     initial_value: null
     type: rasa_core.slots.ListSlot
 templates:
+  utter_answer_bring_your_own_alcohol:
+  - text: Sorry we don't allow BYOB
+  utter_answer_corking_fee:
+  - text: We do charge a $35 corking fee
+  utter_answer_dress_code:
+  - text: We don't have a strict dress code, feel free to come in casually dressed
+  utter_answer_gluten_free:
+  - text: Yes we have quite a few gluten free selections
+  utter_answer_handicap_accessible:
+  - text: We have ramps making us fully handicap accessible
+  utter_answer_kids_menu:
+  - text: Yes we do have a kids menu
+  utter_answer_kosher:
+  - text: Sorry but no we don't serve any kosher options
+  utter_answer_large_group:
+  - text: We do accommodate large groups
+  utter_answer_parking:
+  - text: We have a free parking lot in the back
+  utter_answer_polar_reservation:
+  - text: Yes we do accept reservations!
+  utter_answer_serve_alcohol:
+  - text: Yes, we serve a variety of wines, beers, and liquors
+  utter_answer_vegan:
+  - text: Yes, we serve vegan options
+  utter_answer_vegetarian:
+  - text: Yes, we have quite a few vegetarian options
   utter_ask_for_name_on_reservation:
   - text: What's the name for the reservation?
   utter_ask_for_next_general_request:

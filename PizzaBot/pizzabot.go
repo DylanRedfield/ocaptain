@@ -1130,7 +1130,7 @@ func (bot *Bot) ActionUtterAnswerTime(req *RasaRequest, resp *RasaResponse) {
 		if entityTime.Year() != time.Now().Year() || entityTime.Month() != time.Now().Month() || entityTime.Day() == time.Now().Day() {
 			// Time is not today
 			requestTime = entityTime
-			requestedToday := false
+			requestedToday = false
 		}
 	}
 
@@ -1142,6 +1142,7 @@ func (bot *Bot) ActionUtterAnswerTime(req *RasaRequest, resp *RasaResponse) {
 			openString, err := business.TimeOpenOnDayString(requestTime)
 			closeString, err2 := business.TimeCloseOnDayString(requestTime)
 
+      log.Println("Open")
 			if err != nil || err2 != nil {
 				event := Event{Event: FOLLOWUP, Name: "action_need_employee"}
 				resp.Events = append(resp.Events, event)
@@ -1169,7 +1170,7 @@ func (bot *Bot) ActionUtterAnswerTime(req *RasaRequest, resp *RasaResponse) {
 
 			// We are currently closed but will be open Thursday (5/25) from 8:00am - 8:00pm
 			reply := fmt.Sprintf("We are currently closed but will be open %s (%d/%d) from %s - %s",
-				dayOfWeek, openString, closeString)
+				dayOfWeek, nextOpenDay.Month(), nextOpenDay.Day(), openString, closeString)
 
 			resp.Responses = append(resp.Responses, Response{Text: reply})
 			return
@@ -1177,25 +1178,28 @@ func (bot *Bot) ActionUtterAnswerTime(req *RasaRequest, resp *RasaResponse) {
 		}
 
 	} else {
-		if isOpen {
-			openString, err := business.TimeOpenOnDayString(requestTime)
-			closeString, err2 := business.TimeCloseOnDayString(requestTime)
 
-			if err != nil || err2 != nil {
-				event := Event{Event: FOLLOWUP, Name: "action_need_employee"}
-				resp.Events = append(resp.Events, event)
-				return
-			}
+		dayOfWeek := requestTime.Weekday().String()
+    openString, err := business.TimeOpenOnDayString(requestTime)
+    closeString, err2 := business.TimeCloseOnDayString(requestTime)
+
+    if err != nil || err2 != nil {
+      event := Event{Event: FOLLOWUP, Name: "action_need_employee"}
+      resp.Events = append(resp.Events, event)
+      return
+    }
+
+		if isOpen {
 
 			// "On Thursday (5/25) we'll be open from 8:00am - 8:00pm"
-			reply := fmt.Sprintf("On %s (%d/%d) we'll be open from %s - %s", dayOfWeek, openString, closeString)
+			reply := fmt.Sprintf("On %s (%d/%d) we'll be open from %s - %s", dayOfWeek, requestTime.Month(), requestTime.Day(), openString, closeString)
 
 			resp.Responses = append(resp.Responses, Response{Text: reply})
 			return
 
 		} else {
 			// "Sorry we'll be closed on Thursday (5/25)"
-			reply := fmt.Sprintf("Sorry we'll be closed on %s (%d/%d)", dayOfWeek, openString, closeString)
+			reply := fmt.Sprintf("Sorry we'll be closed on %s (%d/%d)", dayOfWeek, requestTime.Month(), requestTime.Day())
 
 			resp.Responses = append(resp.Responses, Response{Text: reply})
 			return

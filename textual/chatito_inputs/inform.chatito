@@ -1,22 +1,14 @@
 %[inform]
-    ~[it?] Thursday
-    ~[the?] 31st
-    ~[for?] 9
-    ~[for?] three
+    its Thursday
+    Thursday
+    the 31st
+    for 9
+    three
     5 o'clock
     three pm
-    ~[it?] @[name] at 7pm
-    ~[it?] @[name]
-
-~[it]
-    it's
-    it is
-    its
-~[for]
-    for
-
-~[the]
-    the
+    its @[name]
+    @[name]
+    3pm
 
 @[name]
     Dylan

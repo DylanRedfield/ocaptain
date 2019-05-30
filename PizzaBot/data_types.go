@@ -2,6 +2,7 @@ package main
 
 import (
 	"cloud.google.com/go/firestore"
+  "strconv"
 	"context"
 	"errors"
 	firebase "firebase.google.com/go"
@@ -113,7 +114,7 @@ type Business struct {
 	Approved              bool                 `firestore:"approved"`
 	Password              string               `firestore:"password"`
 	PhoneNumber           string               `firestore:"phoneNumber"`
-	Hours                 map[int]OpenClose    `firestore:"hours"`
+	Hours                 map[string]OpenClose    `firestore:"hours"`
 	HoursExcpetions       map[string]OpenClose `firestore:"hoursExceptions"`
 	ReservationPlatform   string               `firestore:"reservationPlatform"`
 	ReservationPlatformId string               `firestore:"reservationPlatformId"`
@@ -141,6 +142,7 @@ type Reservation struct {
 
 func (business *Business) GetOpenCloseOnDay(day time.Time) OpenClose {
 	dayOfWeek := int(day.Weekday())
+  log.Println(dayOfWeek)
 
 	dateString := fmt.Sprintf("%d-%d-%d", day.Year(), day.Month(), day.Day())
 
@@ -148,7 +150,7 @@ func (business *Business) GetOpenCloseOnDay(day time.Time) OpenClose {
 	if val, exists := business.HoursExcpetions[dateString]; exists {
 		openClose = val
 	} else {
-		openClose = business.Hours[dayOfWeek]
+		openClose = business.Hours[strconv.Itoa(dayOfWeek)]
 	}
 
 	return openClose
@@ -221,14 +223,17 @@ func (business *Business) IsOpenOnDay(day time.Time) bool {
 	isOpen := openClose.IsOpen
 
 	if !isOpen {
+    log.Println("fuck")
 		return false
 	}
 
 	currentTimeInt := int64(day.Hour()*100 + day.Minute())
 
 	if openClose.ClosePastMidnight() {
+    log.Println("fuck2")
 		return currentTimeInt >= openClose.Open || currentTimeInt <= openClose.Close
 	} else {
+    log.Println(currentTimeInt)
 		return openClose.Open <= currentTimeInt && currentTimeInt <= openClose.Close
 	}
 

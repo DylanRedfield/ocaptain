@@ -44,20 +44,60 @@
     "action_brancher_reservation_slot_filling_base": {
       "slots": []
     },
-    "action_brancher_with_size_and_single_potential_times_query_reservation_platform": {
+    "utter_answer_parking": {
       "slots": []
     },
-    "action_blank_checkpoint_to_fill_potential_size": {
-      "slots": []
-    },
-    "action_blank_checkpoint_with_several_alternative_times_to_select": {
+    "utter_answer_vegetarian": {
       "slots": []
     },
     "action_blank_checkpoint_to_fill_temp_times": {
       "slots": []
     },
+    "action_set_potential_size_slot": {
+      "slots": [
+        "potential_size"
+      ]
+    },
+    "action_brancher_validate_reservation_potential_size": {
+      "slots": [
+        "size"
+      ]
+    },
     "action_brancher_validate_with_temp_times_and_time_entity_to_modify_temp_time_from_day_or_period_grain": {
       "slots": []
+    },
+    "action_brancher_to_save_new_reservation": {
+      "slots": []
+    },
+    "utter_answer_large_group": {
+      "slots": []
+    },
+    "utter_answer_kosher": {
+      "slots": []
+    },
+    "action_brancher_with_temp_times_validate_single_temp_times": {
+      "slots": []
+    },
+    "action_brancher_with_size_and_single_potential_times_query_reservation_platform": {
+      "slots": []
+    },
+    "action_need_employee": {
+      "slots": []
+    },
+    "action_clear_potential_size_slot": {
+      "slots": [
+        "potential_size"
+      ]
+    },
+    "action_blank_checkpoint_to_fill_potential_size": {
+      "slots": []
+    },
+    "action_blank_for_slots": {
+      "slots": [
+        "recipient_id",
+        "business_id",
+        "recipient_contact"
+      ]
     },
     "action_set_temp_ordinal_slot": {
       "slots": [
@@ -67,61 +107,7 @@
     "action_brancher_with_alternative_times_and_ordinal_validate_ordinal_to_select_alternative_time": {
       "slots": []
     },
-    "action_need_employee": {
-      "slots": []
-    },
-    "action_brancher_to_save_new_reservation": {
-      "slots": []
-    },
-    "action_brancher_validate_reservation_potential_size": {
-      "slots": [
-        "size"
-      ]
-    },
-    "action_clear_potential_size_slot": {
-      "slots": [
-        "potential_size"
-      ]
-    },
-    "action_set_scheduled_time_from_single_alternative": {
-      "slots": [
-        "scheduled_time"
-      ]
-    },
-    "action_brancher_with_temp_times_validate_single_temp_times": {
-      "slots": []
-    },
-    "action_need_employee_because_error_saving": {
-      "slots": []
-    },
-    "action_blank_alert_potential_times_slot_set": {
-      "slots": [
-        "potential_times"
-      ]
-    },
-    "action_blank_for_slots": {
-      "slots": [
-        "business_id",
-        "recipient_contact",
-        "recipient_id"
-      ]
-    },
-    "action_set_potential_size_slot": {
-      "slots": [
-        "potential_size"
-      ]
-    },
-    "action_blank_alert_scheduled_time_slot_set": {
-      "slots": [
-        "scheduled_time"
-      ]
-    },
-    "action_blank_alert_alternative_times_slot_set": {
-      "slots": [
-        "alternative_times"
-      ]
-    },
-    "action_brancher_with_potential_times_and_alternative_times_to_fill_scheduled_time": {
+    "utter_answer_serve_alcohol": {
       "slots": []
     },
     "action_blank_alert_temp_times_slot_set": {
@@ -129,9 +115,30 @@
         "temp_times"
       ]
     },
+    "action_blank_alert_scheduled_time_slot_set": {
+      "slots": [
+        "scheduled_time"
+      ]
+    },
+    "action_need_employee_because_error_saving": {
+      "slots": []
+    },
     "action_set_scheduled_time_slot_from_close_alternative": {
       "slots": [
         "scheduled_time"
+      ]
+    },
+    "action_set_scheduled_time_from_single_alternative": {
+      "slots": [
+        "scheduled_time"
+      ]
+    },
+    "utter_answer_gluten_free": {
+      "slots": []
+    },
+    "action_blank_alert_alternative_times_slot_set": {
+      "slots": [
+        "alternative_times"
       ]
     },
     "action_clear_temp_times_slot": {
@@ -139,7 +146,36 @@
         "temp_times"
       ]
     },
+    "action_brancher_with_potential_times_and_alternative_times_to_fill_scheduled_time": {
+      "slots": []
+    },
     "action_brancher_validate_temp_time_to_select_alternative_time_to_set_scheduled_time_slot": {
+      "slots": []
+    },
+    "action_blank_alert_potential_times_slot_set": {
+      "slots": [
+        "potential_times"
+      ]
+    },
+    "action_blank_checkpoint_with_several_alternative_times_to_select": {
+      "slots": []
+    },
+    "utter_answer_dress_code": {
+      "slots": []
+    },
+    "utter_answer_polar_reservation": {
+      "slots": []
+    },
+    "utter_answer_corking_fee": {
+      "slots": []
+    },
+    "utter_answer_bring_your_own_alcohol": {
+      "slots": []
+    },
+    "utter_answer_vegan": {
+      "slots": []
+    },
+    "utter_answer_kids_menu": {
       "slots": []
     }
   },
@@ -156,5 +192,5 @@
     "rasa_core.policies.memoization.AugmentedMemoizationPolicy",
     "rasa_core.policies.fallback.FallbackPolicy"
   ],
-  "trained_at": "20190523-233020"
+  "trained_at": "20190530-010359"
 }
