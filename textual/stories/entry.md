@@ -1,6 +1,5 @@
 ## entry
 * make_reservation
-    - action_blank_for_slots
     - slot{"business_id": "MewuHeThW4QJGDxD9tTr"}
     - slot{"recipient_id": "BGeFfREAGGSRqRWrmLNx"}
     - slot{"recipient_contact": "+19084771280"}
@@ -8,7 +7,6 @@
 
 ## entry2
 * make_reservation{"number": 5}
-    - action_blank_for_slots
     - slot{"business_id": "MewuHeThW4QJGDxD9tTr"}
     - slot{"recipient_id": "BGeFfREAGGSRqRWrmLNx"}
     - slot{"recipient_contact": "+19084771280"}
@@ -18,7 +16,6 @@
 
 ## entry3
 * make_reservation{"time": "xxxx"}
-    - action_blank_for_slots
     - slot{"business_id": "MewuHeThW4QJGDxD9tTr"}
     - slot{"recipient_id": "BGeFfREAGGSRqRWrmLNx"}
     - slot{"recipient_contact": "+19084771280"}
@@ -28,7 +25,6 @@
 
 ## entry4
 * make_reservation{"number": 8, "time": "xxxx"}
-    - action_blank_for_slots
     - slot{"business_id": "MewuHeThW4QJGDxD9tTr"}
     - slot{"recipient_id": "BGeFfREAGGSRqRWrmLNx"}
     - slot{"recipient_contact": "+19084771280"}

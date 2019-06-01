@@ -10,6 +10,6 @@ policies:
   - name: "AugmentedMemoizationPolicy"
     max_history: 5
   - name: "FallbackPolicy"
-    fallback_action_name: "action_default_fallback"
-    nlu_threshold: 0.05
-    core_threshold: 0.1
+    fallback_action_name: "utter_doing_greet"
+    nlu_threshold: 0.005
+    core_threshold: 0.005
