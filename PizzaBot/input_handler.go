@@ -39,17 +39,17 @@ func (bot *Bot) HandleBusinessInput(reqObj BusinessRequest) BusinessResponse {
 
 	message.Id = messageRef.ID
 
-	smsRequest := SMSRequest{
+	smsRequest := MessageRequest{
 		To:   reqObj.Recipient.Contact,
 		From: reqObj.Business.PhoneNumber,
 		Body: reqObj.Message}
 
-	bot.SmsClient.SendSMS(smsRequest)
+	bot.SmsClient.Send(&smsRequest)
 
 	return BusinessResponse{}
 }
 
-func (bot *Bot) HandleOutsideInput(reqObj OutsideRequest) OutsideResponse {
+func (bot *Bot) HandleOutsideInput(reqObj *OutsideRequest) OutsideResponse {
 
 	businessId := reqObj.Business.Id
 
@@ -79,6 +79,12 @@ func (bot *Bot) HandleOutsideInput(reqObj OutsideRequest) OutsideResponse {
 		log.Println(err)
 	}
 
+	//bot.sendToAi(reqObj)
+
+	return OutsideResponse{}
+}
+
+func (bot *Bot) sendToAI(reqObj *OutsideRequest) OutsideResponse {
 	// Send a http request that will be handled in the textual_input_channel
 	// The body is the OutsideRequest object
 	body, err := json.Marshal(reqObj)
@@ -111,4 +117,5 @@ func (bot *Bot) HandleOutsideInput(reqObj OutsideRequest) OutsideResponse {
 	http.DefaultClient.Do(req)
 
 	return OutsideResponse{}
+
 }

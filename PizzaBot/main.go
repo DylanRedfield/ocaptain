@@ -124,16 +124,16 @@ func outsideSmsInput(w http.ResponseWriter, req *http.Request) {
 	// So I marshal the map into a json string,
 	// then unmarshal the json shring into the object
 
-	reqObj := TwilioRequest{To: req.URL.Query()["To"][0], Body: req.URL.Query()["Body"][0], From: req.URL.Query()["From"][0]}
+	reqObj := MessageRequest{To: req.URL.Query()["To"][0], Body: req.URL.Query()["Body"][0], From: req.URL.Query()["From"][0]}
 
 	outsideReq := toOutsideRequest(reqObj)
-	bot.HandleOutsideInput(outsideReq)
+	bot.HandleOutsideInput(&outsideReq)
 }
 
 func sendSelf(w http.ResponseWriter, req *http.Request) {
-	reqObj := TwilioRequest{To: "+12027593168", Body: "Default message", From: "+12027593168"}
+	reqObj := MessageRequest{To: "+12027593168", Body: "Default message", From: "+12027593168"}
 	outsideReq := toOutsideRequest(reqObj)
-	bot.HandleOutsideInput(outsideReq)
+	bot.HandleOutsideInput(&outsideReq)
 }
 
 func sendAndSave(w http.ResponseWriter, req *http.Request) {
@@ -157,7 +157,7 @@ func sendAndSave(w http.ResponseWriter, req *http.Request) {
 	from := reqObj.Business.PhoneNumber
 	text := reqObj.Message.Content
 
-	twilioClient.SendSMS(SMSRequest{to, from, text})
+	twilioClient.Send(&MessageRequest{to, from, text})
 
 	ctx = context.Background()
 
@@ -201,7 +201,7 @@ func initFirebase() *Bot {
 }
 
 // Turns TwilioRequest into standard OutsideRequest object
-func toOutsideRequest(twilReq TwilioRequest) OutsideRequest {
+func toOutsideRequest(twilReq MessageRequest) OutsideRequest {
 
 	timeInMil := time.Now().UnixNano() / 1000000
 	message := &Message{
