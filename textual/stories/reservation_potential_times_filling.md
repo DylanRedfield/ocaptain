@@ -28,24 +28,24 @@
     - action_brancher_with_temp_times_validate_single_temp_times
 
 ## action_brancher_with_temp_times_validate_single_temp_times_0
-    - action_brancher_with_temp_times_to_determine_next_from_times_length
+    - action_brancher_with_temp_times_validate_single_temp_times
     - followup{"name": "utter_ask_for_time_for_potential_reservation"}
     - utter_ask_for_time_for_potential_reservation
     - action_blank_checkpoint_to_fill_temp_times
 
 ## action_brancher_with_temp_times_validate_single_temp_times_1
-    - action_brancher_with_temp_times_to_determine_next_from_times_length
+    - action_brancher_with_temp_times_validate_single_temp_times
     - followup{"name": "action_need_employee"}
     - action_need_employee
 
 ## action_brancher_with_temp_times_validate_single_temp_times_2
-    - action_brancher_with_temp_times_to_determine_next_from_times_length
+    - action_brancher_with_temp_times_validate_single_temp_times
     - followup{"name": "utter_with_temp_time_ask_for_number_or_time_on_need_hour_grain_from_day"}
     - utter_with_temp_time_ask_for_number_or_time_on_need_hour_grain_from_day
 > checkpoint_with_temp_times_from_reservation_day_grain
 
 ## action_brancher_with_temp_times_validate_single_temp_times_3
-    - action_brancher_with_temp_times_to_determine_next_from_times_length
+    - action_brancher_with_temp_times_validate_single_temp_times
     - followup{"name": "utter_ask_for_polar_on_is_pm"}
     - utter_ask_for_polar_on_is_pm
 > checkpoint_action_brancher_with_temp_times_validate_single_temp_times_period_ask_is_pm
@@ -85,21 +85,21 @@
     - action_need_employee
 
 ## action_brancher_with_temp_times_validate_single_temp_times_4
-    - action_brancher_with_temp_times_to_determine_next_from_times_length
+    - action_brancher_with_temp_times_validate_single_temp_times
     - followup{"name": "utter_unhappy_time_in_past_AND_ask_for_time_on_alternative"}
     - utter_unhappy_time_in_past_AND_ask_for_time_on_alternative
     - action_clear_temp_times_slot
     - action_blank_checkpoint_to_fill_temp_times
 
 ## action_brancher_with_temp_times_validate_single_temp_times_5
-    - action_brancher_with_temp_times_to_determine_next_from_times_length
+    - action_brancher_with_temp_times_validate_single_temp_times
     - followup{"name": "utter_unhappy_time_too_far_in_future_AND_ask_for_time_for_alternative"}
     - utter_unhappy_time_too_far_in_future_AND_ask_for_time_for_alternative_potential_times
     - action_clear_temp_times_slot
     - action_blank_checkpoint_to_fill_temp_times
 
 ## action_brancher_with_temp_times_validate_single_temp_times_6
-    - action_brancher_with_temp_times_to_determine_next_from_times_length
+    - action_brancher_with_temp_times_validate_single_temp_times
     - followup{"name": "action_blank_alert_potential_times_slot_set"}
     - action_blank_alert_potential_times_slot_set
     - slot{"potential_times": ["xxx"]}

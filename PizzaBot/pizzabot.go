@@ -19,6 +19,7 @@ func (bot *Bot) HandleAction(req *RasaRequest) (*RasaResponse, error) {
 
 	action := req.NextAction
 
+	log.Println(action)
 	switch action {
 	case "action_set_potential_size_slot":
 		bot.ActionSetPotentialSizeSlot(req, resp)
@@ -92,9 +93,6 @@ func (bot *Bot) HandleAction(req *RasaRequest) (*RasaResponse, error) {
 		bot.ActionUtterPostReservationAndAskForNextGeneralRequest(req, resp)
 	case "action_utter_answer_time":
 		bot.ActionUtterAnswerTime(req, resp)
-
-	default:
-		log.Println(action)
 	}
 
 	return resp, nil
@@ -130,6 +128,7 @@ func (bot *Bot) ActionBrancherReservationSlotFillingBase(req *RasaRequest, resp 
 
 	event.Event = FOLLOWUP
 	if reflect.TypeOf(size) == nil {
+    log.Println("size_base")
 		if reflect.TypeOf(potentialSize) == nil {
 			event.Name = "utter_ask_for_number_on_reservation_size"
 		} else {
@@ -148,8 +147,10 @@ func (bot *Bot) ActionBrancherReservationSlotFillingBase(req *RasaRequest, resp 
 			event.Name = "action_brancher_with_size_and_single_potential_times_query_reservation_platform"
 		}
 	} else if reflect.TypeOf(name) == nil {
+    log.Println("name_base")
 		event.Name = "utter_ask_for_name_on_reservation"
 	} else {
+    log.Println("save_base")
 		event.Name = "action_brancher_to_save_new_reservation"
 	}
 
@@ -749,10 +750,11 @@ func (bot *Bot) ActionBrancherWithTempTimesValidateSingleTempTimes(req *RasaRequ
 				event := Event{Event: FOLLOWUP, Name: "utter_unhappy_time_too_far_in_future_AND_ask_for_time_on_alternative"}
 				resp.Events = append(resp.Events, event)
 			} else {
-				event := Event{Event: FOLLOWUP, Name: "action_blank_alert_potential_times_slot_set"}
-				resp.Events = append(resp.Events, event)
 				// So set it as the first item in temp_temps
-				event = Event{Event: SLOT, Name: "potential_times", Value: []string{rasaTime.Value}}
+        event := Event{Event: SLOT, Name: "potential_times", Value: []string{rasaTime.Value}}
+				resp.Events = append(resp.Events, event)
+
+				event = Event{Event: FOLLOWUP, Name: "action_blank_alert_potential_times_slot_set"}
 				resp.Events = append(resp.Events, event)
 			}
 
