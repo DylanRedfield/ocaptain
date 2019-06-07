@@ -2,10 +2,68 @@
   "action_fingerprints": {
     "action_listen": {
       "slots": [
-        "business_id",
         "recipient_id",
-        "name",
-        "recipient_contact"
+        "business_id",
+        "recipient_contact",
+        "name"
+      ]
+    },
+    "action_set_temp_times_slot": {
+      "slots": [
+        "temp_times"
+      ]
+    },
+    "action_brancher_with_temp_times_to_determine_next_from_times_length": {
+      "slots": []
+    },
+    "action_brancher_with_temp_times_validate_single_temp_times": {
+      "slots": []
+    },
+    "action_brancher_reservation_slot_filling_base": {
+      "slots": []
+    },
+    "action_blank_checkpoint_to_fill_temp_times": {
+      "slots": []
+    },
+    "action_set_scheduled_time_slot_from_close_alternative": {
+      "slots": [
+        "scheduled_time"
+      ]
+    },
+    "action_clear_potential_times_slot": {
+      "slots": [
+        "potential_times"
+      ]
+    },
+    "action_brancher_with_size_and_single_potential_times_query_reservation_platform": {
+      "slots": []
+    },
+    "utter_answer_bring_your_own_alcohol": {
+      "slots": []
+    },
+    "action_brancher_validate_temp_time_to_select_alternative_time_to_set_scheduled_time_slot": {
+      "slots": []
+    },
+    "action_blank_checkpoint_to_fill_potential_size": {
+      "slots": []
+    },
+    "utter_answer_serve_alcohol": {
+      "slots": []
+    },
+    "action_utter_answer_time": {
+      "slots": []
+    },
+    "action_blank_checkpoint_with_size_and_no_alternatives": {
+      "slots": []
+    },
+    "action_brancher_validate_reservation_potential_size": {
+      "slots": [
+        "size"
+      ]
+    },
+    "action_clear_potential_size_slot": {
+      "slots": [
+        "potential_size"
       ]
     },
     "action_set_potential_hour_slot": {
@@ -23,7 +81,15 @@
         "potential_hour"
       ]
     },
-    "action_brancher_with_temp_times_to_determine_next_from_times_length": {
+    "action_need_employee": {
+      "slots": []
+    },
+    "action_set_temp_ordinal_slot": {
+      "slots": [
+        "temp_ordinal"
+      ]
+    },
+    "action_brancher_with_alternative_times_and_ordinal_validate_ordinal_to_select_alternative_time": {
       "slots": []
     },
     "action_clear_alternative_times_slot": {
@@ -31,88 +97,18 @@
         "alternative_times"
       ]
     },
-    "action_clear_potential_times_slot": {
-      "slots": [
-        "potential_times"
-      ]
-    },
-    "action_blank_checkpoint_with_size_and_no_alternatives": {
-      "slots": []
-    },
-    "action_set_temp_times_slot": {
-      "slots": [
-        "temp_times"
-      ]
-    },
-    "action_brancher_reservation_slot_filling_base": {
-      "slots": []
-    },
-    "action_blank_checkpoint_to_fill_temp_times": {
-      "slots": []
-    },
-    "action_set_scheduled_time_slot_from_close_alternative": {
-      "slots": [
-        "scheduled_time"
-      ]
-    },
-    "action_brancher_with_size_and_single_potential_times_query_reservation_platform": {
-      "slots": []
-    },
-    "action_blank_checkpoint_to_fill_potential_size": {
-      "slots": []
-    },
-    "action_brancher_validate_reservation_potential_size": {
-      "slots": [
-        "size"
-      ]
-    },
-    "action_clear_potential_size_slot": {
-      "slots": [
-        "potential_size"
-      ]
-    },
-    "action_need_employee": {
-      "slots": []
-    },
     "action_blank_alert_alternative_times_slot_set": {
       "slots": [
         "alternative_times"
       ]
     },
-    "action_clear_temp_times_slot": {
-      "slots": [
-        "temp_times"
-      ]
-    },
-    "action_brancher_validate_temp_time_to_select_alternative_time_to_set_scheduled_time_slot": {
-      "slots": []
-    },
     "action_brancher_with_potential_times_and_alternative_times_to_fill_scheduled_time": {
       "slots": []
     },
-    "utter_answer_kids_menu": {
+    "action_brancher_to_save_new_reservation": {
       "slots": []
     },
-    "action_blank_alert_potential_times_slot_set": {
-      "slots": [
-        "potential_times"
-      ]
-    },
-    "action_brancher_validate_with_temp_times_and_time_entity_to_modify_temp_time_from_day_or_period_grain": {
-      "slots": []
-    },
-    "utter_answer_dress_code": {
-      "slots": []
-    },
-    "action_brancher_with_temp_times_validate_single_temp_times": {
-      "slots": []
-    },
-    "action_set_potential_size_slot": {
-      "slots": [
-        "potential_size"
-      ]
-    },
-    "utter_answer_bring_your_own_alcohol": {
+    "action_need_employee_because_error_saving": {
       "slots": []
     },
     "action_blank_alert_scheduled_time_slot_set": {
@@ -120,24 +116,10 @@
         "scheduled_time"
       ]
     },
-    "action_set_scheduled_time_from_single_alternative": {
-      "slots": [
-        "scheduled_time"
-      ]
-    },
-    "utter_answer_large_group": {
+    "action_brancher_validate_with_temp_times_and_time_entity_to_modify_temp_time_from_day_or_period_grain": {
       "slots": []
     },
-    "utter_answer_corking_fee": {
-      "slots": []
-    },
-    "action_brancher_to_save_new_reservation": {
-      "slots": []
-    },
-    "action_blank_checkpoint_with_several_alternative_times_to_select": {
-      "slots": []
-    },
-    "utter_answer_parking": {
+    "utter_answer_kosher": {
       "slots": []
     },
     "action_blank_alert_temp_times_slot_set": {
@@ -145,33 +127,57 @@
         "temp_times"
       ]
     },
-    "action_set_temp_ordinal_slot": {
+    "action_set_potential_size_slot": {
       "slots": [
-        "temp_ordinal"
+        "potential_size"
       ]
     },
-    "utter_answer_vegan": {
+    "utter_answer_handicap_accessible": {
+      "slots": []
+    },
+    "action_blank_alert_potential_times_slot_set": {
+      "slots": [
+        "potential_times"
+      ]
+    },
+    "utter_answer_corking_fee": {
       "slots": []
     },
     "utter_answer_vegetarian": {
       "slots": []
     },
-    "utter_answer_kosher": {
+    "action_set_scheduled_time_from_single_alternative": {
+      "slots": [
+        "scheduled_time"
+      ]
+    },
+    "action_clear_temp_times_slot": {
+      "slots": [
+        "temp_times"
+      ]
+    },
+    "utter_answer_dress_code": {
       "slots": []
     },
-    "utter_answer_gluten_free": {
+    "utter_answer_large_group": {
       "slots": []
     },
     "utter_answer_polar_reservation": {
       "slots": []
     },
-    "action_brancher_with_alternative_times_and_ordinal_validate_ordinal_to_select_alternative_time": {
+    "utter_answer_parking": {
       "slots": []
     },
-    "utter_answer_handicap_accessible": {
+    "utter_answer_vegan": {
       "slots": []
     },
-    "utter_answer_serve_alcohol": {
+    "utter_answer_kids_menu": {
+      "slots": []
+    },
+    "action_blank_checkpoint_with_several_alternative_times_to_select": {
+      "slots": []
+    },
+    "utter_answer_gluten_free": {
       "slots": []
     }
   },
@@ -188,5 +194,5 @@
     "rasa_core.policies.memoization.AugmentedMemoizationPolicy",
     "rasa_core.policies.fallback.FallbackPolicy"
   ],
-  "trained_at": "20190530-163133"
+  "trained_at": "20190607-192415"
 }

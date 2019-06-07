@@ -150,7 +150,7 @@
 11 [label="checkpoiint_actio...", style=filled, fillcolor=lightblue, shape=box];
 12 [label="action_blank_chec...", style=filled, fillcolor=lightblue, shape=box];
 13 [label="action_blank_chec...", style=filled, fillcolor=lightblue, shape=box];
-14 [label=GENR_OR_3f30a, style=filled, fillcolor="#a8ac53"];
+14 [label=GENR_OR_1db33, style=filled, fillcolor="#878cc5"];
 15 [label="action_blank_chec...", style=filled, fillcolor=lightblue, shape=box];
 16 [label="action_blank_chec...", style=filled, fillcolor=lightblue, shape=box];
 17 [label="action_blank_chec...", style=filled, fillcolor=lightblue, shape=box];

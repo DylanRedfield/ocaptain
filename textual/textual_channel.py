@@ -92,6 +92,7 @@ class TextualInput(InputChannel):
             user = UserMessage(text, output_channel = out_channel, sender_id = sender)
 
             on_new_message(user)
+            print("blueprint test")
             return "success"
         return textual_webhook
 
