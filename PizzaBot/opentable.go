@@ -1,12 +1,12 @@
 package main
 
 import (
-	"fmt"
+/*	"fmt"
 	"github.com/PuerkitoBio/goquery"
 	"log"
 	"net/http"
 	"regexp"
-	"strconv"
+	"strconv"*/
 	"time"
 )
 
@@ -25,7 +25,7 @@ func Query(id string, datetime time.Time, partySize string) (OpenTableResult, er
 
 	//	url := fmt.Sprintf("https://www.opentable.com/restaurant/profile/%s/reserve?restref=%s&datetime=%s&covers=%s", id, id, datetime, partySize)
 
-	searchYear := datetime.Year()
+/*	searchYear := datetime.Year()
 	searchMonth := datetime.Month()
 	searchDay := datetime.Day()
 	searchHour := datetime.Hour()
@@ -87,7 +87,8 @@ func Query(id string, datetime time.Time, partySize string) (OpenTableResult, er
 			}
 		}
 
-	})
+	})*/
 
+	result.Results = append(result.Results, datetime)
 	return result, nil
 }

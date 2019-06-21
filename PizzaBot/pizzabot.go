@@ -11,14 +11,13 @@ import (
 )
 
 func (bot *Bot) HandleAction(req *RasaRequest) (*RasaResponse, error) {
-  log.Println(req)
+  log.Println(req.NextAction)
 	resp := NewRasaResponse()
 
 	// TODO remove this it is just for train online testing
 	bot.checkOrSetInputSlots(req, resp)
 
 	action := req.NextAction
-	log.Println(action)
 	switch action {
 	case ACTION_UPDATE_ORDER:
 		bot.ActionUpdateOrder(req, resp)
@@ -187,6 +186,7 @@ func (bot *Bot) handleReservationDatetimeQueryResult(reservationResult OpenTable
 				// Action ask the name
 				nextAction := Event{Event: "followup", Name: UTTER_ASK_NAME}
 				resp.Events = append(resp.Events, nextAction)
+        log.Println("Test")
 				return
 			} else {
 				// Force Action save_reservation

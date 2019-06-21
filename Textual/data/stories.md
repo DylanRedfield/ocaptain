@@ -24,6 +24,7 @@
 ## test
 * goodbye
     - utter_goodbye
+
 ## Generated Story 8573145562614629515
 * make_reservation
     - utter_ask_time
@@ -39,6 +40,7 @@
     - action_set_size_slot
     - slot{"size": 4}
     - action_check_reservation_datetime
+
 ## Generated Story -292295632353312686
 * make_reservation{"number": 4, "time": "2018-11-23T18:30:00.000+00:00"}
     - action_set_scheduled_time_slot
@@ -116,6 +118,7 @@
     - slot{"name": "dylan"}
     - action_save_reservation
     - action_post_reservation_saved
+
 ## Generated Story -4299930402022974351
 * inform{"time": "2018-12-27T19:15:00.000+00:00", "number": 3}
     - action_set_scheduled_time_slot
