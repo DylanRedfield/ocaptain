@@ -13,9 +13,10 @@ import (
 )
 
 type Bot struct {
-	Client    *firestore.Client
-	Ctx       context.Context
-	SmsClient TwilioClient
+	Client       *firestore.Client
+	Ctx          context.Context
+	TwilioClient TwilioClient
+	SwiftClient SwiftClient
 }
 
 func NewBot(ctx context.Context) (*Bot, error) {
@@ -39,7 +40,10 @@ func NewBot(ctx context.Context) (*Bot, error) {
 		AccountSid: "AC9dfbda388f3ee10353bbc001694f5c27",
 		AuthToken:  "e3429e06cc27740f1c859d2bfc9964ae"}
 
-	return &Bot{Client: client, Ctx: ctx, SmsClient: twilioClient}, nil
+	swiftClient := SwiftClient{
+		AccountKey: "8hjeuf40gqyFFkY1wnL7ikTba1zg3fEk"}
+
+	return &Bot{Client: client, Ctx: ctx, TwilioClient: twilioClient, SwiftClient: swiftClient}, nil
 }
 
 type BusinessRequest struct {
@@ -115,15 +119,22 @@ type Business struct {
 	Password              string               `firestore:"password"`
 	PhoneNumber           string               `firestore:"phoneNumber"`
 	Hours                 map[string]OpenClose    `firestore:"hours"`
-	HoursExcpetions       map[string]OpenClose `firestore:"hoursExceptions"`
+	HoursExceptions       map[string]OpenClose `firestore:"hoursExceptions"`
 	ReservationPlatform   string               `firestore:"reservationPlatform"`
 	ReservationPlatformId string               `firestore:"reservationPlatformId"`
+	Employees []Employee `firestore:"employees"`
+	SmsPlatform string `firestore:"smsPlatform"`
 }
 
 type OpenClose struct {
 	IsOpen bool  `firestore:"isOpen"`
 	Open   int64 `firestore:"open"`
 	Close  int64 `firestore:"close"`
+}
+
+type Employee struct {
+	IsActive bool `firestore:"isActive"`
+	PhoneNumber string `firestore:"phoneNumber"`
 }
 
 func (openClose *OpenClose) ClosePastMidnight() bool {
@@ -147,7 +158,7 @@ func (business *Business) GetOpenCloseOnDay(day time.Time) OpenClose {
 	dateString := fmt.Sprintf("%d-%d-%d", day.Year(), day.Month(), day.Day())
 
 	openClose := OpenClose{}
-	if val, exists := business.HoursExcpetions[dateString]; exists {
+	if val, exists := business.HoursExceptions[dateString]; exists {
 		openClose = val
 	} else {
 		openClose = business.Hours[strconv.Itoa(dayOfWeek)]

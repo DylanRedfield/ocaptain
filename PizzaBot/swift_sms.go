@@ -13,11 +13,34 @@ type SwiftClient struct {
 }
 
 func (client *SwiftClient) Send(req *MessageRequest) {
-	baseUrl := fmt.Sprint("http://smsgateway.ca/services/message.svc/%s/%s/ViaDedicated", client.AccountKey, req.To)
+	baseUrl := fmt.Sprintf("http://smsgateway.ca/services/message.svc/%s/%s/ViaDedicated", client.AccountKey, req.To)
 	body := url.Values{}
 	body.Set("MessageBody", req.Body)
 	body.Set("Reference", "")
 	body.Set("SenderNumber", req.From)
+
+	httpReq, err := http.NewRequest("POST", baseUrl, strings.NewReader(body.Encode()))
+	if err != nil {
+		log.Println(err)
+	}
+
+	httpReq.Header.Add("Accept", "application/json")
+	resp, err := httpClient.Do(httpReq)
+	if err != nil {
+		// TODO handlje error
+		log.Println(err)
+	}
+	defer resp.Body.Close()
+}
+
+func (client *SwiftClient) SendBulk(req *BulkMessageRequest) {
+	baseUrl := fmt.Sprintf("http://smsgateway.ca/services/message.svc/%s/Bulk", client.AccountKey)
+	body := url.Values{}
+	body.Set("MessageBody", req.Body)
+	body.Set("Reference", "")
+
+	numbersToString := fmt.Sprintf("[%s]", strings.Join(req.To, ","))
+	body.Set("CellNumbers", numbersToString)
 
 	httpReq, err := http.NewRequest("POST", baseUrl, strings.NewReader(body.Encode()))
 	if err != nil {

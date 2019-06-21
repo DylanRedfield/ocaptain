@@ -11,6 +11,11 @@ type MessageRequest struct {
 	Body string
 }
 
+type BulkMessageRequest struct {
+	To []string
+	Body string
+}
+
 var httpClient = &http.Client{Timeout: 10 * time.Second}
 type MessageClient interface {
 	Send(req *MessageRequest)
