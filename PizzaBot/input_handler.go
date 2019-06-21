@@ -5,10 +5,8 @@ import (
 	"cloud.google.com/go/firestore"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"net/http"
-	"os"
 	"time"
 )
 
@@ -84,7 +82,9 @@ func (bot *Bot) HandleOutsideInput(reqObj *OutsideRequest) OutsideResponse {
 	}
 
 	//bot.sendToAi(reqObj)
-	bot.notifyStaff(reqObj)
+	if reqObj.Business.SmsNotifyEnabled {
+		bot.notifyStaff(reqObj)
+	}
 
 
 	return OutsideResponse{}
@@ -114,19 +114,8 @@ func (bot *Bot) sendToAI(reqObj *OutsideRequest) OutsideResponse {
 		log.Println(err)
 	}
 
-	jsonFile, err := os.Open("../env_values.json")
+	envValues := GetEnvValues()
 
-	if err != nil {
-		log.Println(err)
-	}
-
-	defer jsonFile.Close()
-
-	byteValue, _ := ioutil.ReadAll(jsonFile)
-
-	var envValues EnvValues
-
-	json.Unmarshal([]byte(byteValue), &envValues)
 	rasaUrl := fmt.Sprintf("http://localhost:%s/webhooks/textual/webhook", envValues.RasaPort)
 	req, err := http.NewRequest("POST", rasaUrl, bytes.NewBuffer(body))
 	req.Header.Set("Content-Type", "application/json")

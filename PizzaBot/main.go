@@ -125,6 +125,7 @@ func outsideSmsInput(w http.ResponseWriter, req *http.Request) {
 	// then unmarshal the json shring into the object
 
   log.Println("Recieved")
+	// TODO will error on swift message from conflicting names
 	reqObj := MessageRequest{To: req.URL.Query()["To"][0], Body: req.URL.Query()["Body"][0], From: req.URL.Query()["From"][0]}
 
 	outsideReq := toOutsideRequest(reqObj)

@@ -124,6 +124,7 @@ type Business struct {
 	ReservationPlatformId string               `firestore:"reservationPlatformId"`
 	Employees []Employee `firestore:"employees"`
 	SmsPlatform string `firestore:"smsPlatform"`
+	SmsNotifyEnabled bool `firestore:"smsNotifyEnabled"`
 }
 
 type OpenClose struct {
