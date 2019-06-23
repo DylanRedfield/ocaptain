@@ -9,7 +9,6 @@ import (
 	"strings"
 )
 
-
 type TwilioClient struct {
 	AccountSid string
 	AuthToken  string
@@ -46,8 +45,6 @@ func (client *TwilioClient) Send(reqObj *MessageRequest) {
 		log.Println(err)
 	}
 	defer resp.Body.Close()
-
-
 
 	//fuck, err := ioutil.ReadAll(resp.Body)
 	// TODO handle response errors

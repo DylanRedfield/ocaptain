@@ -54,7 +54,7 @@ func main() {
 
 	json.Unmarshal([]byte(byteValue), &envValues)
 
-  log.Println(envValues.PizzaPort)
+	log.Println(envValues.PizzaPort)
 	log.Println(http.ListenAndServe(":"+envValues.PizzaPort, mux))
 }
 
@@ -125,9 +125,18 @@ func outsideSmsInput(w http.ResponseWriter, req *http.Request) {
 	// So I marshal the map into a json string,
 	// then unmarshal the json shring into the object
 
-  log.Println("Recieved")
+	values := req.URL.Query()
+	reqObj := MessageRequest{}
+	if val, exists := values["platform"]; exists {
+		if val[0] == "SWIFT" {
+			to := fmt.Sprintf("+1%s", values["Destination"][0])
+			from := fmt.Sprintf("+%s", values["PhoneNumber"][0])
+			reqObj = MessageRequest{To: to, Body: values["MessageBody"][0], From: from}
+		}
+	} else {
+		reqObj = MessageRequest{To: req.URL.Query()["To"][0], Body: req.URL.Query()["Body"][0], From: req.URL.Query()["From"][0]}
+	}
 	// TODO will error on swift message from conflicting names
-	reqObj := MessageRequest{To: req.URL.Query()["To"][0], Body: req.URL.Query()["Body"][0], From: req.URL.Query()["From"][0]}
 
 	outsideReq := toOutsideRequest(reqObj)
 	bot.HandleOutsideInput(&outsideReq)
@@ -234,6 +243,7 @@ func toOutsideRequest(twilReq MessageRequest) OutsideRequest {
 
 func businessFromPhone(phoneNumber string) (*Business, error) {
 	business := &Business{}
+	log.Println(phoneNumber)
 	iter := bot.Client.Collection(Businesses).Where(PhoneNumber, "==", phoneNumber).Documents(bot.Ctx)
 
 	for {

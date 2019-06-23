@@ -42,9 +42,11 @@ func (bot *Bot) HandleBusinessInput(reqObj BusinessRequest) BusinessResponse {
 		From: reqObj.Business.PhoneNumber,
 		Body: reqObj.Message}
 
+	log.Println(reqObj.Business.SmsPlatform)
 	if reqObj.Business.SmsPlatform == "TWILIO" {
 		bot.TwilioClient.Send(&smsRequest)
 	} else if reqObj.Business.SmsPlatform == "SWIFT" {
+		log.Println("Swift send")
 		bot.SwiftClient.Send(&smsRequest)
 	}
 
@@ -86,7 +88,6 @@ func (bot *Bot) HandleOutsideInput(reqObj *OutsideRequest) OutsideResponse {
 		bot.notifyStaff(reqObj)
 	}
 
-
 	return OutsideResponse{}
 }
 
@@ -103,7 +104,6 @@ func (bot *Bot) notifyStaff(reqObj *OutsideRequest) {
 	bulkReq := &BulkMessageRequest{actives, reqObj.Message.Content}
 	bot.SwiftClient.SendBulk(bulkReq)
 }
-
 
 func (bot *Bot) sendToAI(reqObj *OutsideRequest) OutsideResponse {
 	// Send a http request that will be handled in the textual_input_channel
