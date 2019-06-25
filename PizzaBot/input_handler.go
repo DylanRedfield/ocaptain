@@ -85,6 +85,7 @@ func (bot *Bot) HandleOutsideInput(reqObj *OutsideRequest) OutsideResponse {
 
 	//bot.sendToAi(reqObj)
 	if reqObj.Business.SmsNotifyEnabled {
+		log.Println("Noitify Enabled")
 		bot.notifyStaff(reqObj)
 	}
 
@@ -96,7 +97,9 @@ func (bot *Bot) notifyStaff(reqObj *OutsideRequest) {
 	actives := []string{}
 
 	for _, employee := range employees {
+		log.Println("Active Employee")
 		if employee.IsActive {
+			log.Println("Active Employee")
 			actives = append(actives, employee.PhoneNumber)
 		}
 	}

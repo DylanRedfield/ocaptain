@@ -260,10 +260,40 @@ func businessFromPhone(phoneNumber string) (*Business, error) {
 		}
 
 		err = doc.DataTo(business)
+
 		if err != nil {
 			log.Println(err)
 		}
+
 		business.Id = doc.Ref.ID
+
+		// Doesnt automatically unmarshall subcollections
+		subIter := bot.Client.Collection(Businesses).Doc(business.Id).Collection("employees").Documents(bot.Ctx)
+		employees := []Employee{}
+		for {
+			subDoc, err := subIter.Next()
+
+			if err == iterator.Done {
+				break
+			}
+			if err != nil {
+				return business, err
+			}
+
+			employee := Employee{}
+			err = subDoc.DataTo(&employee)
+
+			if err != nil {
+				return business, err
+			}
+
+			employee.Id = subDoc.Ref.ID
+
+			employees = append(employees, employee)
+		}
+		business.Employees = employees
+		log.Println(employees)
+
 	}
 
 	if business.Id == "" {

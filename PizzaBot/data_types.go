@@ -134,7 +134,8 @@ type OpenClose struct {
 }
 
 type Employee struct {
-	IsActive    bool   `firestore:"isActive"`
+	IsActive    bool   `firestore:"active"`
+	Id          string `firestore:"-"`
 	PhoneNumber string `firestore:"phoneNumber"`
 }
 
