@@ -2,13 +2,13 @@ package main
 
 import (
 	"cloud.google.com/go/firestore"
-  "strconv"
 	"context"
 	"errors"
 	firebase "firebase.google.com/go"
 	"fmt"
 	"google.golang.org/api/option"
 	"log"
+	"strconv"
 	"time"
 )
 
@@ -16,7 +16,7 @@ type Bot struct {
 	Client       *firestore.Client
 	Ctx          context.Context
 	TwilioClient TwilioClient
-	SwiftClient SwiftClient
+	SwiftClient  SwiftClient
 }
 
 func NewBot(ctx context.Context) (*Bot, error) {
@@ -118,13 +118,13 @@ type Business struct {
 	Approved              bool                 `firestore:"approved"`
 	Password              string               `firestore:"password"`
 	PhoneNumber           string               `firestore:"phoneNumber"`
-	Hours                 map[string]OpenClose    `firestore:"hours"`
+	Hours                 map[string]OpenClose `firestore:"hours"`
 	HoursExceptions       map[string]OpenClose `firestore:"hoursExceptions"`
 	ReservationPlatform   string               `firestore:"reservationPlatform"`
 	ReservationPlatformId string               `firestore:"reservationPlatformId"`
-	Employees []Employee `firestore:"employees"`
-	SmsPlatform string `firestore:"smsPlatform"`
-	SmsNotifyEnabled bool `firestore:"smsNotifyEnabled"`
+	Employees             []Employee           `firestore:"employees"`
+	SmsPlatform           string               `firestore:"smsPlatform"`
+	SmsNotifyEnabled      bool                 `firestore:"smsNotifyEnabled"`
 }
 
 type OpenClose struct {
@@ -134,7 +134,8 @@ type OpenClose struct {
 }
 
 type Employee struct {
-	IsActive bool `firestore:"isActive"`
+	IsActive    bool   `firestore:"active"`
+	Id          string `firestore:"-"`
 	PhoneNumber string `firestore:"phoneNumber"`
 }
 
@@ -154,7 +155,7 @@ type Reservation struct {
 
 func (business *Business) GetOpenCloseOnDay(day time.Time) OpenClose {
 	dayOfWeek := int(day.Weekday())
-  log.Println(dayOfWeek)
+	log.Println(dayOfWeek)
 
 	dateString := fmt.Sprintf("%d-%d-%d", day.Year(), day.Month(), day.Day())
 
@@ -235,17 +236,17 @@ func (business *Business) IsOpenOnDay(day time.Time) bool {
 	isOpen := openClose.IsOpen
 
 	if !isOpen {
-    log.Println("fuck")
+		log.Println("fuck")
 		return false
 	}
 
 	currentTimeInt := int64(day.Hour()*100 + day.Minute())
 
 	if openClose.ClosePastMidnight() {
-    log.Println("fuck2")
+		log.Println("fuck2")
 		return currentTimeInt >= openClose.Open || currentTimeInt <= openClose.Close
 	} else {
-    log.Println(currentTimeInt)
+		log.Println(currentTimeInt)
 		return openClose.Open <= currentTimeInt && currentTimeInt <= openClose.Close
 	}
 

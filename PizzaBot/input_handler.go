@@ -42,9 +42,11 @@ func (bot *Bot) HandleBusinessInput(reqObj BusinessRequest) BusinessResponse {
 		From: reqObj.Business.PhoneNumber,
 		Body: reqObj.Message}
 
+	log.Println(reqObj.Business.SmsPlatform)
 	if reqObj.Business.SmsPlatform == "TWILIO" {
 		bot.TwilioClient.Send(&smsRequest)
 	} else if reqObj.Business.SmsPlatform == "SWIFT" {
+		log.Println("Swift send")
 		bot.SwiftClient.Send(&smsRequest)
 	}
 
@@ -83,9 +85,9 @@ func (bot *Bot) HandleOutsideInput(reqObj *OutsideRequest) OutsideResponse {
 
 	//bot.sendToAi(reqObj)
 	if reqObj.Business.SmsNotifyEnabled {
+		log.Println("Noitify Enabled")
 		bot.notifyStaff(reqObj)
 	}
-
 
 	return OutsideResponse{}
 }
@@ -95,7 +97,9 @@ func (bot *Bot) notifyStaff(reqObj *OutsideRequest) {
 	actives := []string{}
 
 	for _, employee := range employees {
+		log.Println("Active Employee")
 		if employee.IsActive {
+			log.Println("Active Employee")
 			actives = append(actives, employee.PhoneNumber)
 		}
 	}
@@ -103,7 +107,6 @@ func (bot *Bot) notifyStaff(reqObj *OutsideRequest) {
 	bulkReq := &BulkMessageRequest{actives, reqObj.Message.Content}
 	bot.TwilioClient.SendBulk(bulkReq)
 }
-
 
 func (bot *Bot) sendToAI(reqObj *OutsideRequest) OutsideResponse {
 	// Send a http request that will be handled in the textual_input_channel

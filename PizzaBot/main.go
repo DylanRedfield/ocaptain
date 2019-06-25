@@ -54,6 +54,7 @@ func main() {
 
 	json.Unmarshal([]byte(byteValue), &envValues)
 
+	log.Println(envValues.PizzaPort)
 	log.Println(http.ListenAndServe(":"+envValues.PizzaPort, mux))
 }
 
@@ -124,8 +125,18 @@ func outsideSmsInput(w http.ResponseWriter, req *http.Request) {
 	// So I marshal the map into a json string,
 	// then unmarshal the json shring into the object
 
+	values := req.URL.Query()
+	reqObj := MessageRequest{}
+	if val, exists := values["platform"]; exists {
+		if val[0] == "SWIFT" {
+			to := fmt.Sprintf("+1%s", values["Destination"][0])
+			from := fmt.Sprintf("+%s", values["PhoneNumber"][0])
+			reqObj = MessageRequest{To: to, Body: values["MessageBody"][0], From: from}
+		}
+	} else {
+		reqObj = MessageRequest{To: req.URL.Query()["To"][0], Body: req.URL.Query()["Body"][0], From: req.URL.Query()["From"][0]}
+	}
 	// TODO will error on swift message from conflicting names
-	reqObj := MessageRequest{To: req.URL.Query()["To"][0], Body: req.URL.Query()["Body"][0], From: req.URL.Query()["From"][0]}
 
 	outsideReq := toOutsideRequest(reqObj)
 	bot.HandleOutsideInput(&outsideReq)
@@ -232,6 +243,7 @@ func toOutsideRequest(twilReq MessageRequest) OutsideRequest {
 
 func businessFromPhone(phoneNumber string) (*Business, error) {
 	business := &Business{}
+	log.Println(phoneNumber)
 	iter := bot.Client.Collection(Businesses).Where(PhoneNumber, "==", phoneNumber).Documents(bot.Ctx)
 
 	for {
@@ -248,10 +260,40 @@ func businessFromPhone(phoneNumber string) (*Business, error) {
 		}
 
 		err = doc.DataTo(business)
+
 		if err != nil {
 			log.Println(err)
 		}
+
 		business.Id = doc.Ref.ID
+
+		// Doesnt automatically unmarshall subcollections
+		subIter := bot.Client.Collection(Businesses).Doc(business.Id).Collection("employees").Documents(bot.Ctx)
+		employees := []Employee{}
+		for {
+			subDoc, err := subIter.Next()
+
+			if err == iterator.Done {
+				break
+			}
+			if err != nil {
+				return business, err
+			}
+
+			employee := Employee{}
+			err = subDoc.DataTo(&employee)
+
+			if err != nil {
+				return business, err
+			}
+
+			employee.Id = subDoc.Ref.ID
+
+			employees = append(employees, employee)
+		}
+		business.Employees = employees
+		log.Println(employees)
+
 	}
 
 	if business.Id == "" {
