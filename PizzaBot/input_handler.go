@@ -101,7 +101,7 @@ func (bot *Bot) notifyStaff(reqObj *OutsideRequest) {
 	}
 
 	bulkReq := &BulkMessageRequest{actives, reqObj.Message.Content}
-	bot.SwiftClient.SendBulk(bulkReq)
+	bot.TwilioClient.SendBulk(bulkReq)
 }
 
 
