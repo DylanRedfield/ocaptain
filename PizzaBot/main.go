@@ -37,7 +37,6 @@ func main() {
 	mux.Handle("/PizzaBot/businessInput", http.HandlerFunc(businessInput))
 	mux.Handle("/PizzaBot/outsideSmsInput", http.HandlerFunc(outsideSmsInput))
 	mux.Handle("/PizzaBot/sendSelf", http.HandlerFunc(sendSelf))
-	mux.Handle("/ocaptain", http.HandlerFunc(actionInput))
 	mux.Handle("/ocaptain/sendAndSave", http.HandlerFunc(sendAndSave))
 
 	jsonFile, err := os.Open("../env_values.json")
@@ -56,48 +55,6 @@ func main() {
 
 	log.Println(envValues.PizzaPort)
 	log.Println(http.ListenAndServe(":"+envValues.PizzaPort, mux))
-}
-
-func test() {
-	datetime := time.Date(2018, 11, 19, 14, 0, 0, 0, time.Local)
-	result, err := Query("24712", datetime, "3")
-
-	if err != nil {
-		log.Println(err)
-	}
-
-	fmt.Printf("%s", result.Results)
-}
-
-func actionInput(w http.ResponseWriter, req *http.Request) {
-	body, err := ioutil.ReadAll(req.Body)
-
-	if err != nil {
-		log.Println(err)
-	}
-
-	var reqObj RasaRequest
-	if err := json.Unmarshal(body, &reqObj); err != nil {
-		log.Println(err)
-	}
-
-	resp, err := bot.HandleAction(&reqObj)
-
-	if err != nil {
-		log.Print(err)
-	}
-
-	respString, err := json.Marshal(*resp)
-
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
-
-	_, err = w.Write(respString)
-
-	if err != nil {
-		log.Println(err)
-	}
-
 }
 
 // Recieves a BotRequest as HTTP payload,

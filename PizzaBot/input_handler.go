@@ -92,6 +92,18 @@ func (bot *Bot) HandleOutsideInput(reqObj *OutsideRequest) OutsideResponse {
 	return OutsideResponse{}
 }
 
+func (bot *Bot) saveMessage(business *Business, recipeint *Recipient, message *Message) error {
+	messagesRef := bot.Client.Collection(Businesses).Doc(business.Id).Collection(Messages)
+	docRef, _, err := messagesRef.Add(bot.Ctx, message)
+
+	if err != nil {
+		return err
+	}
+
+	message.Id = docRef.ID
+	return nil
+}
+
 func (bot *Bot) notifyStaff(reqObj *OutsideRequest) {
 	var employees = reqObj.Business.Employees
 	actives := []string{}

@@ -1,5 +1,0 @@
-{
-  "nlu_threshold": 0.005,
-  "core_threshold": 0.005,
-  "fallback_action_name": "utter_doing_greet"
-}
