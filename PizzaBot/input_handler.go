@@ -37,17 +37,23 @@ func (bot *Bot) HandleBusinessInput(reqObj BusinessRequest) BusinessResponse {
 
 	message.Id = messageRef.ID
 
-	smsRequest := SMSRequest{
+	smsRequest := MessageRequest{
 		To:   reqObj.Recipient.Contact,
 		From: reqObj.Business.PhoneNumber,
 		Body: reqObj.Message}
 
-	bot.SmsClient.SendSMS(smsRequest)
+	log.Println(reqObj.Business.SmsPlatform)
+	if reqObj.Business.SmsPlatform == "TWILIO" {
+		bot.TwilioClient.Send(&smsRequest)
+	} else if reqObj.Business.SmsPlatform == "SWIFT" {
+		log.Println("Swift send")
+		bot.SwiftClient.Send(&smsRequest)
+	}
 
 	return BusinessResponse{}
 }
 
-func (bot *Bot) HandleOutsideInput(reqObj OutsideRequest) OutsideResponse {
+func (bot *Bot) HandleOutsideInput(reqObj *OutsideRequest) OutsideResponse {
 
 	businessId := reqObj.Business.Id
 
@@ -56,7 +62,9 @@ func (bot *Bot) HandleOutsideInput(reqObj OutsideRequest) OutsideResponse {
 		reqObj.Recipient.RecentMessage = reqObj.Message
 
 		personRef, _, err := bot.Client.Collection(Businesses).Doc(businessId).Collection(Recipients).Add(bot.Ctx, reqObj.Recipient)
+		log.Println(personRef.ID)
 		reqObj.Recipient.Id = personRef.ID
+		reqObj.Message.RecipientId = personRef.ID
 
 		if err != nil {
 			log.Println(err)
@@ -75,6 +83,32 @@ func (bot *Bot) HandleOutsideInput(reqObj OutsideRequest) OutsideResponse {
 		log.Println(err)
 	}
 
+	//bot.sendToAi(reqObj)
+	if reqObj.Business.SmsNotifyEnabled {
+		log.Println("Noitify Enabled")
+		bot.notifyStaff(reqObj)
+	}
+
+	return OutsideResponse{}
+}
+
+func (bot *Bot) notifyStaff(reqObj *OutsideRequest) {
+	var employees = reqObj.Business.Employees
+	actives := []string{}
+
+	for _, employee := range employees {
+		log.Println("Active Employee")
+		if employee.IsActive {
+			log.Println("Active Employee")
+			actives = append(actives, employee.PhoneNumber)
+		}
+	}
+
+	bulkReq := &BulkMessageRequest{actives, reqObj.Message.Content}
+	bot.TwilioClient.SendBulk(bulkReq)
+}
+
+func (bot *Bot) sendToAI(reqObj *OutsideRequest) OutsideResponse {
 	// Send a http request that will be handled in the textual_input_channel
 	// The body is the OutsideRequest object
 	body, err := json.Marshal(reqObj)
@@ -83,7 +117,9 @@ func (bot *Bot) HandleOutsideInput(reqObj OutsideRequest) OutsideResponse {
 		log.Println(err)
 	}
 
-	rasaUrl := fmt.Sprintf("http://localhost:5005/webhooks/textual/webhook")
+	envValues := GetEnvValues()
+
+	rasaUrl := fmt.Sprintf("http://localhost:%s/webhooks/textual/webhook", envValues.RasaPort)
 	req, err := http.NewRequest("POST", rasaUrl, bytes.NewBuffer(body))
 	req.Header.Set("Content-Type", "application/json")
 
@@ -94,4 +130,5 @@ func (bot *Bot) HandleOutsideInput(reqObj OutsideRequest) OutsideResponse {
 	http.DefaultClient.Do(req)
 
 	return OutsideResponse{}
+
 }

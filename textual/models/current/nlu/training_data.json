@@ -1,0 +1,681 @@
+{
+  "rasa_nlu_data": {
+    "common_examples": [
+      {
+        "intent": "affirm",
+        "text": "correct"
+      },
+      {
+        "intent": "affirm",
+        "text": "sounds good"
+      },
+      {
+        "intent": "affirm",
+        "text": "indeed"
+      },
+      {
+        "intent": "affirm",
+        "text": "sure"
+      },
+      {
+        "intent": "affirm",
+        "text": "yes"
+      },
+      {
+        "intent": "allow_reservations",
+        "text": "Accept reservations?"
+      },
+      {
+        "intent": "allow_reservations",
+        "text": "Do you take resservations?"
+      },
+      {
+        "intent": "busy",
+        "text": "Are you busy?"
+      },
+      {
+        "intent": "busy",
+        "text": "Busy tonight?"
+      },
+      {
+        "intent": "deny",
+        "text": "nah"
+      },
+      {
+        "intent": "deny",
+        "text": "no"
+      },
+      {
+        "intent": "deny",
+        "text": "Nope"
+      },
+      {
+        "intent": "deny",
+        "text": "nuh"
+      },
+      {
+        "intent": "deny",
+        "text": "I don't think so"
+      },
+      {
+        "intent": "question_serve_alcohol",
+        "text": "Do you serve alcohol?"
+      },
+      {
+        "intent": "question_serve_alcohol",
+        "text": "What kind of alcohol do you have?"
+      },
+      {
+        "intent": "question_serve_alcohol",
+        "text": "do you serve drinks"
+      },
+      {
+        "intent": "question_serve_alcohol",
+        "text": "can i get wine?"
+      },
+      {
+        "intent": "question_serve_alcohol",
+        "text": "do you have a bar"
+      },
+      {
+        "intent": "question_serve_alcohol",
+        "text": "Do you have beer"
+      },
+      {
+        "intent": "question_serve_alcohol",
+        "text": "what kind of liqour do you have"
+      },
+      {
+        "intent": "question_dress_code",
+        "text": "can i wear a t shirt"
+      },
+      {
+        "intent": "question_dress_code",
+        "text": "what do we have to wear"
+      },
+      {
+        "intent": "question_dress_code",
+        "text": "do you have a dress code?"
+      },
+      {
+        "intent": "question_gluten_free",
+        "text": "does everything have gluten?"
+      },
+      {
+        "intent": "question_gluten_free",
+        "text": "Do you have gluten free options"
+      },
+      {
+        "intent": "question_vegetarian",
+        "text": "Do you have vegetarian options"
+      },
+      {
+        "intent": "question_vegetarian",
+        "text": "are there veg meals?"
+      },
+      {
+        "intent": "question_vegetarian",
+        "text": "Does everything have meat in it?"
+      },
+      {
+        "intent": "question_kosher",
+        "text": "have kosher food?"
+      },
+      {
+        "intent": "question_kosher",
+        "text": "Do you serve kosher options?"
+      },
+      {
+        "intent": "question_large_group",
+        "text": "Do you accommodate large groups?"
+      },
+      {
+        "intent": "question_large_group",
+        "text": "is there space for big parties"
+      },
+      {
+        "intent": "question_kids_menu",
+        "text": "are there options for children"
+      },
+      {
+        "intent": "question_kids_menu",
+        "text": "is there a kids menu?"
+      },
+      {
+        "intent": "question_bring_your_own_alcohol",
+        "text": "are you byob"
+      },
+      {
+        "intent": "question_bring_your_own_alcohol",
+        "text": "is wine allowed in"
+      },
+      {
+        "intent": "question_bring_your_own_alcohol",
+        "text": "can i bring my own alcohol"
+      },
+      {
+        "intent": "question_bring_your_own_alcohol",
+        "text": "what is your outside beer policy"
+      },
+      {
+        "intent": "question_parking",
+        "text": "do you have parking?"
+      },
+      {
+        "intent": "question_parking",
+        "text": "is there free parking available"
+      },
+      {
+        "intent": "question_parking",
+        "text": "where should i park?"
+      },
+      {
+        "intent": "question_handicap_accessible",
+        "text": "Do you have handicap ramps?"
+      },
+      {
+        "intent": "question_handicap_accessible",
+        "text": "am i good with a wheelchair?"
+      },
+      {
+        "intent": "question_handicap_accessible",
+        "text": "handicap accessible?"
+      },
+      {
+        "intent": "question_corking_fee",
+        "text": "do you charge for outside wine?"
+      },
+      {
+        "intent": "question_corking_fee",
+        "text": "is there a corking fee?"
+      },
+      {
+        "intent": "question_polar_reservation",
+        "text": "can i call ahead"
+      },
+      {
+        "intent": "question_polar_reservation",
+        "text": "do you take reservations?"
+      },
+      {
+        "intent": "goodbye",
+        "text": "goodbye"
+      },
+      {
+        "intent": "goodbye",
+        "text": "see you later"
+      },
+      {
+        "intent": "goodbye",
+        "text": "bye"
+      },
+      {
+        "intent": "greet",
+        "text": "hello"
+      },
+      {
+        "intent": "greet",
+        "text": "good morning"
+      },
+      {
+        "intent": "greet",
+        "text": "good evening"
+      },
+      {
+        "intent": "greet",
+        "text": "hi"
+      },
+      {
+        "intent": "greet",
+        "text": "hey"
+      },
+      {
+        "intent": "greet",
+        "text": "what's up"
+      },
+      {
+        "intent": "greet",
+        "text": "hey there"
+      },
+      {
+        "intent": "inform",
+        "entities": [
+          {
+            "end": 7,
+            "entity": "name",
+            "start": 4,
+            "value": "Kim"
+          }
+        ],
+        "text": "its Kim"
+      },
+      {
+        "intent": "inform",
+        "text": "three pm"
+      },
+      {
+        "intent": "inform",
+        "text": "Thursday"
+      },
+      {
+        "intent": "inform",
+        "entities": [
+          {
+            "end": 3,
+            "entity": "name",
+            "start": 0,
+            "value": "Kim"
+          }
+        ],
+        "text": "Kim"
+      },
+      {
+        "intent": "inform",
+        "text": "3pm"
+      },
+      {
+        "intent": "inform",
+        "text": "the 31st"
+      },
+      {
+        "intent": "inform",
+        "text": "its Thursday"
+      },
+      {
+        "intent": "inform",
+        "text": "for 9"
+      },
+      {
+        "intent": "inform",
+        "text": "three"
+      },
+      {
+        "intent": "inform",
+        "text": "5 o'clock"
+      },
+      {
+        "intent": "inform",
+        "entities": [
+          {
+            "end": 9,
+            "entity": "name",
+            "start": 4,
+            "value": "Dylan"
+          }
+        ],
+        "text": "its Dylan"
+      },
+      {
+        "intent": "inform",
+        "entities": [
+          {
+            "end": 5,
+            "entity": "name",
+            "start": 0,
+            "value": "Dylan"
+          }
+        ],
+        "text": "Dylan"
+      },
+      {
+        "intent": "inform",
+        "entities": [
+          {
+            "end": 10,
+            "entity": "name",
+            "start": 4,
+            "value": "Ronald"
+          }
+        ],
+        "text": "its Ronald"
+      },
+      {
+        "intent": "inform",
+        "entities": [
+          {
+            "end": 6,
+            "entity": "name",
+            "start": 0,
+            "value": "Ronald"
+          }
+        ],
+        "text": "Ronald"
+      },
+      {
+        "intent": "inform",
+        "entities": [
+          {
+            "end": 6,
+            "entity": "name",
+            "start": 0,
+            "value": "Suresh"
+          }
+        ],
+        "text": "Suresh"
+      },
+      {
+        "intent": "inform",
+        "entities": [
+          {
+            "end": 9,
+            "entity": "name",
+            "start": 4,
+            "value": "Rohan"
+          }
+        ],
+        "text": "its Rohan"
+      },
+      {
+        "intent": "inform",
+        "entities": [
+          {
+            "end": 10,
+            "entity": "name",
+            "start": 4,
+            "value": "Suresh"
+          }
+        ],
+        "text": "its Suresh"
+      },
+      {
+        "intent": "inform",
+        "entities": [
+          {
+            "end": 4,
+            "entity": "name",
+            "start": 0,
+            "value": "Neil"
+          }
+        ],
+        "text": "Neil"
+      },
+      {
+        "intent": "inform",
+        "entities": [
+          {
+            "end": 5,
+            "entity": "name",
+            "start": 0,
+            "value": "Rohan"
+          }
+        ],
+        "text": "Rohan"
+      },
+      {
+        "intent": "inform",
+        "entities": [
+          {
+            "end": 8,
+            "entity": "name",
+            "start": 4,
+            "value": "Neil"
+          }
+        ],
+        "text": "its Neil"
+      },
+      {
+        "intent": "inform",
+        "entities": [
+          {
+            "end": 8,
+            "entity": "name",
+            "start": 4,
+            "value": "Mary"
+          }
+        ],
+        "text": "its Mary"
+      },
+      {
+        "intent": "inform",
+        "entities": [
+          {
+            "end": 4,
+            "entity": "name",
+            "start": 0,
+            "value": "Mary"
+          }
+        ],
+        "text": "Mary"
+      },
+      {
+        "intent": "inform",
+        "entities": [
+          {
+            "end": 8,
+            "entity": "name",
+            "start": 4,
+            "value": "Kate"
+          }
+        ],
+        "text": "its Kate"
+      },
+      {
+        "intent": "inform",
+        "entities": [
+          {
+            "end": 4,
+            "entity": "name",
+            "start": 0,
+            "value": "Kate"
+          }
+        ],
+        "text": "Kate"
+      },
+      {
+        "intent": "make_reservation",
+        "text": "Can i get a resrevation for five at 3pm"
+      },
+      {
+        "intent": "make_reservation",
+        "text": "Save a spot for Thursday for 7 people"
+      },
+      {
+        "intent": "make_reservation",
+        "text": "Table for nine at nine"
+      },
+      {
+        "intent": "make_reservation",
+        "text": "Can I get a table?"
+      },
+      {
+        "intent": "make_reservation",
+        "text": "Make a reservation for tonight"
+      },
+      {
+        "intent": "make_reservation",
+        "entities": [
+          {
+            "end": 33,
+            "entity": "name",
+            "start": 28,
+            "value": "Rohan"
+          }
+        ],
+        "text": "can i get a reservation for Rohan for 5"
+      },
+      {
+        "intent": "make_reservation",
+        "text": "Reserve a table for nine"
+      },
+      {
+        "intent": "make_reservation",
+        "entities": [
+          {
+            "end": 34,
+            "entity": "name",
+            "start": 28,
+            "value": "Suresh"
+          }
+        ],
+        "text": "can i get a reservation for Suresh for 5"
+      },
+      {
+        "intent": "make_reservation",
+        "entities": [
+          {
+            "end": 32,
+            "entity": "name",
+            "start": 28,
+            "value": "Neil"
+          }
+        ],
+        "text": "can i get a reservation for Neil for 5"
+      },
+      {
+        "intent": "make_reservation",
+        "entities": [
+          {
+            "end": 34,
+            "entity": "name",
+            "start": 28,
+            "value": "Ronald"
+          }
+        ],
+        "text": "can i get a reservation for Ronald for 5"
+      },
+      {
+        "intent": "make_reservation",
+        "entities": [
+          {
+            "end": 32,
+            "entity": "name",
+            "start": 28,
+            "value": "Kate"
+          }
+        ],
+        "text": "can i get a reservation for Kate for 5"
+      },
+      {
+        "intent": "make_reservation",
+        "entities": [
+          {
+            "end": 32,
+            "entity": "name",
+            "start": 28,
+            "value": "Mary"
+          }
+        ],
+        "text": "can i get a reservation for Mary for 5"
+      },
+      {
+        "intent": "make_reservation",
+        "entities": [
+          {
+            "end": 31,
+            "entity": "name",
+            "start": 28,
+            "value": "Kim"
+          }
+        ],
+        "text": "can i get a reservation for Kim for 5"
+      },
+      {
+        "intent": "make_reservation",
+        "entities": [
+          {
+            "end": 33,
+            "entity": "name",
+            "start": 28,
+            "value": "Dylan"
+          }
+        ],
+        "text": "can i get a reservation for Dylan for 5"
+      },
+      {
+        "intent": "menu_item",
+        "text": "Do you have rice?"
+      },
+      {
+        "intent": "menu_item",
+        "text": "Can I get pasta today?"
+      },
+      {
+        "intent": "menu_item",
+        "text": "Do you have chicken in stock?"
+      },
+      {
+        "intent": "need_reservation",
+        "text": "Do I need a reservation?"
+      },
+      {
+        "intent": "need_reservation",
+        "text": "Can I just walk in?"
+      },
+      {
+        "intent": "order",
+        "text": "Can I place an order"
+      },
+      {
+        "intent": "order",
+        "text": "I'd like to place an order for chicken fingers"
+      },
+      {
+        "intent": "order",
+        "text": "Can I put in an order for pick up?"
+      },
+      {
+        "intent": "order",
+        "text": "Can I get chicken fingers"
+      },
+      {
+        "intent": "question_time",
+        "text": "what time do you close on thursday"
+      },
+      {
+        "intent": "question_time",
+        "text": "when do you close"
+      },
+      {
+        "intent": "question_time",
+        "text": "will you be open in an hour"
+      },
+      {
+        "intent": "question_time",
+        "text": "are you open on the 31st"
+      },
+      {
+        "intent": "question_time",
+        "text": "are you open?"
+      },
+      {
+        "intent": "question_time",
+        "text": "what time do you open?"
+      },
+      {
+        "intent": "question_time",
+        "text": "what time will you be open until today"
+      },
+      {
+        "intent": "question_time",
+        "text": "what are your hours"
+      },
+      {
+        "intent": "restart",
+        "text": "restart please"
+      },
+      {
+        "intent": "restart",
+        "text": "reset"
+      },
+      {
+        "intent": "restart",
+        "text": "restart"
+      },
+      {
+        "intent": "thank",
+        "text": "Thank you"
+      },
+      {
+        "intent": "thank",
+        "text": "Thanks"
+      },
+      {
+        "intent": "thank",
+        "text": "That's great, thank"
+      }
+    ],
+    "regex_features": [],
+    "lookup_tables": [],
+    "entity_synonyms": []
+  }
+}

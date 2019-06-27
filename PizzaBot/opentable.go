@@ -1,12 +1,12 @@
 package main
 
 import (
-	"fmt"
-	"github.com/PuerkitoBio/goquery"
-	"log"
-	"net/http"
-	"regexp"
-	"strconv"
+	/*	"fmt"
+		"github.com/PuerkitoBio/goquery"
+		"log"
+		"net/http"
+		"regexp"
+		"strconv"*/
 	"time"
 )
 
@@ -25,7 +25,7 @@ func Query(id string, datetime time.Time, partySize string) (OpenTableResult, er
 
 	//	url := fmt.Sprintf("https://www.opentable.com/restaurant/profile/%s/reserve?restref=%s&datetime=%s&covers=%s", id, id, datetime, partySize)
 
-	searchYear := datetime.Year()
+	/*searchYear := datetime.Year()
 	searchMonth := datetime.Month()
 	searchDay := datetime.Day()
 	searchHour := datetime.Hour()
@@ -36,6 +36,7 @@ func Query(id string, datetime time.Time, partySize string) (OpenTableResult, er
 		baseUrl, id, id, searchYear, searchMonth, searchDay, searchHour, searchMinute, partySize)
 	res, err := http.Get(paramUrl)
 
+	fmt.Println(paramUrl)
 	if err != nil {
 		return result, err
 	}
@@ -43,7 +44,7 @@ func Query(id string, datetime time.Time, partySize string) (OpenTableResult, er
 	defer res.Body.Close()
 
 	if res.StatusCode != 200 {
-		log.Println("status code error: %d %s", res.StatusCode, res.Status)
+		log.Printf("status code error: %d %s", res.StatusCode, res.Status)
 	}
 
 	doc, err := goquery.NewDocumentFromReader(res.Body)
@@ -82,12 +83,13 @@ func Query(id string, datetime time.Time, partySize string) (OpenTableResult, er
 				if period == "PM" {
 					hour += 12
 				}
-				parsedTime := time.Date(searchYear, searchMonth, searchDay, hour, minutes, 0, 0, time.UTC)
+				parsedTime := time.Date(searchYear, searchMonth, searchDay, hour, minutes, 0, 0, time.Local)
 				result.Results = append(result.Results, parsedTime)
 			}
 		}
 
-	})
+	})*/
 
+	result.Results = append(result.Results, datetime)
 	return result, nil
 }
