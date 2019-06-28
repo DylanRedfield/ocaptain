@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"cloud.google.com/go/firestore"
 	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
 	"time"
@@ -131,8 +130,7 @@ func (bot *Bot) sendToAI(reqObj *OutsideRequest) OutsideResponse {
 
 	envValues := GetEnvValues()
 
-	rasaUrl := fmt.Sprintf("http://localhost:%s/webhooks/textual/webhook", envValues.RasaPort)
-	req, err := http.NewRequest("POST", rasaUrl, bytes.NewBuffer(body))
+	req, err := http.NewRequest("POST", envValues.BotUrl, bytes.NewBuffer(body))
 	req.Header.Set("Content-Type", "application/json")
 
 	if err != nil {

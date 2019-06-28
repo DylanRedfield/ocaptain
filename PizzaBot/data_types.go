@@ -36,12 +36,14 @@ func NewBot(ctx context.Context) (*Bot, error) {
 		return nil, err
 	}
 
+	envValues := GetEnvValues()
 	twilioClient := TwilioClient{
-		AccountSid: "AC9dfbda388f3ee10353bbc001694f5c27",
-		AuthToken:  "e3429e06cc27740f1c859d2bfc9964ae"}
+		AccountSid: envValues.TwilioAccountSid,
+		AuthToken:  envValues.TwilioAccountToken,
+	}
 
 	swiftClient := SwiftClient{
-		AccountKey: "8hjeuf40gqyFFkY1wnL7ikTba1zg3fEk"}
+		AccountKey: envValues.SwiftAccountKey}
 
 	return &Bot{Client: client, Ctx: ctx, TwilioClient: twilioClient, SwiftClient: swiftClient}, nil
 }
@@ -305,4 +307,10 @@ type Event struct {
 type EnvValues struct {
 	PizzaPort string `json:"pizza_port"`
 	RasaPort  string `json:"rasa_port"`
+	Name string `json:"name"`
+	BotUrl string `json:"bot_url"`
+	TwilioAccountSid string `json:"twilio_account_sid"`
+	TwilioAccountToken string `json:"twilio_account_token"`
+	SwiftAccountKey string `json:"swift_account_key"`
 }
+

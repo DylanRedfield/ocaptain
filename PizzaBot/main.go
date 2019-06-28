@@ -1,14 +1,11 @@
 package main
 
 import (
-	"cloud.google.com/go/firestore"
 	"context"
 	"encoding/json"
 	"errors"
-	firebase "firebase.google.com/go"
 	"fmt"
 	"google.golang.org/api/iterator"
-	"google.golang.org/api/option"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -33,11 +30,11 @@ func init() {
 
 func main() {
 
+	name := GetEnvValues().Name
+
 	mux := http.NewServeMux()
-	mux.Handle("/PizzaBot/businessInput", http.HandlerFunc(businessInput))
-	mux.Handle("/PizzaBot/outsideSmsInput", http.HandlerFunc(outsideSmsInput))
-	mux.Handle("/PizzaBot/sendSelf", http.HandlerFunc(sendSelf))
-	mux.Handle("/ocaptain/sendAndSave", http.HandlerFunc(sendAndSave))
+	mux.Handle(fmt.Sprintf("/%s/businessInput", name), http.HandlerFunc(businessInput))
+	mux.Handle(fmt.Sprintf("/%s/outsideSmsInput", name), http.HandlerFunc(outsideSmsInput))
 
 	jsonFile, err := os.Open("../env_values.json")
 
@@ -99,75 +96,7 @@ func outsideSmsInput(w http.ResponseWriter, req *http.Request) {
 	bot.HandleOutsideInput(&outsideReq)
 }
 
-func sendSelf(w http.ResponseWriter, req *http.Request) {
-	reqObj := MessageRequest{To: "+12027593168", Body: "Default message", From: "+12027593168"}
-	outsideReq := toOutsideRequest(reqObj)
-	bot.HandleOutsideInput(&outsideReq)
-}
 
-func sendAndSave(w http.ResponseWriter, req *http.Request) {
-	log.Println("UGHHH")
-	body, err := ioutil.ReadAll(req.Body)
-
-	if err != nil {
-		log.Println(err)
-	}
-
-	var reqObj OutsideRequest
-	if err := json.Unmarshal(body, &reqObj); err != nil {
-		log.Println(err)
-	}
-
-	twilioClient := TwilioClient{
-		AccountSid: "AC9dfbda388f3ee10353bbc001694f5c27",
-		AuthToken:  "e3429e06cc27740f1c859d2bfc9964ae"}
-
-	to := reqObj.Recipient.Contact
-	from := reqObj.Business.PhoneNumber
-	text := reqObj.Message.Content
-
-	twilioClient.Send(&MessageRequest{to, from, text})
-
-	ctx = context.Background()
-
-	sa := option.WithCredentialsFile("firebase-config.json")
-
-	app, err := firebase.NewApp(ctx, nil, sa)
-
-	if err != nil {
-		log.Println(err)
-	}
-
-	client, err := app.Firestore(ctx)
-
-	if err != nil {
-		log.Println(err)
-	}
-
-	log.Println(reqObj.Business.Id)
-	messagesRef := client.Collection(Businesses).Doc(reqObj.Business.Id).Collection(Messages)
-	_, _, err = messagesRef.Add(ctx, reqObj.Message)
-
-	if err != nil {
-		log.Println(err)
-	}
-
-	personRef := client.Collection(Businesses).Doc(reqObj.Business.Id).Collection(Recipients).Doc(reqObj.Recipient.Id)
-	personRef.Update(ctx, []firestore.Update{
-		{Path: RecentMessage, Value: reqObj.Message},
-	})
-
-}
-func initFirebase() *Bot {
-	ctx = context.Background()
-	bot, err := NewBot(ctx)
-
-	if err != nil {
-		// TODO handle error
-	}
-
-	return bot
-}
 
 // Turns TwilioRequest into standard OutsideRequest object
 func toOutsideRequest(twilReq MessageRequest) OutsideRequest {
