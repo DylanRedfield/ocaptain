@@ -14,7 +14,6 @@ type TwilioClient struct {
 	AuthToken  string
 }
 
-var TwilioGeneralNumber = "+19083411652"
 func init() {
 	log.SetFlags(log.Lshortfile)
 }
@@ -53,7 +52,7 @@ func (client *TwilioClient) Send(reqObj *MessageRequest) {
 
 func (client *TwilioClient) SendBulk(reqObj *BulkMessageRequest) {
 
-	single := &MessageRequest{From: TwilioGeneralNumber, Body: reqObj.Body}
+	single := &MessageRequest{From: GetEnvValues().TwilioGeneralNumber, Body: reqObj.Body}
 	for _, number := range reqObj.To {
 		single.To = number
 		client.Send(single)

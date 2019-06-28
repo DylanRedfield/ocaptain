@@ -312,5 +312,6 @@ type EnvValues struct {
 	TwilioAccountSid string `json:"twilio_account_sid"`
 	TwilioAccountToken string `json:"twilio_account_token"`
 	SwiftAccountKey string `json:"swift_account_key"`
+	TwilioGeneralNumber string `json:"twilio_general_number"`
 }
 
