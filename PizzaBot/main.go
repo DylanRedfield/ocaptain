@@ -81,6 +81,7 @@ func outsideSmsInput(w http.ResponseWriter, req *http.Request) {
 
 	values := req.URL.Query()
 	reqObj := MessageRequest{}
+	log.Println(values)
 	if val, exists := values["smsPlatform"]; exists {
 		if val[0] == "SWIFT" {
 			to := fmt.Sprintf("+1%s", values["Destination"][0])
