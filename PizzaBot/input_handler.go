@@ -25,8 +25,11 @@ func (bot *Bot) HandleBusinessInput(reqObj BusinessRequest) BusinessResponse {
 
 	_, err := messageRef.Set(bot.Ctx, message)
 
+	if err != nil {
+		log.Println(err)
+	}
 	personRef := bot.Client.Collection(Businesses).Doc(reqObj.BusinessId).Collection(Recipients).Doc(reqObj.Recipient.Id)
-	personRef.Update(bot.Ctx, []firestore.Update{
+	_, err = personRef.Update(bot.Ctx, []firestore.Update{
 		{Path: RecentMessage, Value: message},
 	})
 
