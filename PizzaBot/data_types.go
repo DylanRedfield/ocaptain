@@ -39,7 +39,7 @@ func NewBot(ctx context.Context) (*Bot, error) {
 	envValues := GetEnvValues()
 	twilioClient := TwilioClient{
 		AccountSid: envValues.TwilioAccountSid,
-		AuthToken:  envValues.TwilioAccountToken,
+		AuthToken:  envValues.TwilioAuthToken,
 	}
 
 	swiftClient := SwiftClient{
@@ -310,7 +310,7 @@ type EnvValues struct {
 	Name string `json:"name"`
 	BotUrl string `json:"bot_url"`
 	TwilioAccountSid string `json:"twilio_account_sid"`
-	TwilioAccountToken string `json:"twilio_account_token"`
+	TwilioAuthToken string `json:"twilio_auth_token"`
 	SwiftAccountKey string `json:"swift_account_key"`
 	TwilioGeneralNumber string `json:"twilio_general_number"`
 }
