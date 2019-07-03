@@ -79,10 +79,11 @@ func outsideSmsInput(w http.ResponseWriter, req *http.Request) {
 	// So I marshal the map into a json string,
 	// then unmarshal the json shring into the object
 
+	log.Println(req)
+
 	values := req.URL.Query()
 	reqObj := MessageRequest{}
-	log.Println(values)
-	if val, exists := values["smsPlatform"]; exists {
+	if val, exists := values["platform"]; exists {
 		if val[0] == "SWIFT" {
 			to := fmt.Sprintf("+1%s", values["Destination"][0])
 			from := fmt.Sprintf("+%s", values["PhoneNumber"][0])

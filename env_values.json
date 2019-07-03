@@ -3,7 +3,7 @@
   "twilio_account_sid": "AC9dfbda388f3ee10353bbc001694f5c27",
   "twilio_auth_token": "e3429e06cc27740f1c859d2bfc9964ae",
   "swift_account_key": "8hjeuf40gqyFFkY1wnL7ikTba1zg3fEk",
-  "pizza_url":"http://redfieldautomation.com:8080/production-ocaptain/outsideSmsInput",
+  "pizza_url":"http://redfieldautomation.com:8080/production-ocaptain",
   "pizza_port":"8080",
   "bot_url":"http://localhost:%s/webhooks/textual/webhook",
   "twilio_general_number": "+12024105107"
