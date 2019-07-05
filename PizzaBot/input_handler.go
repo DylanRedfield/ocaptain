@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"fmt"
 	"cloud.google.com/go/firestore"
 	"encoding/json"
 	"log"
@@ -118,7 +119,8 @@ func (bot *Bot) notifyStaff(reqObj *OutsideRequest) {
 		}
 	}
 
-	bulkReq := &BulkMessageRequest{actives, reqObj.Message.Content}
+	message := fmt.Sprintf("New message from %s:\n\n%s", reqObj.Recipient.Contact, reqObj.Message.Content)
+	bulkReq := &BulkMessageRequest{actives, message}
 	bot.TwilioClient.SendBulk(bulkReq)
 }
 
