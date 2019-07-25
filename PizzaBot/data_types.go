@@ -17,6 +17,7 @@ type Bot struct {
 	Ctx          context.Context
 	TwilioClient TwilioClient
 	SwiftClient  SwiftClient
+	ActiveMessages []*Message
 }
 
 func NewBot(ctx context.Context) (*Bot, error) {

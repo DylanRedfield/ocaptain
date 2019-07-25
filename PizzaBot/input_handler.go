@@ -2,9 +2,9 @@ package main
 
 import (
 	"bytes"
-	"fmt"
 	"cloud.google.com/go/firestore"
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 	"time"
@@ -53,7 +53,20 @@ func (bot *Bot) HandleBusinessInput(reqObj BusinessRequest) BusinessResponse {
 		bot.SwiftClient.Send(&smsRequest)
 	}
 
+	// filter out any messages from the active messages that have the same recipientID because they've been responded to
+	filterFunc := func(m *Message) bool { return m.RecipientId != message.RecipientId}
+	bot.ActiveMessages = Filter(bot.ActiveMessages, filterFunc)
+
 	return BusinessResponse{}
+}
+
+func Filter(ss []*Message, test func(*Message) bool) (ret []*Message) {
+	for _, s := range ss {
+		if test(s) {
+			ret = append(ret, s)
+		}
+	}
+	return
 }
 
 func (bot *Bot) HandleOutsideInput(reqObj *OutsideRequest) OutsideResponse {
@@ -81,6 +94,9 @@ func (bot *Bot) HandleOutsideInput(reqObj *OutsideRequest) OutsideResponse {
 
 	// Need to save the new message to firebase
 	err := bot.saveMessage(reqObj.Business, reqObj.Recipient, reqObj.Message)
+
+	// And add the message to the active messages
+	bot.ActiveMessages = append(bot.ActiveMessages, reqObj.Message)
 
 	if err != nil {
 		log.Println(err)
