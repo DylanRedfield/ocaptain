@@ -50,6 +50,20 @@ func main() {
 
 	json.Unmarshal([]byte(byteValue), &envValues)
 
+	ticker := time.NewTicker(30 * time.Second)
+	quit := make(chan struct{})
+
+	go func() {
+		for {
+			select {
+			case <- ticker.C:
+				bot.CheckActiveMessages()
+				case <- quit:
+					ticker.Stop()
+					return
+			}
+		}
+	}()
 	log.Println(envValues.PizzaPort)
 	log.Println(http.ListenAndServe(":"+envValues.PizzaPort, mux))
 }

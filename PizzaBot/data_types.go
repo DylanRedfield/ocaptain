@@ -1,53 +1,14 @@
 package main
 
 import (
-	"cloud.google.com/go/firestore"
-	"context"
 	"errors"
-	firebase "firebase.google.com/go"
 	"fmt"
-	"google.golang.org/api/option"
 	"log"
 	"strconv"
 	"time"
 )
 
-type Bot struct {
-	Client       *firestore.Client
-	Ctx          context.Context
-	TwilioClient TwilioClient
-	SwiftClient  SwiftClient
-	ActiveMessages []*Message
-}
 
-func NewBot(ctx context.Context) (*Bot, error) {
-	sa := option.WithCredentialsFile("firebase-config.json")
-
-	app, err := firebase.NewApp(ctx, nil, sa)
-
-	if err != nil {
-		log.Println(err)
-		return nil, err
-	}
-
-	client, err := app.Firestore(ctx)
-
-	if err != nil {
-		log.Println(err)
-		return nil, err
-	}
-
-	envValues := GetEnvValues()
-	twilioClient := TwilioClient{
-		AccountSid: envValues.TwilioAccountSid,
-		AuthToken:  envValues.TwilioAuthToken,
-	}
-
-	swiftClient := SwiftClient{
-		AccountKey: envValues.SwiftAccountKey}
-
-	return &Bot{Client: client, Ctx: ctx, TwilioClient: twilioClient, SwiftClient: swiftClient}, nil
-}
 
 type BusinessRequest struct {
 	BusinessId string
