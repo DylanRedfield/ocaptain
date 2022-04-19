@@ -7,6 +7,7 @@ import (
 	"errors"
 	firebase "firebase.google.com/go"
 	"fmt"
+	"golang.org/x/crypto/acme/autocert"
 	"google.golang.org/api/iterator"
 	"google.golang.org/api/option"
 	"io/ioutil"
@@ -40,7 +41,22 @@ func main() {
 	mux.Handle("/ocaptain", http.HandlerFunc(actionInput))
 	mux.Handle("/ocaptain/sendAndSave", http.HandlerFunc(sendAndSave))
 	mux.Handle("/", http.HandlerFunc(actionInput))
-	log.Println(http.ListenAndServe(":80", mux))
+
+	domain := "redfieldautomation.com"
+	certManager := autocert.Manager{
+		Prompt:     autocert.AcceptTOS,
+		HostPolicy: autocert.HostWhitelist(domain),
+		Cache:      autocert.DirCache("certs"),
+	}
+
+	tlsConfig := certManager.TLSConfig()
+	server := http.Server{
+		Addr:      ":443",
+		Handler:   mux,
+		TLSConfig: tlsConfig,
+	}
+
+	log.Println(server.ListenAndServeTLS("", ""))
 
 	jsonFile, err := os.Open("../env_values.json")
 
