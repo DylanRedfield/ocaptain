@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Rasa Core Visualisation</title>
+    <script src="https://dagrejs.github.io/project/dagre-d3/latest/dagre-d3.min.js"></script>
+    <script src="https://dagrejs.github.io/project/dagre/latest/dagre.min.js"></script>
+    <script src="https://d3js.org/d3.v4.js"></script>
+    <script src="https://dagrejs.github.io/project/graphlib-dot/v0.6.3/graphlib-dot.js"></script>
+</head>
+<body>
+<div id="errormsg" style="color: #b00"></div>
+<svg>
+    <style>
+        .node.invisible > rect {
+            display: none;
+        }
+
+        .node.start > rect {
+            fill: #7f7;
+            rx: 30;
+            ry: 18;
+        }
+
+        .node.end > rect {
+            fill: #f77;
+            rx: 30;
+            ry: 18;
+        }
+
+        .node:not(.active) > rect, .node:not(.active) > .label {
+            opacity: 0.4;
+        }
+
+        .edgePath:not(.active) path {
+            opacity: 0.4;
+        }
+
+        .node.ellipsis > rect {
+            fill: #CCC;
+        }
+
+        .node.intent > rect {
+            fill: #7ff;
+        }
+
+        .node.dashed > rect {
+            stroke-dasharray: 5;
+        }
+
+        text {
+            font-weight: 300;
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serf, serif;
+            font-size: 14px;
+            color: #1f1d1d;
+        }
+
+        .node rect {
+            stroke: #444;
+            fill: #fff;
+            stroke-width: 1.5px;
+        }
+
+        .edgePath path {
+            stroke: #333;
+            stroke-width: 1.5px;
+        }
+
+        svg {
+            position: fixed;
+            top: 10px;
+            left: 0;
+            height: 100%;
+            width: 100%
+        }
+    </style>
+    <g></g>
+</svg>
+<script>
+
+  function serveGraph() {
+    let oldInputGraphValue;
+
+    const url = 'visualization.dot';
+    const refreshInterval = 500;
+
+    // trigger a refresh by fetching an updated graph
+    setInterval(function () {
+      fetch(url).then(r => r.text()).then(dot => {
+        document.getElementById('errormsg').innerHTML = '';
+        if (oldInputGraphValue === dot) return;
+
+        oldInputGraphValue = dot;
+        drawGraph(dot);
+      }).catch(err => {
+        document.getElementById('errormsg').innerHTML =
+          'Failed to update plot. (' + err.message + ')';
+      });
+    }, refreshInterval);
+  }
+
+  function drawGraph(graph) {
+    let g = graphlibDot.read(graph);
+    // Set margins, if not present
+    if (!g.graph().hasOwnProperty("marginx") &&
+      !g.graph().hasOwnProperty("marginy")) {
+      g.graph().marginx = 20;
+      g.graph().marginy = 20;
+    }
+    g.graph().transition = function (selection) {
+      return selection.transition().duration(300);
+    };
+    // Render the graph into svg g
+    d3.select("svg g").call(render, g);
+  }
+  // Set up zoom support
+  const svg = d3.select("svg"),
+    inner = d3.select("svg g"),
+    zoom = d3.zoom().on("zoom", function () {
+      inner.attr("transform", d3.event.transform);
+    });
+  svg.call(zoom);
+
+  // Create and configure the renderer
+  const render = dagreD3.render();
+
+  let isClient = false;
+  isClient = true;
+
+  if (isClient) {
+    // Mark all nodes and their edges as active
+    cssRules = document.styleSheets[0].cssRules;
+    cssRules[3].style.opacity = 1;
+    cssRules[4].style.opacity = 1;
+
+    let graph;
+    graph = `digraph  {
+0 [label=START, fillcolor=green, style=filled];
+"-1" [label=END, fillcolor=red, style=filled];
+1 [label="checkpoint_reserv...", style=filled, fillcolor=lightblue, shape=rect];
+2 [label="checkpoint_reserv..."];
+3 [label="checkpoint_to_fil..."];
+4 [label=entry, style=filled, fillcolor=lightblue, shape=rect];
+5 [label="checkpoint_to_fil...", style=filled, fillcolor=lightblue, shape=rect];
+6 [label=GENR_CYCL_SRC_0f0a1, style=filled, fillcolor="#95c587"];
+7 [label=GENR_CYCL_SRC_90a0c, style=filled, fillcolor="#7a53ac"];
+8 [label=GENR_CYCL_SRC_d53eb, style=filled, fillcolor="#a079d2"];
+9 [label=GENR_CYCL_SRC_1b40f, style=filled, fillcolor="#879bc5"];
+10 [label=GENR_CYCL_SINK_9b013, style=filled, fillcolor="#8d53ac"];
+11 [label=GENR_CYCL_CONN_9b013, style=filled, fillcolor="#8d53ac"];
+12 [label="checkpoint_to_fil...", style=filled, fillcolor=lightblue, shape=rect];
+13 [label=GENR_CYCL_SRC_c0638, style=filled, fillcolor="#4d862d"];
+14 [label=GENR_CYCL_CONN_90a0c, style=filled, fillcolor="#7a53ac"];
+15 [label=GENR_CYCL_CONN_d53eb, style=filled, fillcolor="#a079d2"];
+16 [label=GENR_CYCL_SRC_93006, style=filled, fillcolor="#40aebf"];
+17 [label=GENR_CYCL_SINK_0f0a1, style=filled, fillcolor="#95c587"];
+18 [label=GENR_CYCL_SINK_93006, style=filled, fillcolor="#40aebf"];
+19 [label=GENR_CYCL_CONN_93006, style=filled, fillcolor="#40aebf"];
+20 [label="checkpoint_to_fil...", style=filled, fillcolor=lightblue, shape=rect];
+21 [label=GENR_CYCL_SRC_568d5, style=filled, fillcolor="#671f93"];
+22 [label=GENR_CYCL_SINK_c0638, style=filled, fillcolor="#4d862d"];
+23 [label=GENR_CYCL_SINK_568d5, style=filled, fillcolor="#671f93"];
+24 [label=GENR_CYCL_SINK_1b40f, style=filled, fillcolor="#879bc5"];
+25 [label="checkpoint_with_p...", style=filled, fillcolor=lightblue, shape=rect];
+26 [label=GENR_CYCL_SRC_9b013, style=filled, fillcolor="#8d53ac"];
+27 [label="checkpoint_with_p...", style=filled, fillcolor=lightblue, shape=rect];
+28 [label=GENR_CYCL_SINK_d53eb, style=filled, fillcolor="#a079d2"];
+29 [label="checkpoint_with_p...", style=filled, fillcolor=lightblue, shape=rect];
+30 [label="checkpoint_with_p...", style=filled, fillcolor=lightblue, shape=rect];
+31 [label=GENR_CYCL_SINK_90a0c, style=filled, fillcolor="#7a53ac"];
+0 -> 4  [key=0];
+1 -> 3  [key=0];
+2 -> 1  [key=0];
+3 -> 5  [key=0];
+3 -> 12  [key=0];
+3 -> 20  [key=0];
+4 -> 2  [key=0];
+5 -> 10  [key=0];
+5 -> 11  [key=0];
+6 -> 5  [key=0];
+7 -> 5  [key=0];
+8 -> 5  [key=0];
+9 -> 5  [key=0];
+11 -> 27  [key=0];
+11 -> 29  [key=0];
+11 -> 30  [key=0];
+12 -> 17  [key=0];
+12 -> 18  [key=0];
+12 -> 19  [key=0];
+13 -> 12  [key=0];
+14 -> 12  [key=0];
+14 -> 20  [key=0];
+15 -> 12  [key=0];
+15 -> 20  [key=0];
+16 -> 12  [key=0];
+19 -> 20  [key=0];
+20 -> 22  [key=0];
+20 -> 23  [key=0];
+20 -> 24  [key=0];
+21 -> 20  [key=0];
+25 -> 2  [key=0];
+26 -> 25  [key=0];
+27 -> 28  [key=0];
+27 -> 15  [key=0];
+29 -> "-1"  [key=0];
+30 -> 31  [key=0];
+30 -> 14  [key=0];
+}
+`;
+    drawGraph(graph);
+  } else {
+    serveGraph();
+  }
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+policies:
+  - name: "KerasPolicy"
+    epochs: 25
+    validation_split: 0.0
+    featurizer:
+      - name: MaxHistoryTrackerFeaturizer
+        max_history: 5
+        state_featurizer:
+          - name: BinarySingleStateFeaturizer
+  - name: "AugmentedMemoizationPolicy"
+    max_history: 5
+  - name: "FallbackPolicy"
+    fallback_action_name: "utter_doing_greet"
+    nlu_threshold: 0.005
+    core_threshold: 0.005

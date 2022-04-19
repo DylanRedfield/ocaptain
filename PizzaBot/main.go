@@ -12,6 +12,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 	"time"
 )
 
@@ -38,11 +39,31 @@ func main() {
 	mux.Handle("/PizzaBot/sendSelf", http.HandlerFunc(sendSelf))
 	mux.Handle("/ocaptain", http.HandlerFunc(actionInput))
 	mux.Handle("/ocaptain/sendAndSave", http.HandlerFunc(sendAndSave))
+<<<<<<< HEAD
 	log.Println(http.ListenAndServe(":80", mux))
+=======
+
+	jsonFile, err := os.Open("../env_values.json")
+
+	if err != nil {
+		log.Println(err)
+	}
+
+	defer jsonFile.Close()
+
+	byteValue, _ := ioutil.ReadAll(jsonFile)
+
+	var envValues EnvValues
+
+	json.Unmarshal([]byte(byteValue), &envValues)
+
+	log.Println(envValues.PizzaPort)
+	log.Println(http.ListenAndServe(":"+envValues.PizzaPort, mux))
+>>>>>>> cb3275b8d1b581e240b085cc24b8b124d636901d
 }
 
 func test() {
-	datetime := time.Date(2018, 11, 19, 14, 0, 0, 0, time.UTC)
+	datetime := time.Date(2018, 11, 19, 14, 0, 0, 0, time.Local)
 	result, err := Query("24712", datetime, "3")
 
 	if err != nil {
@@ -108,16 +129,27 @@ func outsideSmsInput(w http.ResponseWriter, req *http.Request) {
 	// So I marshal the map into a json string,
 	// then unmarshal the json shring into the object
 
-	reqObj := TwilioRequest{To: req.URL.Query()["To"][0], Body: req.URL.Query()["Body"][0], From: req.URL.Query()["From"][0]}
+	values := req.URL.Query()
+	reqObj := MessageRequest{}
+	if val, exists := values["platform"]; exists {
+		if val[0] == "SWIFT" {
+			to := fmt.Sprintf("+1%s", values["Destination"][0])
+			from := fmt.Sprintf("+%s", values["PhoneNumber"][0])
+			reqObj = MessageRequest{To: to, Body: values["MessageBody"][0], From: from}
+		}
+	} else {
+		reqObj = MessageRequest{To: req.URL.Query()["To"][0], Body: req.URL.Query()["Body"][0], From: req.URL.Query()["From"][0]}
+	}
+	// TODO will error on swift message from conflicting names
 
 	outsideReq := toOutsideRequest(reqObj)
-	bot.HandleOutsideInput(outsideReq)
+	bot.HandleOutsideInput(&outsideReq)
 }
 
 func sendSelf(w http.ResponseWriter, req *http.Request) {
-	reqObj := TwilioRequest{To: "+12027593168", Body: "Default message", From: "+12027593168"}
+	reqObj := MessageRequest{To: "+12027593168", Body: "Default message", From: "+12027593168"}
 	outsideReq := toOutsideRequest(reqObj)
-	bot.HandleOutsideInput(outsideReq)
+	bot.HandleOutsideInput(&outsideReq)
 }
 
 func sendAndSave(w http.ResponseWriter, req *http.Request) {
@@ -141,7 +173,7 @@ func sendAndSave(w http.ResponseWriter, req *http.Request) {
 	from := reqObj.Business.PhoneNumber
 	text := reqObj.Message.Content
 
-	twilioClient.SendSMS(SMSRequest{to, from, text})
+	twilioClient.Send(&MessageRequest{to, from, text})
 
 	ctx = context.Background()
 
@@ -185,7 +217,7 @@ func initFirebase() *Bot {
 }
 
 // Turns TwilioRequest into standard OutsideRequest object
-func toOutsideRequest(twilReq TwilioRequest) OutsideRequest {
+func toOutsideRequest(twilReq MessageRequest) OutsideRequest {
 
 	timeInMil := time.Now().UnixNano() / 1000000
 	message := &Message{
@@ -215,6 +247,7 @@ func toOutsideRequest(twilReq TwilioRequest) OutsideRequest {
 
 func businessFromPhone(phoneNumber string) (*Business, error) {
 	business := &Business{}
+	log.Println(phoneNumber)
 	iter := bot.Client.Collection(Businesses).Where(PhoneNumber, "==", phoneNumber).Documents(bot.Ctx)
 
 	for {
@@ -231,10 +264,40 @@ func businessFromPhone(phoneNumber string) (*Business, error) {
 		}
 
 		err = doc.DataTo(business)
+
 		if err != nil {
 			log.Println(err)
 		}
+
 		business.Id = doc.Ref.ID
+
+		// Doesnt automatically unmarshall subcollections
+		subIter := bot.Client.Collection(Businesses).Doc(business.Id).Collection("employees").Documents(bot.Ctx)
+		employees := []Employee{}
+		for {
+			subDoc, err := subIter.Next()
+
+			if err == iterator.Done {
+				break
+			}
+			if err != nil {
+				return business, err
+			}
+
+			employee := Employee{}
+			err = subDoc.DataTo(&employee)
+
+			if err != nil {
+				return business, err
+			}
+
+			employee.Id = subDoc.Ref.ID
+
+			employees = append(employees, employee)
+		}
+		business.Employees = employees
+		log.Println(employees)
+
 	}
 
 	if business.Id == "" {

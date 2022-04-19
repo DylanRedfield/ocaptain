@@ -5,35 +5,21 @@ import (
 	"log"
 	"net/http"
 	"net/url"
-	"time"
 	//"io/ioutil"
 	"strings"
 )
-
-var httpClient = &http.Client{Timeout: 10 * time.Second}
 
 type TwilioClient struct {
 	AccountSid string
 	AuthToken  string
 }
 
-type SMSRequest struct {
-	To   string
-	From string
-	Body string
-}
-
-type TwilioRequest struct {
-	Body string
-	To   string
-	From string
-}
-
+var TwilioGeneralNumber = "+19083411652"
 func init() {
 	log.SetFlags(log.Lshortfile)
 }
 
-func (client TwilioClient) SendSMS(reqObj SMSRequest) {
+func (client *TwilioClient) Send(reqObj *MessageRequest) {
 
 	queryUrl := fmt.Sprintf("https://api.twilio.com/2010-04-01/Accounts/%s/Messages.json", client.AccountSid)
 
@@ -55,14 +41,22 @@ func (client TwilioClient) SendSMS(reqObj SMSRequest) {
 	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 
 	resp, err := httpClient.Do(req)
-
-	defer resp.Body.Close()
-
 	if err != nil {
 		// TODO handlje error
 		log.Println(err)
 	}
+	defer resp.Body.Close()
 
 	//fuck, err := ioutil.ReadAll(resp.Body)
 	// TODO handle response errors
+}
+
+func (client *TwilioClient) SendBulk(reqObj *BulkMessageRequest) {
+
+	single := &MessageRequest{From: TwilioGeneralNumber, Body: reqObj.Body}
+	for _, number := range reqObj.To {
+		single.To = number
+		client.Send(single)
+	}
+
 }

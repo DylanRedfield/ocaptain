@@ -3,15 +3,20 @@ package main
 import (
 	"cloud.google.com/go/firestore"
 	"context"
+	"errors"
 	firebase "firebase.google.com/go"
+	"fmt"
 	"google.golang.org/api/option"
 	"log"
+	"strconv"
+	"time"
 )
 
 type Bot struct {
-	Client    *firestore.Client
-	Ctx       context.Context
-	SmsClient TwilioClient
+	Client       *firestore.Client
+	Ctx          context.Context
+	TwilioClient TwilioClient
+	SwiftClient  SwiftClient
 }
 
 func NewBot(ctx context.Context) (*Bot, error) {
@@ -35,7 +40,10 @@ func NewBot(ctx context.Context) (*Bot, error) {
 		AccountSid: "AC9dfbda388f3ee10353bbc001694f5c27",
 		AuthToken:  "e3429e06cc27740f1c859d2bfc9964ae"}
 
-	return &Bot{Client: client, Ctx: ctx, SmsClient: twilioClient}, nil
+	swiftClient := SwiftClient{
+		AccountKey: "8hjeuf40gqyFFkY1wnL7ikTba1zg3fEk"}
+
+	return &Bot{Client: client, Ctx: ctx, TwilioClient: twilioClient, SwiftClient: swiftClient}, nil
 }
 
 type BusinessRequest struct {
@@ -84,6 +92,12 @@ type OutsideRequest struct {
 type OutsideResponse struct {
 }
 
+type RasaTime struct {
+	Value string
+	Grain string
+	Type  string
+}
+
 type Order struct {
 	Id                   string `firestore:"-"`
 	Address              string `firestore:"address"`
@@ -105,33 +119,137 @@ type Business struct {
 	Password              string               `firestore:"password"`
 	PhoneNumber           string               `firestore:"phoneNumber"`
 	Hours                 map[string]OpenClose `firestore:"hours"`
+	HoursExceptions       map[string]OpenClose `firestore:"hoursExceptions"`
 	ReservationPlatform   string               `firestore:"reservationPlatform"`
 	ReservationPlatformId string               `firestore:"reservationPlatformId"`
+	Employees             []Employee           `firestore:"employees"`
+	SmsPlatform           string               `firestore:"smsPlatform"`
+	SmsNotifyEnabled      bool                 `firestore:"smsNotifyEnabled"`
 }
 
 type OpenClose struct {
-	IsOpen    bool  `firestore:"isOpen"`
-	OpenTime  int64 `firestore:"openTime"`
-	CloseTime int64 `firestore:"closeTime"`
+	IsOpen bool  `firestore:"isOpen"`
+	Open   int64 `firestore:"open"`
+	Close  int64 `firestore:"close"`
+}
+
+type Employee struct {
+	IsActive    bool   `firestore:"active"`
+	Id          string `firestore:"-"`
+	PhoneNumber string `firestore:"phoneNumber"`
+}
+
+func (openClose *OpenClose) ClosePastMidnight() bool {
+	return openClose.Close < openClose.Open
 }
 
 type Reservation struct {
 	Id            string `firestore:"-"`
 	RecipientId   string `firestore:"recipientId"`
-  Contact string `firestore:"contact"`
+	Contact       string `firestore:"contact"`
 	Name          string `firestore:"name"`
 	ScheduledTime int64  `firestore:"scheduledTime"`
-	NumPeople     int  `firestore:"numPeople"`
+	NumPeople     int    `firestore:"numPeople"`
 	IsVisible     bool   `firestore:"visible"`
 }
 
-func (business Business) TimeClose(day string) int64 {
-	return business.Hours[day].CloseTime
+func (business *Business) GetOpenCloseOnDay(day time.Time) OpenClose {
+	dayOfWeek := int(day.Weekday())
+	log.Println(dayOfWeek)
+
+	dateString := fmt.Sprintf("%d-%d-%d", day.Year(), day.Month(), day.Day())
+
+	openClose := OpenClose{}
+	if val, exists := business.HoursExceptions[dateString]; exists {
+		openClose = val
+	} else {
+		openClose = business.Hours[strconv.Itoa(dayOfWeek)]
+	}
+
+	return openClose
+
 }
 
-func (business Business) IsOpen() bool {
-	// TODO implement
-	return true
+func (business *Business) GetNextOpenDayAfter(day time.Time) time.Time {
+	// Find the next available open time by add a day at a time in a while loop until the business is open
+
+	// First check if the current day is the next open day by checking if the requested time is less than the open time
+
+	requestedTimeInt := int64(day.Hour()*100 + day.Minute())
+
+	if requestedTimeInt < business.GetOpenCloseOnDay(day).Open {
+		return day
+	}
+
+	day = day.Add(time.Hour * 24)
+
+	for !business.GetOpenCloseOnDay(day).IsOpen {
+		day = day.Add(time.Hour * 24)
+	}
+
+	return day
+}
+
+func formatIntTimeTwelveHourString(inputTime int64) string {
+	period := "am"
+
+	if inputTime >= 1200 {
+		period = "pm"
+		inputTime = inputTime - 1200
+	}
+
+	if inputTime == 0 {
+		inputTime = inputTime + 1200
+	}
+
+	minutes := inputTime % 100
+	hour := inputTime / 100
+
+	return fmt.Sprintf("%d:%02d %s", hour, minutes, period)
+
+}
+
+// Will return error is the business is not open that day
+func (business *Business) TimeCloseOnDayString(day time.Time) (string, error) {
+	openClose := business.GetOpenCloseOnDay(day)
+
+	if !openClose.IsOpen {
+		return "", errors.New("Restaurant closed")
+	}
+
+	return formatIntTimeTwelveHourString(openClose.Close), nil
+}
+
+func (business *Business) TimeOpenOnDayString(day time.Time) (string, error) {
+	openClose := business.GetOpenCloseOnDay(day)
+
+	if !openClose.IsOpen {
+		return "", errors.New("Restaurant closed")
+	}
+
+	return formatIntTimeTwelveHourString(openClose.Open), nil
+
+}
+
+func (business *Business) IsOpenOnDay(day time.Time) bool {
+	openClose := business.GetOpenCloseOnDay(day)
+	isOpen := openClose.IsOpen
+
+	if !isOpen {
+		log.Println("fuck")
+		return false
+	}
+
+	currentTimeInt := int64(day.Hour()*100 + day.Minute())
+
+	if openClose.ClosePastMidnight() {
+		log.Println("fuck2")
+		return currentTimeInt >= openClose.Open || currentTimeInt <= openClose.Close
+	} else {
+		log.Println(currentTimeInt)
+		return openClose.Open <= currentTimeInt && currentTimeInt <= openClose.Close
+	}
+
 }
 
 type Tracker struct {
@@ -147,12 +265,13 @@ type LatestMessage struct {
 }
 
 type Entity struct {
-	Start      int       `json:"start"`
-	End        int       `json:"end"`
-	Value      interface{} `json:"value"`
-	Text       string      `json:"text"`
-	Confidence float64     `json:"confidence"`
-	Entity     string      `json:"entity"`
+	Start          int         `json:"start"`
+	End            int         `json:"end"`
+	Value          interface{} `json:"value"`
+	AdditionalInfo interface{} `json:"additional_info"`
+	Text           string      `json:"text"`
+	Confidence     float64     `json:"confidence"`
+	Entity         string      `json:"entity"`
 }
 
 type RasaRequest struct {
@@ -181,4 +300,9 @@ type Event struct {
 	Event string      `json:"event"`
 	Name  string      `json:"name"`
 	Value interface{} `json:"value"`
+}
+
+type EnvValues struct {
+	PizzaPort string `json:"pizza_port"`
+	RasaPort  string `json:"rasa_port"`
 }
