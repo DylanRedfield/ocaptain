@@ -25,7 +25,6 @@ func Query(id string, datetime time.Time, partySize string) (OpenTableResult, er
 
 	//	url := fmt.Sprintf("https://www.opentable.com/restaurant/profile/%s/reserve?restref=%s&datetime=%s&covers=%s", id, id, datetime, partySize)
 
-<<<<<<< HEAD
 /*	searchYear := datetime.Year()
 =======
 	/*searchYear := datetime.Year()
