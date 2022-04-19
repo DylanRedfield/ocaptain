@@ -39,6 +39,7 @@ func main() {
 	mux.Handle("/PizzaBot/sendSelf", http.HandlerFunc(sendSelf))
 	mux.Handle("/ocaptain", http.HandlerFunc(actionInput))
 	mux.Handle("/ocaptain/sendAndSave", http.HandlerFunc(sendAndSave))
+	mux.Handle("/", http.HandlerFunc(actionInput))
 	log.Println(http.ListenAndServe(":80", mux))
 
 	jsonFile, err := os.Open("../env_values.json")
