@@ -38,7 +38,7 @@ func main() {
 	mux.Handle("/PizzaBot/sendSelf", http.HandlerFunc(sendSelf))
 	mux.Handle("/ocaptain", http.HandlerFunc(actionInput))
 	mux.Handle("/ocaptain/sendAndSave", http.HandlerFunc(sendAndSave))
-	log.Println(http.ListenAndServe(":8080", mux))
+	log.Println(http.ListenAndServe(":80", mux))
 }
 
 func test() {
