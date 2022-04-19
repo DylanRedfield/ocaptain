@@ -12,7 +12,7 @@ import (
 )
 
 func (bot *Bot) HandleAction(req *RasaRequest) (*RasaResponse, error) {
-  log.Println(req.NextAction)
+	log.Println(req.NextAction)
 	resp := NewRasaResponse()
 
 	// TODO remove this it is just for train online testing
@@ -341,18 +341,18 @@ func (bot *Bot) ActionBrancherWithPotentialTimesAndAlterativeTimesToFillSchedule
 
 		altTimes := []time.Time{}
 
-<<<<<<< HEAD
-			if name == "" {
-				// Action ask the name
-				nextAction := Event{Event: "followup", Name: UTTER_ASK_NAME}
-				resp.Events = append(resp.Events, nextAction)
-        log.Println("Test")
-				return
-			} else {
-				// Force Action save_reservation
-				nextAction := Event{Event: "followup", Name: ACTION_SAVE_RESERVATION}
-				resp.Events = append(resp.Events, nextAction)
-=======
+		// TODO IDK WHY I COMMENT THIS OUT IT JUST WASN"T COMPILING
+		/*if name == "" {
+			// Action ask the name
+			nextAction := Event{Event: "followup", Name: UTTER_ASK_NAME}
+			resp.Events = append(resp.Events, nextAction)
+			log.Println("Test")
+			return
+		} else {
+			// Force Action save_reservation
+			nextAction := Event{Event: "followup", Name: ACTION_SAVE_RESERVATION}
+			resp.Events = append(resp.Events, nextAction)
+		}
 		altTimesArr := rawAlternativeTimes.([]interface{})
 		for _, v := range altTimesArr {
 			altTime, err := time.Parse(time.RFC3339, v.(string))
@@ -361,12 +361,11 @@ func (bot *Bot) ActionBrancherWithPotentialTimesAndAlterativeTimesToFillSchedule
 				event.Name = "action_need_employee_because_error"
 
 				resp.Events = append(resp.Events, event)
->>>>>>> cb3275b8d1b581e240b085cc24b8b124d636901d
 				return
 			}
 
 			altTimes = append(altTimes, altTime)
-		}
+		}*/
 
 		// Check if any are within 15 minutes and if so ask if that is fine
 		lessThan15 := false
@@ -383,7 +382,6 @@ func (bot *Bot) ActionBrancherWithPotentialTimesAndAlterativeTimesToFillSchedule
 		} else {
 			event.Name = "action_utter_ask_for_polar_on_if_single_alternative_times_acceptable"
 		}
-
 	}
 
 	resp.Events = append(resp.Events, event)
