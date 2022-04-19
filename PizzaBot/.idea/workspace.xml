@@ -5,7 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6c3e1660-e94b-4b69-8cc7-115637e0c24f" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
     </list>
@@ -98,7 +97,8 @@
     "RunOnceActivity.go.watchers.conflict.with.on.save.actions.check.performed": "true",
     "WebServerToolWindowFactoryState": "false",
     "go.import.settings.migrated": "true",
-    "last_opened_file_path": "/home/dylan/go/src/ocaptain/PizzaBot"
+    "last_opened_file_path": "/home/dylan/go/src/ocaptain/PizzaBot",
+    "settings.editor.selected.configurable": "file.status.colors"
   }
 }]]></component>
   <component name="RunManager">
