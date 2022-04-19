@@ -56,6 +56,7 @@ func main() {
 		TLSConfig: tlsConfig,
 	}
 
+  go http.ListenAndServe(":80", certManager.HTTPHandler(nil))
 	log.Println(server.ListenAndServeTLS("", ""))
 
 	jsonFile, err := os.Open("../env_values.json")
