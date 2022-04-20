@@ -38,7 +38,7 @@ func main() {
 	mux.Handle("/PizzaBot/businessInput", http.HandlerFunc(businessInput))
 	mux.Handle("/PizzaBot/outsideSmsInput", http.HandlerFunc(outsideSmsInput))
 	mux.Handle("/PizzaBot/sendSelf", http.HandlerFunc(sendSelf))
-	mux.Handle("/PizzaBot/outsideFacebookInput", http.HandlerFunc(outsideSmsInput))
+	mux.Handle("/PizzaBot/outsideFacebookInput", http.HandlerFunc(outsideFacebookInput))
 	mux.Handle("/ocaptain", http.HandlerFunc(actionInput))
 	mux.Handle("/ocaptain/sendAndSave", http.HandlerFunc(sendAndSave))
 	mux.Handle("/", http.HandlerFunc(actionInput))
@@ -167,10 +167,9 @@ func outsideFacebookInput(w http.ResponseWriter, req *http.Request) {
 	// I can get them as a map, but not obj.
 	// So I marshal the map into a json string,
 	// then unmarshal the json shring into the object
-
 	values := req.URL.Query()
 
-	fmt.Fprint(w, values.Get("hub.challenge"))
+	reqObj := MessageRequest{To: values}
 
 }
 
