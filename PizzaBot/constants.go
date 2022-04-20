@@ -1,5 +1,11 @@
 package main
 
+// Program
+const (
+	PROD_STATE string = "PROD_STATE"
+	DEV_STATE  string = "DEV_STATE"
+)
+
 // Business
 const (
 	PhoneNumber string = "phoneNumber"

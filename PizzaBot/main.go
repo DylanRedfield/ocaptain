@@ -50,15 +50,18 @@ func main() {
 		Cache:      autocert.DirCache("certs"),
 	}
 
-	tlsConfig := certManager.TLSConfig()
-	server := http.Server{
-		Addr:      ":443",
-		Handler:   mux,
-		TLSConfig: tlsConfig,
+	if bot.State == PROD_STATE {
+		tlsConfig := certManager.TLSConfig()
+		server := http.Server{
+			Addr:      ":443",
+			Handler:   mux,
+			TLSConfig: tlsConfig,
+		}
+
+		log.Println(server.ListenAndServeTLS("", ""))
 	}
 
-  go http.ListenAndServe(":80", certManager.HTTPHandler(nil))
-	log.Println(server.ListenAndServeTLS("", ""))
+	go http.ListenAndServe(":80", certManager.HTTPHandler(nil))
 
 	jsonFile, err := os.Open("../env_values.json")
 
@@ -193,7 +196,7 @@ func sendAndSave(w http.ResponseWriter, req *http.Request) {
 
 	ctx = context.Background()
 
-	sa := option.WithCredentialsFile("firebase-config.json")
+	sa := option.WithCredentialsFile("dev-firebase-config.json")
 
 	app, err := firebase.NewApp(ctx, nil, sa)
 
