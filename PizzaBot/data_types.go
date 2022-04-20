@@ -303,6 +303,7 @@ type Event struct {
 }
 
 type EnvValues struct {
-	PizzaPort string `json:"pizza_port"`
-	RasaPort  string `json:"rasa_port"`
+	PizzaPort       string `json:"pizza_port"`
+	RasaPort        string `json:"rasa_port"`
+	MessengerVerify string `json:"messenger_verify"`
 }

@@ -57,7 +57,7 @@ func main() {
 		TLSConfig: tlsConfig,
 	}
 
-  go http.ListenAndServe(":80", certManager.HTTPHandler(nil))
+	go http.ListenAndServe(":80", certManager.HTTPHandler(nil))
 	log.Println(server.ListenAndServeTLS("", ""))
 
 	jsonFile, err := os.Open("../env_values.json")
@@ -160,6 +160,18 @@ func outsideSmsInput(w http.ResponseWriter, req *http.Request) {
 
 	outsideReq := toOutsideRequest(reqObj)
 	bot.HandleOutsideInput(&outsideReq)
+}
+
+func outsideFacebookInput(w http.ResponseWriter, req *http.Request) {
+	// Params come in from GET URL.
+	// I can get them as a map, but not obj.
+	// So I marshal the map into a json string,
+	// then unmarshal the json shring into the object
+
+	values := req.URL.Query()
+
+	fmt.Fprint(w, values.Get("hub.challenge"))
+
 }
 
 func sendSelf(w http.ResponseWriter, req *http.Request) {
