@@ -167,10 +167,21 @@ func outsideFacebookInput(w http.ResponseWriter, req *http.Request) {
 	// I can get them as a map, but not obj.
 	// So I marshal the map into a json string,
 	// then unmarshal the json shring into the object
-	values := req.URL.Query()
 
-	reqObj := MessageRequest{To: values}
+	decoder := json.NewDecoder(req.Body)
+	var data FacebookMessengerTextMessage
 
+	err := decoder.Decode(&data)
+
+	if err != nil {
+		log.Println(err)
+	}
+
+	reqObj := MessageRequest{To: data.sender.id, From: data.recipient.id, Body: data.message.text}
+
+	outsideReq := toOutsideRequest(reqObj)
+
+	bot.HandleOutsideInput(&outsideReq)
 }
 
 func sendSelf(w http.ResponseWriter, req *http.Request) {
