@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"google.golang.org/api/option"
 	"log"
+	"os"
 	"strconv"
 	"time"
 )
@@ -17,10 +18,25 @@ type Bot struct {
 	Ctx          context.Context
 	TwilioClient TwilioClient
 	SwiftClient  SwiftClient
+	State        string
 }
 
 func NewBot(ctx context.Context) (*Bot, error) {
-	sa := option.WithCredentialsFile("firebase-config.json")
+	var bot Bot
+	args := os.Args
+
+	var sa option.ClientOption
+	if len(args) > 1 {
+		state := args[1]
+
+		if state == "prod" {
+			bot.State = PROD_STATE
+			sa = option.WithCredentialsFile("prod-firebase-config.json")
+		} else {
+			bot.State = DEV_STATE
+			sa = option.WithCredentialsFile("dev-firebase-config.json")
+		}
+	}
 
 	app, err := firebase.NewApp(ctx, nil, sa)
 
@@ -43,7 +59,11 @@ func NewBot(ctx context.Context) (*Bot, error) {
 	swiftClient := SwiftClient{
 		AccountKey: "8hjeuf40gqyFFkY1wnL7ikTba1zg3fEk"}
 
-	return &Bot{Client: client, Ctx: ctx, TwilioClient: twilioClient, SwiftClient: swiftClient}, nil
+	bot.Client = client
+	bot.Ctx = ctx
+	bot.TwilioClient = twilioClient
+	bot.SwiftClient = swiftClient
+	return &bot, nil
 }
 
 type BusinessRequest struct {
