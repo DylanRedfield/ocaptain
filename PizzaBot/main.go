@@ -77,8 +77,6 @@ func main() {
 
 	json.Unmarshal([]byte(byteValue), &envValues)
 
-	log.Println(envValues.PizzaPort)
-	log.Println(http.ListenAndServe(":"+envValues.PizzaPort, mux))
 }
 
 func test() {
