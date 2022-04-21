@@ -62,10 +62,6 @@ func main() {
 	}
 
 	go http.ListenAndServe(":80", certManager.HTTPHandler(nil))
-<<<<<<< HEAD
-	log.Println(server.ListenAndServeTLS("", ""))
-=======
->>>>>>> master
 
 	jsonFile, err := os.Open("../env_values.json")
 
@@ -184,7 +180,8 @@ func outsideFacebookInput(w http.ResponseWriter, req *http.Request) {
 		log.Println(err)
 	}
 
-	reqObj := MessageRequest{To: data.sender.id, From: data.recipient.id, Body: data.message.text}
+	reqObj := MessageRequest{To: data.sender.id, From: data.recipient.id, Body: data.message.text,
+		Platform: FACEBOOK_MESSENGER_PLATFORM}
 
 	outsideReq := toOutsideRequest(reqObj)
 
@@ -218,7 +215,7 @@ func sendAndSave(w http.ResponseWriter, req *http.Request) {
 	from := reqObj.Business.PhoneNumber
 	text := reqObj.Message.Content
 
-	twilioClient.Send(&MessageRequest{to, from, text})
+	twilioClient.Send(&MessageRequest{to, from, text, TWILIO_PLATFORM})
 
 	ctx = context.Background()
 
@@ -273,13 +270,22 @@ func toOutsideRequest(twilReq MessageRequest) OutsideRequest {
 		TimeSent:         timeInMil,
 	}
 
-	business, err := businessFromPhone(twilReq.To)
+	var business *Business
+	var err error
+
+	var recipient *Recipient
+
+	if twilReq.Platform == FACEBOOK_MESSENGER_PLATFORM {
+		business, err = businessFromFacebookId(twilReq.To)
+		recipient, err = recipientFromContact(twilReq.From, business.Id, FACEBOOK_MESSENGER_PLATFORM)
+	} else {
+		business, err = businessFromPhone(twilReq.To)
+		recipient, err = recipientFromNumber(twilReq.From, business.Id)
+	}
 
 	if err != nil {
 		log.Println(err)
 	}
-
-	recipient, err := recipientFromNumber(twilReq.From, business.Id)
 
 	if err != nil {
 		log.Println(err)
@@ -290,6 +296,68 @@ func toOutsideRequest(twilReq MessageRequest) OutsideRequest {
 	return OutsideRequest{Recipient: recipient, Message: message, Business: business}
 }
 
+func businessFromFacebookId(facebookId string) (*Business, error) {
+	business := &Business{}
+
+	iter := bot.Client.Collection(Businesses).Where(FacebookMessengerId, "==", facebookId).Documents(bot.Ctx)
+
+	for {
+		doc, err := iter.Next()
+
+		if err == iterator.Done {
+			break
+		}
+
+		if err != nil {
+			log.Println(err)
+			// TODO handle error
+			break
+		}
+
+		err = doc.DataTo(business)
+
+		if err != nil {
+			log.Println(err)
+		}
+
+		business.Id = doc.Ref.ID
+
+		// Doesnt automatically unmarshall subcollections
+		subIter := bot.Client.Collection(Businesses).Doc(business.Id).Collection("employees").Documents(bot.Ctx)
+		employees := []Employee{}
+		for {
+			subDoc, err := subIter.Next()
+
+			if err == iterator.Done {
+				break
+			}
+			if err != nil {
+				return business, err
+			}
+
+			employee := Employee{}
+			err = subDoc.DataTo(&employee)
+
+			if err != nil {
+				return business, err
+			}
+
+			employee.Id = subDoc.Ref.ID
+
+			employees = append(employees, employee)
+		}
+		business.Employees = employees
+		log.Println(employees)
+
+	}
+
+	if business.Id == "" {
+		return business, errors.New("Business not found")
+	} else {
+		return business, nil
+	}
+
+}
 func businessFromPhone(phoneNumber string) (*Business, error) {
 	business := &Business{}
 	log.Println(phoneNumber)
@@ -394,4 +462,11 @@ func recipientFromNumber(recipientNumber string, businessId string) (*Recipient,
 		recipient.Contact = recipientNumber
 		return recipient, nil
 	}
+}
+
+func recipientFromContact(recipientNumber string, businessId string, platform Platform) (*Recipient, error) {
+	rec, err := recipientFromNumber(recipientNumber, businessId)
+	rec.Platform = platform
+
+	return rec, err
 }

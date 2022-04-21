@@ -145,6 +145,7 @@ type Business struct {
 	Employees             []Employee           `firestore:"employees"`
 	SmsPlatform           string               `firestore:"smsPlatform"`
 	SmsNotifyEnabled      bool                 `firestore:"smsNotifyEnabled"`
+	FacebookMessengerId   string               `firestore:"facebookMessengerId"`
 }
 
 type OpenClose struct {

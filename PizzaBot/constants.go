@@ -2,15 +2,18 @@ package main
 
 // Program
 const (
-	PROD_STATE string = "PROD_STATE"
-	DEV_STATE  string = "DEV_STATE"
+	PROD_STATE                  string = "PROD_STATE"
+	DEV_STATE                   string = "DEV_STATE"
+	FACEBOOK_MESSENGER_PLATFORM        = "FACEBOOK_MESSENGER_PLATFORM"
+	TWILIO_PLATFORM                    = "TWILIO_PLATFORM"
 )
 
 // Business
 const (
-	PhoneNumber string = "phoneNumber"
-	Approved    string = "approved"
-	Password    string = "password"
+	PhoneNumber         string = "phoneNumber"
+	Approved            string = "approved"
+	Password            string = "password"
+	FacebookMessengerId string = "facebookMessengerId"
 )
 
 // Recipient

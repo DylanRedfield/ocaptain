@@ -6,9 +6,10 @@ import (
 )
 
 type MessageRequest struct {
-	To   string
-	From string
-	Body string
+	To       string
+	From     string
+	Body     string
+	Platform string
 }
 
 type BulkMessageRequest struct {
