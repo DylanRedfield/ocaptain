@@ -11,28 +11,28 @@ type MessengerWebhook struct {
 	Entry []Entry `json:entry`
 }
 type Entry struct {
-	Messaging []FacebookMessengerReceiveMessage `json:messaging`
+	Messaging []FacebookMessengerReceiveMessage `json:"messaging""`
 }
 type FacebookMessengerReceiveMessage struct {
-	Sender    FacebookSender    `json:sender`
-	Recipient FacebookRecipient `json:recipient`
-	Message   FacebookMessage   `json:message`
+	Sender    FacebookSender    `json:"sender"`
+	Recipient FacebookRecipient `json:"recipient"`
+	Message   FacebookMessage   `json:"message"`
 }
 
 type FacebookMessengerSendMessage struct {
-	Recipient FacebookRecipient `json:recipient`
-	Message   FacebookMessage   `json:message`
+	Recipient FacebookRecipient `json:"recipient"`
+	Message   FacebookMessage   `json:"message"`
 }
 
 type FacebookSender struct {
-	Id string `json:id`
+	Id string `json:"id"`
 }
 type FacebookRecipient struct {
-	Id string `json:id`
+	Id string `json:"id"`
 }
 
 type FacebookMessage struct {
-	Text string `json:text`
+	Text string `json:"text"`
 }
 
 func Send(req *MessageRequest) {
