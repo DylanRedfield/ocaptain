@@ -177,6 +177,8 @@ func outsideFacebookInput(w http.ResponseWriter, req *http.Request) {
 	var wrapper MessengerWebhook
 
 	err := decoder.Decode(&wrapper)
+	body, err := ioutil.ReadAll(req.Body)
+	err = json.Unmarshal(body, &wrapper)
 
 	if err != nil {
 		log.Println(err)
