@@ -171,6 +171,8 @@ func outsideFacebookInput(w http.ResponseWriter, req *http.Request) {
 	// So I marshal the map into a json string,
 	// then unmarshal the json shring into the object
 
+  b, _ := ioutil.ReadAll(req.Body)
+  log.Println(string(b))
 	decoder := json.NewDecoder(req.Body)
 	var data FacebookMessengerReceiveMessage
 
