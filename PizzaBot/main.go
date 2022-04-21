@@ -125,6 +125,7 @@ func actionInput(w http.ResponseWriter, req *http.Request) {
 // Recieves a BotRequest as HTTP payload,
 // and returns BotResponse as HTTP payload.
 func businessInput(w http.ResponseWriter, req *http.Request) {
+  log.Println("Business input")
 	body, err := ioutil.ReadAll(req.Body)
 
 	if err != nil {
@@ -165,7 +166,6 @@ func outsideSmsInput(w http.ResponseWriter, req *http.Request) {
 }
 
 func outsideFacebookInput(w http.ResponseWriter, req *http.Request) {
-	log.Println("Facebook input")
 	// Params come in from GET URL.
 	// I can get them as a map, but not obj.
 	// So I marshal the map into a json string,
@@ -187,7 +187,6 @@ func outsideFacebookInput(w http.ResponseWriter, req *http.Request) {
 
 	data := wrapper.Entry[0].Messaging[0]
 
-	log.Println("Sender id: " + data.Sender.Id)
 
 	reqObj := MessageRequest{To: data.Recipient.Id, From: data.Sender.Id, Body: data.Message.Text,
 		Platform: FACEBOOK_MESSENGER_PLATFORM}
@@ -416,7 +415,6 @@ func businessFromPhone(phoneNumber string) (*Business, error) {
 			employees = append(employees, employee)
 		}
 		business.Employees = employees
-		log.Println(employees)
 
 	}
 
@@ -436,8 +434,6 @@ func recipientFromNumber(recipientNumber string, businessId string) (*Recipient,
 	iter := query.Documents(bot.Ctx)
 
 	recipient := &Recipient{}
-	log.Println(businessId)
-	log.Println(recipientNumber)
 
 	for {
 		doc, err := iter.Next()

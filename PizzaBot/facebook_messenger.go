@@ -42,6 +42,7 @@ func Send(req *MessageRequest) {
 	reqObj.Recipient = FacebookRecipient{Id: req.To}
 	reqObj.Message = FacebookMessage{Text: req.Body}
 
+  log.Println(req.From)
 	bussiness, err := businessFromFacebookId(req.From)
 
 	if err != nil {
