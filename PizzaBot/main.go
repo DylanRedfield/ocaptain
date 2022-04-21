@@ -165,7 +165,7 @@ func outsideSmsInput(w http.ResponseWriter, req *http.Request) {
 }
 
 func outsideFacebookInput(w http.ResponseWriter, req *http.Request) {
-  log.Println("Facebook input")
+	log.Println("Facebook input")
 	// Params come in from GET URL.
 	// I can get them as a map, but not obj.
 	// So I marshal the map into a json string,
@@ -179,6 +179,8 @@ func outsideFacebookInput(w http.ResponseWriter, req *http.Request) {
 	if err != nil {
 		log.Println(err)
 	}
+
+	log.Println("Sender id: " + data.sender.id)
 
 	reqObj := MessageRequest{To: data.sender.id, From: data.recipient.id, Body: data.message.text,
 		Platform: FACEBOOK_MESSENGER_PLATFORM}
@@ -425,8 +427,8 @@ func recipientFromNumber(recipientNumber string, businessId string) (*Recipient,
 	iter := query.Documents(bot.Ctx)
 
 	recipient := &Recipient{}
-  log.Println(businessId)
-  log.Println(recipientNumber)
+	log.Println(businessId)
+	log.Println(recipientNumber)
 
 	for {
 		doc, err := iter.Next()
