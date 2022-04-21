@@ -2,8 +2,9 @@ package main
 
 // Program
 const (
-	PROD_STATE                  string = "PROD_STATE"
-	DEV_STATE                   string = "DEV_STATE"
+	PROD_STATE                  string = "prod"
+	DEV_STATE_LOCAL             string = "dev_local"
+	DEV_STATE_ONLINE            string = "dev"
 	FACEBOOK_MESSENGER_PLATFORM        = "FACEBOOK_MESSENGER_PLATFORM"
 	TWILIO_PLATFORM                    = "TWILIO_PLATFORM"
 )

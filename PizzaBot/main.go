@@ -50,7 +50,7 @@ func main() {
 		Cache:      autocert.DirCache("certs"),
 	}
 
-	if bot.State == PROD_STATE {
+	if bot.State == PROD_STATE || bot.State == DEV_STATE_ONLINE {
 		tlsConfig := certManager.TLSConfig()
 		server := http.Server{
 			Addr:      ":443",
@@ -59,9 +59,10 @@ func main() {
 		}
 
 		log.Println(server.ListenAndServeTLS("", ""))
+		go http.ListenAndServe(":80", certManager.HTTPHandler(nil))
+	} else {
+		http.ListenAndServe(":80", certManager.HTTPHandler(nil))
 	}
-
-	go http.ListenAndServe(":80", certManager.HTTPHandler(nil))
 
 	jsonFile, err := os.Open("../env_values.json")
 
