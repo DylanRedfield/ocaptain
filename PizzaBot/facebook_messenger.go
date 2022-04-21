@@ -7,6 +7,12 @@ import (
 	"net/http"
 )
 
+type MessengerWebhook struct {
+	entry []Entry
+}
+type Entry struct {
+	messaging []FacebookMessengerReceiveMessage
+}
 type FacebookMessengerReceiveMessage struct {
 	sender    FacebookSender
 	recipient FacebookRecipient
