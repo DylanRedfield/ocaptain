@@ -36,6 +36,9 @@ func NewBot(ctx context.Context) (*Bot, error) {
 			bot.State = DEV_STATE
 			sa = option.WithCredentialsFile("dev-firebase-config.json")
 		}
+	} else {
+		bot.State = DEV_STATE
+		sa = option.WithCredentialsFile("dev-firebase-config.json")
 	}
 
 	app, err := firebase.NewApp(ctx, nil, sa)
