@@ -182,11 +182,11 @@ func outsideFacebookInput(w http.ResponseWriter, req *http.Request) {
 		log.Println(err)
 	}
 
-	data := wrapper.entry[0].messaging[0]
+	data := wrapper.Entry[0].Messaging[0]
 
-	log.Println("Sender id: " + data.sender.id)
+	log.Println("Sender id: " + data.Sender.Id)
 
-	reqObj := MessageRequest{To: data.sender.id, From: data.recipient.id, Body: data.message.text,
+	reqObj := MessageRequest{To: data.Sender.Id, From: data.Recipient.Id, Body: data.Message.Text,
 		Platform: FACEBOOK_MESSENGER_PLATFORM}
 
 	outsideReq := toOutsideRequest(reqObj)
