@@ -8,7 +8,8 @@ import (
 )
 
 type MessengerWebhook struct {
-	Entry []Entry `json:"entry"`
+	Entry []Entry `json:entry`
+	Object string `json:"object"`
 }
 type Entry struct {
 	Messaging []FacebookMessengerReceiveMessage `json:"messaging"`

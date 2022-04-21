@@ -171,18 +171,19 @@ func outsideFacebookInput(w http.ResponseWriter, req *http.Request) {
 	// So I marshal the map into a json string,
 	// then unmarshal the json shring into the object
 
-  b, _ := ioutil.ReadAll(req.Body)
-  log.Println(string(b))
-	//decoder := json.NewDecoder(req.Body)
+  //b, _ := ioutil.ReadAll(req.Body)
+  //log.Println(string(b))
+	decoder := json.NewDecoder(req.Body)
 	var wrapper MessengerWebhook
 
-	//err := decoder.Decode(&wrapper)
-	body, err := ioutil.ReadAll(req.Body)
-	err = json.Unmarshal(body, &wrapper)
+	err := decoder.Decode(&wrapper)
+	//body, err := ioutil.ReadAll(req.Body)
+	//err = json.Unmarshal(body, &wrapper)
 
 	if err != nil {
 		log.Println(err)
 	}
+	log.Println(wrapper.Object)
 
 	data := wrapper.Entry[0].Messaging[0]
 
