@@ -181,17 +181,18 @@ func outsideFacebookInput(w http.ResponseWriter, req *http.Request) {
 	if err != nil {
 		log.Println(err)
 	}
+	log.Println(wrapper.Object)
 
-	data := wrapper.Entry[0].Messaging[0]
+	/*data := wrapper.Entry[0].Messaging[0]
 
 	log.Println("Sender id: " + data.Sender.Id)
 
 	reqObj := MessageRequest{To: data.Sender.Id, From: data.Recipient.Id, Body: data.Message.Text,
-		Platform: FACEBOOK_MESSENGER_PLATFORM}
+		Platform: FACEBOOK_MESSENGER_PLATFORM}*/
 
-	outsideReq := toOutsideRequest(reqObj)
+	//outsideReq := toOutsideRequest(reqObj)
 
-	bot.HandleOutsideInput(&outsideReq)
+	//bot.HandleOutsideInput(&outsideReq)
 }
 
 func sendSelf(w http.ResponseWriter, req *http.Request) {
