@@ -32,12 +32,15 @@ func NewBot(ctx context.Context) (*Bot, error) {
 		if state == "prod" {
 			bot.State = PROD_STATE
 			sa = option.WithCredentialsFile("prod-firebase-config.json")
-		} else {
-			bot.State = DEV_STATE
+		} else if state == "dev_local" {
+			bot.State = DEV_STATE_LOCAL
+			sa = option.WithCredentialsFile("dev-firebase-config.json")
+		} else if state == "dev" {
+			bot.State = DEV_STATE_ONLINE
 			sa = option.WithCredentialsFile("dev-firebase-config.json")
 		}
 	} else {
-		bot.State = DEV_STATE
+		bot.State = DEV_STATE_LOCAL
 		sa = option.WithCredentialsFile("dev-firebase-config.json")
 	}
 
