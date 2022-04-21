@@ -284,6 +284,7 @@ func toOutsideRequest(twilReq MessageRequest) OutsideRequest {
 
 	var recipient *Recipient
 
+  log.Println(twilReq.Platform)
 	if twilReq.Platform == FACEBOOK_MESSENGER_PLATFORM {
 		business, err = businessFromFacebookId(twilReq.To)
 		recipient, err = recipientFromContact(twilReq.From, business.Id, FACEBOOK_MESSENGER_PLATFORM)
@@ -302,6 +303,7 @@ func toOutsideRequest(twilReq MessageRequest) OutsideRequest {
 }
 
 func businessFromFacebookId(facebookId string) (*Business, error) {
+  log.Println(facebookId)
 	business := &Business{}
 
 	iter := bot.Client.Collection(Businesses).Where(FacebookMessengerId, "==", facebookId).Documents(bot.Ctx)
