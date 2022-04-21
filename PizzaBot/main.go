@@ -286,10 +286,6 @@ func toOutsideRequest(twilReq MessageRequest) OutsideRequest {
 		log.Println(err)
 	}
 
-	if err != nil {
-		log.Println(err)
-	}
-
 	message.RecipientId = recipient.Id
 
 	return OutsideRequest{Recipient: recipient, Message: message, Business: business}
