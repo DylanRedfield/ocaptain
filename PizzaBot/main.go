@@ -174,13 +174,15 @@ func outsideFacebookInput(w http.ResponseWriter, req *http.Request) {
   b, _ := ioutil.ReadAll(req.Body)
   log.Println(string(b))
 	decoder := json.NewDecoder(req.Body)
-	var data FacebookMessengerReceiveMessage
+	var wrapper MessengerWebhook
 
-	err := decoder.Decode(&data)
+	err := decoder.Decode(&wrapper)
 
 	if err != nil {
 		log.Println(err)
 	}
+
+	data := wrapper.entry[0].messaging[0]
 
 	log.Println("Sender id: " + data.sender.id)
 
