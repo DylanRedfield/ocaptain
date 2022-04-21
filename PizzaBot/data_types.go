@@ -134,18 +134,19 @@ type Order struct {
 }
 
 type Business struct {
-	Id                    string               `firestore:"-"`
-	Approved              bool                 `firestore:"approved"`
-	Password              string               `firestore:"password"`
-	PhoneNumber           string               `firestore:"phoneNumber"`
-	Hours                 map[string]OpenClose `firestore:"hours"`
-	HoursExceptions       map[string]OpenClose `firestore:"hoursExceptions"`
-	ReservationPlatform   string               `firestore:"reservationPlatform"`
-	ReservationPlatformId string               `firestore:"reservationPlatformId"`
-	Employees             []Employee           `firestore:"employees"`
-	SmsPlatform           string               `firestore:"smsPlatform"`
-	SmsNotifyEnabled      bool                 `firestore:"smsNotifyEnabled"`
-	FacebookMessengerId   string               `firestore:"facebookMessengerId"`
+	Id                               string               `firestore:"-"`
+	Approved                         bool                 `firestore:"approved"`
+	Password                         string               `firestore:"password"`
+	PhoneNumber                      string               `firestore:"phoneNumber"`
+	Hours                            map[string]OpenClose `firestore:"hours"`
+	HoursExceptions                  map[string]OpenClose `firestore:"hoursExceptions"`
+	ReservationPlatform              string               `firestore:"reservationPlatform"`
+	ReservationPlatformId            string               `firestore:"reservationPlatformId"`
+	Employees                        []Employee           `firestore:"employees"`
+	SmsPlatform                      string               `firestore:"smsPlatform"`
+	SmsNotifyEnabled                 bool                 `firestore:"smsNotifyEnabled"`
+	FacebookMessengerId              string               `firestore:"facebookMessengerId"`
+	FacebookMessengerPageAccessToken string               `firestore:facebookMessengerPageAccessToken`
 }
 
 type OpenClose struct {

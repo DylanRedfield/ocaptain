@@ -172,7 +172,7 @@ func outsideFacebookInput(w http.ResponseWriter, req *http.Request) {
 	// then unmarshal the json shring into the object
 
 	decoder := json.NewDecoder(req.Body)
-	var data FacebookMessengerTextMessage
+	var data FacebookMessengerReceiveMessage
 
 	err := decoder.Decode(&data)
 
