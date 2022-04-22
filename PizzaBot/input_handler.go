@@ -42,10 +42,6 @@ func (bot *Bot) HandleBusinessInput(reqObj BusinessRequest) BusinessResponse {
 		From: reqObj.Business.PhoneNumber,
 		Body: reqObj.Message}
 
-	if reqObj.Recipient.Platform == TWILIO_WHATSAPP_PLATFORM {
-		smsRequest.From = "whatsapp:" + reqObj.Business.Whatsapp
-	}
-
 	if reqObj.Recipient.Platform == FACEBOOK_MESSENGER_PLATFORM {
 		smsRequest.From = reqObj.Business.FacebookMessengerId
 		Send(&smsRequest)
