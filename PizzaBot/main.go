@@ -125,7 +125,7 @@ func actionInput(w http.ResponseWriter, req *http.Request) {
 // Recieves a BotRequest as HTTP payload,
 // and returns BotResponse as HTTP payload.
 func businessInput(w http.ResponseWriter, req *http.Request) {
-  log.Println("Business input")
+	log.Println("Business input")
 	body, err := ioutil.ReadAll(req.Body)
 
 	if err != nil {
@@ -186,7 +186,6 @@ func outsideFacebookInput(w http.ResponseWriter, req *http.Request) {
 	log.Println(wrapper.Object)
 
 	data := wrapper.Entry[0].Messaging[0]
-
 
 	reqObj := MessageRequest{To: data.Recipient.Id, From: data.Sender.Id, Body: data.Message.Text,
 		Platform: FACEBOOK_MESSENGER_PLATFORM}
@@ -283,10 +282,13 @@ func toOutsideRequest(twilReq MessageRequest) OutsideRequest {
 
 	var recipient *Recipient
 
-  log.Println(twilReq.Platform)
+	log.Println(twilReq.Platform)
 	if twilReq.Platform == FACEBOOK_MESSENGER_PLATFORM {
 		business, err = businessFromFacebookId(twilReq.To)
 		recipient, err = recipientFromContact(twilReq.From, business.Id, FACEBOOK_MESSENGER_PLATFORM)
+	} else if twilReq.Platform == TWILIO_WHATSAPP_PLATFORM {
+		business, err = businessFromWhatsapp(twilReq.To)
+		recipient, err = recipientFromContact(twilReq.From, business.Id, TWILIO_WHATSAPP_PLATFORM)
 	} else {
 		business, err = businessFromPhone(twilReq.To)
 		recipient, err = recipientFromNumber(twilReq.From, business.Id)
@@ -301,11 +303,74 @@ func toOutsideRequest(twilReq MessageRequest) OutsideRequest {
 	return OutsideRequest{Recipient: recipient, Message: message, Business: business}
 }
 
+// TODO so replace hardcoded query target with string parameter to turn three identiical methods into one
 func businessFromFacebookId(facebookId string) (*Business, error) {
-  log.Println(facebookId)
+	log.Println(facebookId)
 	business := &Business{}
 
 	iter := bot.Client.Collection(Businesses).Where(FacebookMessengerId, "==", facebookId).Documents(bot.Ctx)
+
+	for {
+		doc, err := iter.Next()
+
+		if err == iterator.Done {
+			break
+		}
+
+		if err != nil {
+			log.Println(err)
+			// TODO handle error
+			break
+		}
+
+		err = doc.DataTo(business)
+
+		if err != nil {
+			log.Println(err)
+		}
+
+		business.Id = doc.Ref.ID
+
+		// Doesnt automatically unmarshall subcollections
+		subIter := bot.Client.Collection(Businesses).Doc(business.Id).Collection("employees").Documents(bot.Ctx)
+		employees := []Employee{}
+		for {
+			subDoc, err := subIter.Next()
+
+			if err == iterator.Done {
+				break
+			}
+			if err != nil {
+				return business, err
+			}
+
+			employee := Employee{}
+			err = subDoc.DataTo(&employee)
+
+			if err != nil {
+				return business, err
+			}
+
+			employee.Id = subDoc.Ref.ID
+
+			employees = append(employees, employee)
+		}
+		business.Employees = employees
+		log.Println(employees)
+
+	}
+
+	if business.Id == "" {
+		return business, errors.New("Business not found")
+	} else {
+		return business, nil
+	}
+
+}
+func businessFromWhatsapp(whatsappNumber string) (*Business, error) {
+	business := &Business{}
+
+	iter := bot.Client.Collection(Businesses).Where(Whatsapp, "==", whatsappNumber).Documents(bot.Ctx)
 
 	for {
 		doc, err := iter.Next()

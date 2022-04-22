@@ -16,6 +16,7 @@ const (
 	Approved            string = "approved"
 	Password            string = "password"
 	FacebookMessengerId string = "facebookMessengerId"
+	Whatsapp            string = "whatsapp"
 )
 
 // Recipient
