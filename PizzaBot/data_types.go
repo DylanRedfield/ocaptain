@@ -152,7 +152,8 @@ type Business struct {
 	SmsPlatform                      string               `firestore:"smsPlatform"`
 	SmsNotifyEnabled                 bool                 `firestore:"smsNotifyEnabled"`
 	FacebookMessengerId              string               `firestore:"facebookMessengerId"`
-	FacebookMessengerPageAccessToken string               `firestore:facebookMessengerPageAccessToken`
+	FacebookMessengerPageAccessToken string               `firestore:"facebookMessengerPageAccessToken"`
+	Whatsapp                         string               `firestore:"whatsapp"`
 }
 
 type OpenClose struct {

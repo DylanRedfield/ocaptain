@@ -6,6 +6,7 @@ const (
 	DEV_STATE_LOCAL             string = "dev_local"
 	DEV_STATE_ONLINE            string = "dev"
 	FACEBOOK_MESSENGER_PLATFORM        = "FACEBOOK_MESSENGER_PLATFORM"
+	TWILIO_WHATSAPP_PLATFORM           = "TWILIO_WHATSAPP_PLATFORM"
 	TWILIO_PLATFORM                    = "TWILIO_PLATFORM"
 )
 
