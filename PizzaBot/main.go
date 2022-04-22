@@ -39,6 +39,7 @@ func main() {
 	mux.Handle("/PizzaBot/outsideSmsInput", http.HandlerFunc(outsideSmsInput))
 	mux.Handle("/PizzaBot/sendSelf", http.HandlerFunc(sendSelf))
 	mux.Handle("/PizzaBot/outsideFacebookInput", http.HandlerFunc(outsideFacebookInput))
+	mux.Handle("/PizzaBot/outsideTwilioWhatsappInput", http.HandlerFunc(outsideTwilioWhatsappInput))
 	mux.Handle("/ocaptain", http.HandlerFunc(actionInput))
 	mux.Handle("/ocaptain/sendAndSave", http.HandlerFunc(sendAndSave))
 	mux.Handle("/", http.HandlerFunc(actionInput))
@@ -139,6 +140,12 @@ func businessInput(w http.ResponseWriter, req *http.Request) {
 	}
 
 	bot.HandleBusinessInput(reqObj)
+}
+
+func outsideTwilioWhatsappInput(w http.ResponseWriter, req *http.Request) {
+	b, _ := ioutil.ReadAll(req.Body)
+
+	log.Println(string(b))
 }
 
 // Recieves input from SMS service like Twilio
