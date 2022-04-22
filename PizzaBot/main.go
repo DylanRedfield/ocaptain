@@ -42,7 +42,7 @@ func main() {
 	mux.Handle("/PizzaBot/outsideTwilioWhatsappInput", http.HandlerFunc(outsideTwilioWhatsappInput))
 	mux.Handle("/ocaptain", http.HandlerFunc(actionInput))
 	mux.Handle("/ocaptain/sendAndSave", http.HandlerFunc(sendAndSave))
-	mux.Handle("/", http.HandlerFunc(actionInput))
+	mux.Handle("/", http.HandlerFunc(businessInput))
 
 	domain := "redfieldautomation.com"
 	certManager := autocert.Manager{
@@ -143,9 +143,10 @@ func businessInput(w http.ResponseWriter, req *http.Request) {
 }
 
 func outsideTwilioWhatsappInput(w http.ResponseWriter, req *http.Request) {
-	b, _ := ioutil.ReadAll(req.Body)
-
-	log.Println(string(b))
+	reqObj := MessageRequest{To: req.FormValue("To"), Body: req.FormValue("Body"),
+		From: req.FormValue("From"), Platform: TWILIO_WHATSAPP_PLATFORM}
+	outsideReq := toOutsideRequest(reqObj)
+	bot.HandleOutsideInput(&outsideReq)
 }
 
 // Recieves input from SMS service like Twilio
