@@ -143,9 +143,8 @@ func businessInput(w http.ResponseWriter, req *http.Request) {
 }
 
 func outsideTwilioWhatsappInput(w http.ResponseWriter, req *http.Request) {
-	b, _ := ioutil.ReadAll(req.Body)
+	log.Println("outside twil")
 
-	log.Println(string(b))
 }
 
 // Recieves input from SMS service like Twilio
