@@ -143,6 +143,7 @@ type Business struct {
 	Id                               string               `firestore:"-"`
 	Approved                         bool                 `firestore:"approved"`
 	Password                         string               `firestore:"password"`
+	Whatsapp                         string               `firestore:"whatsapp"`
 	PhoneNumber                      string               `firestore:"phoneNumber"`
 	Hours                            map[string]OpenClose `firestore:"hours"`
 	HoursExceptions                  map[string]OpenClose `firestore:"hoursExceptions"`
@@ -153,7 +154,6 @@ type Business struct {
 	SmsNotifyEnabled                 bool                 `firestore:"smsNotifyEnabled"`
 	FacebookMessengerId              string               `firestore:"facebookMessengerId"`
 	FacebookMessengerPageAccessToken string               `firestore:"facebookMessengerPageAccessToken"`
-	Whatsapp                         string               `firestore:"whatsapp"`
 }
 
 type OpenClose struct {
