@@ -298,6 +298,7 @@ func toOutsideRequest(twilReq MessageRequest) OutsideRequest {
 		recipient, err = recipientFromContact(twilReq.From, business.Id, FACEBOOK_MESSENGER_PLATFORM)
 	} else if twilReq.Platform == TWILIO_WHATSAPP_PLATFORM {
 		business, err = businessFromWhatsapp(twilReq.To)
+    log.Println(business.Whatsapp)
 		recipient, err = recipientFromContact(twilReq.From, business.Id, TWILIO_WHATSAPP_PLATFORM)
 	} else {
 		business, err = businessFromPhone(twilReq.To)
