@@ -1,0 +1,30 @@
+language: en
+
+policies:
+  - name: KerasPolicy
+    epochs: 25
+    validation_split: 0.0
+    featurizer:
+      - name: MaxHistoryTrackerFeaturizer
+        max_history: 5
+        state_featurizer:
+          - name: BinarySingleStateFeaturizer
+  - name: AugmentedMemoizationPolicy
+    max_history: 5
+  - name: RulePolicy
+    core_fallback_action_name: "utter_doing_greet"
+    core_fallback_threshold: 0.005
+
+pipeline:
+- name: "SpacyNLP"
+- name: "SpacyTokenizer"
+- name: "DIETClassifier"
+- name: "SpacyFeaturizer"
+- name: "CRFEntityExtractor"
+- name: "EntitySynonymMapper"
+- name: "extended_spacy_entity_extractor.ExtendedSpacyEntityExtractor"
+- name: "extended_duckling_http_extractor.ExtendedDucklingHTTPExtractor"
+- name: "SklearnIntentClassifier"
+- name: FallbackClassifier
+  threshold: 0.005
+  ambiguity_threshold: 0.005

@@ -1,5 +1,5 @@
-%YAML 1.1
----
+version: "3.1"
+
 actions:
 - action_blank_checkpoint_with_several_alternative_times_to_select
 - action_listen

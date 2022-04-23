@@ -28,6 +28,9 @@ func (client *TwilioClient) Send(reqObj *MessageRequest) {
 	body.Set("From", reqObj.From)
 	body.Set("Body", reqObj.Body)
 
+  log.Println(reqObj.To)
+  log.Println(reqObj.From)
+
 	req, err := http.NewRequest("POST", queryUrl, strings.NewReader(body.Encode()))
 
 	if err != nil {
