@@ -146,45 +146,59 @@ intents:
 
 slots:
   business_id:
-    auto_fill: false
-    type: rasa_core.slots.TextSlot
+    type: text
+    mappings:
+    - type: custom
   name:
-    auto_fill: true
-    type: rasa_core.slots.TextSlot
-  potential_size:
-    auto_fill: false
-    type: rasa_core.slots.TextSlot
-  potential_time:
-    auto_fill: false
-    type: rasa_core.slots.TextSlot
-  potential_times:
-    auto_fill: false
-    type: rasa_core.slots.ListSlot
-  temp_times:
-    auto_fill: false
-    type: rasa_core.slots.ListSlot
-  recipient_contact:
-    auto_fill: false
-    type: rasa_core.slots.TextSlot
-  potential_hour:
-    auto_fill: false
-    type: rasa_core.slots.TextSlot
-  recipient_id:
-    auto_fill: false
-    type: rasa_core.slots.TextSlot
-  scheduled_time:
-    auto_fill: false
-    type: rasa_core.slots.TextSlot
-  size:
-    auto_fill: false
-    type: rasa_core.slots.TextSlot
-  alternative_times:
-    auto_fill: false
-    type: rasa_core.slots.ListSlot
-  temp_ordinal:
-    auto_fill: false
-    type: rasa_core.slots.TextSlot
+    type: text
+    mappings:
+    - type: from_entity
+      entity: name
 
+  potential_size:
+    type: text
+    mappings:
+    - type: custom
+  potential_time:
+    type: text
+     mappings:
+    - type: custom
+ potential_times:
+    type: list
+      mappings:
+    - type: custom
+ temp_times:
+    type: list
+       mappings:
+    - type: custom
+recipient_contact:
+    type: text
+       mappings:
+    - type: custom
+potential_hour:
+    type: text
+       mappings:
+    - type: custom
+recipient_id:
+    type: text
+       mappings:
+    - type: custom
+scheduled_time:
+    type: text
+       mappings:
+    - type: custom
+size:
+    type: text
+       mappings:
+        - type: custom
+alternative_times:
+    type: list
+       mappings:
+        - type: custom
+temp_ordinal:
+    type: text
+     mappings:
+        - type: custom
 
 templates:
   utter_ask_for_name_on_reservation:
