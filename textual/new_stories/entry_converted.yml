@@ -1,0 +1,118 @@
+version: "2.0"
+stories:
+- story: entry
+  steps:
+  - intent: make_reservation
+  - slot_was_set:
+    - business_id: MewuHeThW4QJGDxD9tTr
+  - slot_was_set:
+    - recipient_id: BGeFfREAGGSRqRWrmLNx
+  - slot_was_set:
+    - recipient_contact: '+19084771280'
+  - action: action_brancher_reservation_slot_filling_base
+- story: entry2
+  steps:
+  - intent: make_reservation
+    entities:
+    - number: 5
+  - slot_was_set:
+    - business_id: MewuHeThW4QJGDxD9tTr
+  - slot_was_set:
+    - recipient_id: BGeFfREAGGSRqRWrmLNx
+  - slot_was_set:
+    - recipient_contact: '+19084771280'
+  - action: action_set_potential_size_slot
+  - slot_was_set:
+    - potential_size: 5
+  - action: action_brancher_reservation_slot_filling_base
+- story: entry3
+  steps:
+  - intent: make_reservation
+    entities:
+    - time: xxxx
+  - slot_was_set:
+    - business_id: MewuHeThW4QJGDxD9tTr
+  - slot_was_set:
+    - recipient_id: BGeFfREAGGSRqRWrmLNx
+  - slot_was_set:
+    - recipient_contact: '+19084771280'
+  - action: action_set_temp_times_slot
+  - slot_was_set:
+    - temp_times: []
+  - action: action_brancher_reservation_slot_filling_base
+- story: entry4
+  steps:
+  - intent: make_reservation
+    entities:
+    - number: 8
+    - time: xxxx
+  - slot_was_set:
+    - business_id: MewuHeThW4QJGDxD9tTr
+  - slot_was_set:
+    - recipient_id: BGeFfREAGGSRqRWrmLNx
+  - slot_was_set:
+    - recipient_contact: '+19084771280'
+  - action: action_set_potential_size_slot
+  - slot_was_set:
+    - potential_size: 5
+  - action: action_set_temp_times_slot
+  - slot_was_set:
+    - temp_times:
+      - xxx
+  - action: action_brancher_reservation_slot_filling_base
+- story: question_time
+  steps:
+  - intent: question_time
+  - action: action_utter_answer_time
+- story: question_serve_alcohol
+  steps:
+  - intent: question_serve_alcohol
+  - action: utter_answer_serve_alcohol
+- story: question_dress_code
+  steps:
+  - intent: question_dress_code
+  - action: utter_answer_dress_code
+- story: question_gluten_free
+  steps:
+  - intent: question_gluten_free
+  - action: utter_answer_gluten_free
+- story: question_vegetarian
+  steps:
+  - intent: question_vegetarian
+  - action: utter_answer_vegetarian
+- story: question_vegan
+  steps:
+  - intent: question_vegan
+  - action: utter_answer_vegan
+- story: question_kosher
+  steps:
+  - intent: question_kosher
+  - action: utter_answer_kosher
+- story: question_large_group
+  steps:
+  - intent: question_large_group
+  - action: utter_answer_large_group
+- story: question_kids_menu
+  steps:
+  - intent: question_kids_menu
+  - action: utter_answer_kids_menu
+- story: question_byob
+  steps:
+  - intent: question_bring_your_own_alcohol
+  - action: utter_answer_bring_your_own_alcohol
+- story: question_parking
+  steps:
+  - intent: question_parking
+  - action: utter_answer_parking
+- story: question_handicap_accessible
+  steps:
+  - intent: question_handicap_accessible
+  - action: utter_answer_handicap_accessible
+- story: question_corking_fee
+  steps:
+  - intent: question_corking_fee
+  - action: utter_answer_corking_fee
+- story: question_polar_reservation
+  steps:
+  - intent: question_polar_reservation
+  - action: utter_answer_polar_reservation
