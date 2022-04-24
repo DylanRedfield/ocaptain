@@ -143,7 +143,6 @@ func businessInput(w http.ResponseWriter, req *http.Request) {
 }
 
 func outsideTwilioWhatsappInput(w http.ResponseWriter, req *http.Request) {
-	log.Println("outside twil")
 
 	reqObj := MessageRequest{To: req.FormValue("To"), Body: req.FormValue("Body"),
 		From: req.FormValue("From"), Platform: TWILIO_WHATSAPP_PLATFORM}
@@ -292,13 +291,11 @@ func toOutsideRequest(twilReq MessageRequest) OutsideRequest {
 
 	var recipient *Recipient
 
-	log.Println(twilReq.Platform)
 	if twilReq.Platform == FACEBOOK_MESSENGER_PLATFORM {
 		business, err = businessFromFacebookId(twilReq.To)
 		recipient, err = recipientFromContact(twilReq.From, business.Id, FACEBOOK_MESSENGER_PLATFORM)
 	} else if twilReq.Platform == TWILIO_WHATSAPP_PLATFORM {
 		business, err = businessFromWhatsapp(twilReq.To)
-    log.Println(business.Whatsapp)
 		recipient, err = recipientFromContact(twilReq.From, business.Id, TWILIO_WHATSAPP_PLATFORM)
 	} else {
 		business, err = businessFromPhone(twilReq.To)
@@ -429,7 +426,6 @@ func businessFromWhatsapp(whatsappNumber string) (*Business, error) {
 			employees = append(employees, employee)
 		}
 		business.Employees = employees
-		log.Println(employees)
 
 	}
 
