@@ -19,6 +19,7 @@ type Bot struct {
 	TwilioClient TwilioClient
 	SwiftClient  SwiftClient
 	State        string
+	DemoCounter  int
 }
 
 func NewBot(ctx context.Context) (*Bot, error) {
