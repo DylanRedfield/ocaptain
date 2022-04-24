@@ -1,0 +1,54 @@
+version: "2.0"
+stories:
+- story: checkpoint_to_fill_potential_size_inform_number
+  steps:
+  - action: action_blank_checkpoint_to_fill_potential_size
+  - intent: inform
+    entities:
+    - number: 2
+  - action: action_set_potential_size_slot
+  - slot_was_set:
+    - potential_size: 1
+  - action: action_brancher_validate_reservation_potential_size
+- story: checkpoint_to_fill_potential_size_inform_non_number
+  steps:
+  - action: action_blank_checkpoint_to_fill_potential_size
+  - intent: inform
+    entities:
+    - name: dylan
+  - action: utter_unhappy_doing_no_number_recognized
+  - action: action_blank_checkpoint_to_fill_potential_size
+- story: checkpoint_with_potential_size_to_validate_and_fill_size_where_potential_size_is_valid
+  steps:
+  - action: action_brancher_validate_reservation_potential_size
+  - slot_was_set:
+    - size: 5
+  - action: action_blank_alert_size_slot_set
+  - action: action_clear_potential_size_slot
+  - slot_was_set:
+    - potential_size: null
+  - action: action_brancher_reservation_slot_filling_base
+- story: checkpoint_with_potential_size_to_validate_and_fill_size_where_potential_size_is_zero
+  steps:
+  - action: action_brancher_validate_reservation_potential_size
+  - action: utter_unhappy_doing_invalid_size_AND_ask_for_size_greater_than_zero
+  - action: action_clear_potential_size_slot
+  - slot_was_set:
+    - potential_size: null
+  - action: action_blank_checkpoint_to_fill_potential_size
+- story: checkpoint_with_potential_size_to_validate_and_fill_size_where_potential_size_is_greater_than_max
+  steps:
+  - action: action_brancher_validate_reservation_potential_size
+  - action: utter_unhappy_doing_request_customer_call_for_large_parties
+  - action: action_clear_potential_size_slot
+  - slot_was_set:
+    - potential_size: null
+  - action: action_need_employee
+- story: checkpoint_with_potential_size_to_validate_and_fill_size_where_potential_size_is_null
+  steps:
+  - action: action_brancher_validate_reservation_potential_size
+  - action: utter_ask_for_number_on_reservation_size
+  - action: action_clear_potential_size_slot
+  - slot_was_set:
+    - potential_size: null
+  - action: action_blank_checkpoint_to_fill_potential_size

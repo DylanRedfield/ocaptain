@@ -9,14 +9,18 @@ from typing import Dict
 from typing import List
 from typing import Text
 
-from rasa_nlu.extractors import EntityExtractor
-from rasa_nlu.training_data import Message
+from rasa.nlu.extractors.extractor import EntityExtractorMixin
+from rasa.shared.nlu.training_data.message import Message
+from rasa.engine.recipes.default_recipe import DefaultV1Recipe
+from rasa.engine.graph import GraphComponent
 
 if typing.TYPE_CHECKING:
     from spacy.tokens.doc import Doc
 
 
-class ExtendedSpacyEntityExtractor(EntityExtractor):
+@DefaultV1Recipe.register(
+        [DefaultV1Recipe.ComponentType.ENTITY_EXTRACTOR], is_trainable=False)
+class ExtendedSpacyEntityExtractor(GraphComponent):
     name = "ner_extended_spacy"
 
     provides = ["entities"]
@@ -27,7 +31,7 @@ class ExtendedSpacyEntityExtractor(EntityExtractor):
         super(ExtendedSpacyEntityExtractor, self).__init__(component_config)
         self.ordinals = []
 
-    def process(self, message, **kwargs):
+    def process(self, messages: List[Message], **kwargs) -> List[Message]:
         # type: (Message, **Any) -> None
 
         # can't use the existing doc here (spacy_doc on the message)

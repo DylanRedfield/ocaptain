@@ -136,7 +136,7 @@ intents:
 - question_vegan: {triggers: utter_answer_vegan}
 - question_kosher: {triggers: utter_answer_kosher}
 - question_large_group: {triggers: utter_answer_large_group}
-- question_kids_menu: {triggers: utter_answer_answer_kids_menu}
+- question_kids_menu: {triggers: utter_answer_kids_menu}
 - question_bring_your_own_alcohol: {triggers: utter_answer_bring_your_own_alcohol}
 - question_parking: {triggers: utter_answer_parking}
 - question_handicap_accessible: {triggers: utter_answer_handicap_accessible}

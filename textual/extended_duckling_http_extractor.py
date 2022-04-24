@@ -14,18 +14,23 @@ from typing import List
 from typing import Optional
 from typing import Text
 
-from rasa_nlu.config import RasaNLUModelConfig
-from rasa_nlu.extractors import EntityExtractor
-from rasa_nlu.extractors.duckling_http_extractor import (
-    filter_irrelevant_matches, convert_duckling_format_to_rasa)
-from rasa_nlu.model import Metadata
-from rasa_nlu.training_data import Message
+#from rasa_nlu.config import RasaNLUModelConfig
+from rasa.nlu.extractors.duckling_entity_extractor import convert_duckling_format_to_rasa
+#from rasa_nlu.model import Metadata
+
+from rasa.engine.graph import GraphComponent
+from rasa.shared.nlu.training_data.message import Message
 from datetime import datetime
 from dateutil import parser
+from rasa.nlu.extractors.extractor import EntityExtractorMixin
+from rasa.engine.recipes.default_recipe import DefaultV1Recipe
 
 logger = logging.getLogger(__name__)
 
-class ExtendedDucklingHTTPExtractor(EntityExtractor):
+@DefaultV1Recipe.register(
+        [DefaultV1Recipe.ComponentType.ENTITY_EXTRACTOR], is_trainable=False
+        )
+class ExtendedDucklingHTTPExtractor(GraphComponent, EntityExtractorMixin):
     """Searches for structured entites, e.g. dates, using a duckling server."""
 
     name = "ner_extended_duckling_http"
@@ -142,7 +147,7 @@ class ExtendedDucklingHTTPExtractor(EntityExtractor):
         if is_period:
             match['additional_info']['grain'] = 'period'
 
-    def process(self, message, **kwargs):
+    def process(self, messages: List[Message], **kwargs) -> List[Message]:
         # type: (Message, **Any) -> None
 
         if self._url() is not None:
@@ -151,7 +156,7 @@ class ExtendedDucklingHTTPExtractor(EntityExtractor):
 
 
             dimensions = self.component_config["dimensions"]
-            relevant_matches = filter_irrelevant_matches(matches, dimensions)
+            relevant_matches = filter_irrelevant_entities(matches, dimensions)
 
             if message.get('ordinals'):
                 ordinals = message.get('ordinals')

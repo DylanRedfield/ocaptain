@@ -1,14 +1,10 @@
+recipe: default.v1
 language: en
 
 policies:
-  - name: KerasPolicy
+  - name: TEDPolicy
     epochs: 25
-    validation_split: 0.0
-    featurizer:
-      - name: MaxHistoryTrackerFeaturizer
-        max_history: 5
-        state_featurizer:
-          - name: BinarySingleStateFeaturizer
+    max_history: 5
   - name: AugmentedMemoizationPolicy
     max_history: 5
   - name: RulePolicy
@@ -16,10 +12,11 @@ policies:
     core_fallback_threshold: 0.005
 
 pipeline:
-- name: "SpacyNLP"
+- name: SpacyNLP
+  model: en_core_web_md
 - name: "SpacyTokenizer"
-- name: "DIETClassifier"
 - name: "SpacyFeaturizer"
+- name: "DIETClassifier"
 - name: "CRFEntityExtractor"
 - name: "EntitySynonymMapper"
 - name: "extended_spacy_entity_extractor.ExtendedSpacyEntityExtractor"
