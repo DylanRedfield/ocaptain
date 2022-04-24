@@ -19,7 +19,6 @@ pipeline:
 - name: "DIETClassifier"
 - name: "CRFEntityExtractor"
 - name: "EntitySynonymMapper"
-- name: "extended_spacy_entity_extractor.ExtendedSpacyEntityExtractor"
 - name: "SklearnIntentClassifier"
 - name: FallbackClassifier
   threshold: 0.005

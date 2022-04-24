@@ -89,7 +89,7 @@ func (bot *Bot) HandleOutsideInput(reqObj *OutsideRequest) OutsideResponse {
 		log.Println(err)
 	}
 
-	bot.sendToAI(reqObj)
+	//bot.sendToAI(reqObj)
 	if reqObj.Business.SmsNotifyEnabled {
 		log.Println("Noitify Enabled")
 		bot.notifyStaff(reqObj)
