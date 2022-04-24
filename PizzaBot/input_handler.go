@@ -125,7 +125,7 @@ func (bot *Bot) sendToAI(reqObj *OutsideRequest) OutsideResponse {
 
 	//envValues := GetEnvValues()
 
-	rasaUrl := fmt.Sprintf("http://localhost:%s/webhooks/textual/webhook", 5005)
+	rasaUrl := fmt.Sprintf("http://localhost:%s/webhooks/textual/webhook", "5005")
 	req, err := http.NewRequest("POST", rasaUrl, bytes.NewBuffer(body))
 	req.Header.Set("Content-Type", "application/json")
 

@@ -12,7 +12,7 @@ from firebase_admin import credentials
 from firebase_admin import firestore
 import requests
 import threading
-from sanic import Blueprint
+from sanic import Blueprint, response
 from sanic.request import Request
 from sanic.response import HTTPResponse
 from typing import Text, Callable, Awaitable
@@ -70,30 +70,19 @@ class TextualInput(InputChannel):
             return jsonify({"status":"ok"})
 
         @textual_webhook.route("/webhook", methods=['POST'])
-        def receive(request: Request) -> HTTPResponse:
+        async def receive(request: Request) -> HTTPResponse:
             print("--- Input Text ---")
-            req = request.get_json()
+            req = request.json
 
             text = req["message"]["Content"]
             sender = req["recipient"]["Id"]
 
-            #tracker = self.agent.tracker_store.get_or_create_tracker(sender)
-
-            if tracker.get_slot('business_id') == None or tracker.get_slot('recipient_contact') == None or tracker.get_slot('recipient_id') == None:
-                event = SlotSet('business_id', req["business"]["Id"])
-                #tracker.update(event)
-                event = SlotSet('recipient_contact', req["recipient"]["Contact"])
-                #tracker.update(event)
-                event = SlotSet('recipient_id', req["recipient"]["Id"])
-                #tracker.update(event)
-                #self.agent.tracker_store.save(tracker)
-
             out_channel = TextualOutput(req, db, sms_client)
 
             user = UserMessage(text, output_channel = out_channel, sender_id = sender)
+            await on_new_message(user)
 
-            on_new_message(user)
+            return response.json("success")
             print("blueprint test")
-            return "success"
         return textual_webhook
 
