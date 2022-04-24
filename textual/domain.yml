@@ -114,7 +114,6 @@ entities:
 - TIME
 - item
 - time
-forms: []
 intents:
 - make_reservation
 - inform
@@ -154,51 +153,50 @@ slots:
     mappings:
     - type: from_entity
       entity: name
-
   potential_size:
     type: text
     mappings:
     - type: custom
   potential_time:
     type: text
-     mappings:
+    mappings:
     - type: custom
- potential_times:
+  potential_times:
     type: list
-      mappings:
+    mappings:
     - type: custom
- temp_times:
+  temp_times:
     type: list
-       mappings:
+    mappings:
     - type: custom
-recipient_contact:
+  recipient_contact:
     type: text
-       mappings:
+    mappings:
     - type: custom
-potential_hour:
+  potential_hour:
     type: text
-       mappings:
+    mappings:
     - type: custom
-recipient_id:
+  recipient_id:
     type: text
-       mappings:
+    mappings:
     - type: custom
-scheduled_time:
+  scheduled_time:
     type: text
-       mappings:
+    mappings:
     - type: custom
-size:
+  size:
     type: text
-       mappings:
-        - type: custom
-alternative_times:
+    mappings:
+    - type: custom
+  alternative_times:
     type: list
-       mappings:
-        - type: custom
-temp_ordinal:
+    mappings:
+    - type: custom
+  temp_ordinal:
     type: text
-     mappings:
-        - type: custom
+    mappings:
+    - type: custom
 
 templates:
   utter_ask_for_name_on_reservation:
