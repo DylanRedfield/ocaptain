@@ -1,11 +1,9 @@
 digraph  {
-0 [label=START, fillcolor=green, style=filled, fontsize=12, class="start active"];
-1 [label=action_blank_for_slots, fontsize=12, class=""];
-"-912" [label="...", class=ellipsis];
-911 [label="  ?  ", shape=rect, class="intent dashed active"];
-912 [label="/make_reservation", shape=rect, style=filled, fillcolor=lightblue, class=intent];
-0 -> 911  [key=NONE, label="", class=active];
-0 -> 912  [key=0, class=""];
-1 -> "-912"  [key=NONE, label="", class=""];
-912 -> 1  [key=0, class=""];
+0 [class="start active", fillcolor=green, fontsize=12, label=START, style=filled];
+"-1" [class=end, fillcolor=red, fontsize=12, label=END, style=filled];
+1 [class=active, fontsize=12, label=action_session_start];
+2 [class="intent dashed active", label="  ?  ", shape=rect];
+0 -> "-1"  [class="", key=NONE, label=""];
+0 -> 1  [class=active, key=NONE, label=""];
+1 -> 2  [class=active, key=NONE, label=""];
 }

@@ -1,0 +1,174 @@
+version: "3.1"
+nlu:
+- intent: affirm
+  examples: |
+    - correct
+    - sounds good
+    - indeed
+    - sure
+    - yes
+- intent: allow_reservations
+  examples: |
+    - Accept reservations?
+    - Do you take resservations?
+- intent: busy
+  examples: |
+    - Are you busy?
+    - Busy tonight?
+- intent: deny
+  examples: |
+    - nah
+    - no
+    - Nope
+    - nuh
+    - I don't think so
+- intent: question_serve_alcohol
+  examples: |
+    - Do you serve alcohol?
+    - What kind of alcohol do you have?
+    - do you serve drinks
+    - can i get wine?
+    - do you have a bar
+    - Do you have beer
+    - what kind of liqour do you have
+- intent: question_dress_code
+  examples: |
+    - can i wear a t shirt
+    - what do we have to wear
+    - do you have a dress code?
+- intent: question_gluten_free
+  examples: |
+    - does everything have gluten?
+    - Do you have gluten free options
+- intent: question_vegetarian
+  examples: |
+    - Do you have vegetarian options
+    - are there veg meals?
+    - Does everything have meat in it?
+- intent: question_kosher
+  examples: |
+    - have kosher food?
+    - Do you serve kosher options?
+- intent: question_large_group
+  examples: |
+    - Do you accommodate large groups?
+    - is there space for big parties
+- intent: question_kids_menu
+  examples: |
+    - are there options for children
+    - is there a kids menu?
+- intent: question_bring_your_own_alcohol
+  examples: |
+    - are you byob
+    - is wine allowed in
+    - can i bring my own alcohol
+    - what is your outside beer policy
+- intent: question_parking
+  examples: |
+    - do you have parking?
+    - is there free parking available
+    - where should i park?
+- intent: question_handicap_accessible
+  examples: |
+    - Do you have handicap ramps?
+    - am i good with a wheelchair?
+    - handicap accessible?
+- intent: question_corking_fee
+  examples: |
+    - do you charge for outside wine?
+    - is there a corking fee?
+- intent: question_polar_reservation
+  examples: |
+    - can i call ahead
+    - do you take reservations?
+- intent: goodbye
+  examples: |
+    - goodbye
+    - see you later
+    - bye
+- intent: greet
+  examples: |
+    - hello
+    - good morning
+    - good evening
+    - hi
+    - hey
+    - what's up
+    - hey there
+- intent: inform
+  examples: |
+    - its [Kim](name)
+    - three pm
+    - Thursday
+    - [Kim](name)
+    - 3pm
+    - the 31st
+    - its Thursday
+    - for 9
+    - three
+    - 5 o'clock
+    - its [Dylan](name)
+    - [Dylan](name)
+    - its [Ronald](name)
+    - [Ronald](name)
+    - [Suresh](name)
+    - its [Rohan](name)
+    - its [Suresh](name)
+    - [Neil](name)
+    - [Rohan](name)
+    - its [Neil](name)
+    - its [Mary](name)
+    - [Mary](name)
+    - its [Kate](name)
+    - [Kate](name)
+- intent: make_reservation
+  examples: |
+    - Can i get a resrevation for five at 3pm
+    - Save a spot for Thursday for 7 people
+    - Table for nine at nine
+    - Can I get a table?
+    - Make a reservation for tonight
+    - can i get a reservation for [Rohan](name) for 5
+    - Reserve a table for nine
+    - can i get a reservation for [Suresh](name) for 5
+    - can i get a reservation for [Neil](name) for 5
+    - can i get a reservation for [Ronald](name) for 5
+    - can i get a reservation for [Kate](name) for 5
+    - can i get a reservation for [Mary](name) for 5
+    - can i get a reservation for [Kim](name) for 5
+    - can i get a reservation for [Dylan](name) for 5
+- intent: menu_item
+  examples: |
+    - Do you have rice?
+    - Can I get pasta today?
+    - Do you have chicken in stock?
+- intent: need_reservation
+  examples: |
+    - Do I need a reservation?
+    - Can I just walk in?
+- intent: order
+  examples: |
+    - Can I place an order
+    - I'd like to place an order for chicken fingers
+    - Can I put in an order for pick up?
+    - Can I get chicken fingers
+- intent: question_time
+  examples: |
+    - what time do you close on thursday
+    - when do you close
+    - will you be open in an hour
+    - are you open on the 31st
+    - are you open?
+    - what time do you open?
+    - what time will you be open until today
+    - what are your hours
+- intent: restart
+  examples: |
+    - restart please
+    - reset
+    - restart
+- intent: thank
+  examples: |
+    - Thank you
+    - Thanks
+    - That's great, thank

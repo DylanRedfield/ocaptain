@@ -198,7 +198,7 @@ slots:
     mappings:
     - type: custom
 
-templates:
+responses:
   utter_ask_for_name_on_reservation:
   - text: What's the name for the reservation?
   utter_ask_for_number_on_reservation_size:
