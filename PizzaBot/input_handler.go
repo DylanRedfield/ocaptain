@@ -68,7 +68,6 @@ func (bot *Bot) HandleOutsideInput(reqObj *OutsideRequest) OutsideResponse {
 		reqObj.Recipient.RecentMessage = reqObj.Message
 
 		personRef, _, err := bot.Client.Collection(Businesses).Doc(businessId).Collection(Recipients).Add(bot.Ctx, reqObj.Recipient)
-		log.Println(personRef.ID)
 		reqObj.Recipient.Id = personRef.ID
 		reqObj.Message.RecipientId = personRef.ID
 
@@ -130,14 +129,9 @@ func (bot *Bot) sanderDemo(receivedMsg *OutsideRequest) {
 	bot.DemoCounter = (bot.DemoCounter + 1) % len(responses)
 
 	msgReq := MessageRequest{
-		To:       receivedMsg.Recipient.Contact,
-		From:     receivedMsg.Business.Whatsapp,
-		Body:     generatedBody,
-		Platform: TWILIO_WHATSAPP_PLATFORM,
+		To:   receivedMsg.Recipient.Contact,
+		Body: generatedBody,
 	}
-
-	bot.TwilioClient.Send(&msgReq)
-
 	msg := Message{}
 	msg.Content = generatedBody
 	msg.DidBotCreate = true
@@ -145,6 +139,15 @@ func (bot *Bot) sanderDemo(receivedMsg *OutsideRequest) {
 	msg.RecipientId = receivedMsg.Recipient.Id
 	msg.IsBusinessSender = true
 	msg.TimeSent = time.Now().UnixNano() / 1000000
+	if receivedMsg.Recipient.Platform == TWILIO_WHATSAPP_PLATFORM {
+		msgReq.Platform = TWILIO_WHATSAPP_PLATFORM
+		msgReq.From = receivedMsg.Business.Whatsapp
+	} else {
+		msgReq.From = receivedMsg.Business.PhoneNumber
+	}
+
+	bot.TwilioClient.Send(&msgReq)
+
 	bot.saveMessage(receivedMsg.Business, receivedMsg.Recipient, &msg)
 }
 
