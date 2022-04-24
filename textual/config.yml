@@ -20,7 +20,6 @@ pipeline:
 - name: "CRFEntityExtractor"
 - name: "EntitySynonymMapper"
 - name: "extended_spacy_entity_extractor.ExtendedSpacyEntityExtractor"
-- name: "extended_duckling_http_extractor.ExtendedDucklingHTTPExtractor"
 - name: "SklearnIntentClassifier"
 - name: FallbackClassifier
   threshold: 0.005

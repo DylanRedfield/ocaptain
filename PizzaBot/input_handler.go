@@ -89,7 +89,7 @@ func (bot *Bot) HandleOutsideInput(reqObj *OutsideRequest) OutsideResponse {
 		log.Println(err)
 	}
 
-	//bot.sendToAi(reqObj)
+	bot.sendToAI(reqObj)
 	if reqObj.Business.SmsNotifyEnabled {
 		log.Println("Noitify Enabled")
 		bot.notifyStaff(reqObj)
@@ -123,9 +123,9 @@ func (bot *Bot) sendToAI(reqObj *OutsideRequest) OutsideResponse {
 		log.Println(err)
 	}
 
-	envValues := GetEnvValues()
+	//envValues := GetEnvValues()
 
-	rasaUrl := fmt.Sprintf("http://localhost:%s/webhooks/textual/webhook", envValues.RasaPort)
+	rasaUrl := fmt.Sprintf("http://localhost:%s/webhooks/textual/webhook", 5005)
 	req, err := http.NewRequest("POST", rasaUrl, bytes.NewBuffer(body))
 	req.Header.Set("Content-Type", "application/json")
 
