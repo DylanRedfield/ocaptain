@@ -42,13 +42,13 @@ func (bot *Bot) HandleBusinessInput(reqObj BusinessRequest) BusinessResponse {
 		From: reqObj.Business.PhoneNumber,
 		Body: reqObj.Message}
 
-    log.Println(reqObj.Business)
+	log.Println(reqObj.Business)
 
 	if reqObj.Recipient.Platform == FACEBOOK_MESSENGER_PLATFORM {
 		smsRequest.From = reqObj.Business.FacebookMessengerId
 		Send(&smsRequest)
 	} else if reqObj.Business.SmsPlatform == "TWILIO" || reqObj.Recipient.Platform == TWILIO_WHATSAPP_PLATFORM {
-    log.Println(reqObj.Business.Whatsapp)
+		log.Println(reqObj.Business.Whatsapp)
 		smsRequest.From = reqObj.Business.Whatsapp
 		bot.TwilioClient.Send(&smsRequest)
 	} else if reqObj.Business.SmsPlatform == "SWIFT" {
@@ -90,6 +90,7 @@ func (bot *Bot) HandleOutsideInput(reqObj *OutsideRequest) OutsideResponse {
 	}
 
 	//bot.sendToAI(reqObj)
+	bot.sanderDemo(reqObj)
 	if reqObj.Business.SmsNotifyEnabled {
 		log.Println("Noitify Enabled")
 		bot.notifyStaff(reqObj)
@@ -112,6 +113,39 @@ func (bot *Bot) notifyStaff(reqObj *OutsideRequest) {
 
 	bulkReq := &BulkMessageRequest{actives, reqObj.Message.Content}
 	bot.TwilioClient.SendBulk(bulkReq)
+}
+
+func (bot *Bot) sanderDemo(receivedMsg *OutsideRequest) {
+	responses := []string{
+		"Sure, for what time?",
+		"Can you do 20:30?",
+		"And what's you name?",
+		"Great, see you then",
+		"No, we serve meat and dairy",
+	}
+
+	// Send message to customer via whatsapp client
+
+	generatedBody := responses[bot.DemoCounter]
+	bot.DemoCounter = (bot.DemoCounter + 1) % len(responses)
+
+	msgReq := MessageRequest{
+		To:       receivedMsg.Recipient.Contact,
+		From:     receivedMsg.Business.Whatsapp,
+		Body:     generatedBody,
+		Platform: TWILIO_WHATSAPP_PLATFORM,
+	}
+
+	bot.TwilioClient.Send(&msgReq)
+
+	msg := Message{}
+	msg.Content = generatedBody
+	msg.DidBotCreate = true
+	msg.HasBusinessRead = false
+	msg.RecipientId = receivedMsg.Recipient.Id
+	msg.IsBusinessSender = true
+	msg.TimeSent = time.Now().UnixNano() / 1000000
+	bot.saveMessage(receivedMsg.Business, receivedMsg.Recipient, &msg)
 }
 
 func (bot *Bot) sendToAI(reqObj *OutsideRequest) OutsideResponse {
