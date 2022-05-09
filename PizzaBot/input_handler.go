@@ -91,7 +91,10 @@ func (bot *Bot) HandleOutsideInput(reqObj *OutsideRequest) OutsideResponse {
 	}
 
 	//bot.sendToAI(reqObj)
-	bot.sanderDemo(reqObj)
+
+	if bot.IsDemo {
+		bot.sanderDemo(reqObj)
+	}
 	if reqObj.Business.SmsNotifyEnabled {
 		log.Println("Noitify Enabled")
 		bot.notifyStaff(reqObj)

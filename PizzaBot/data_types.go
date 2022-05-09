@@ -20,6 +20,7 @@ type Bot struct {
 	SwiftClient  SwiftClient
 	State        string
 	DemoCounter  int
+	IsDemo       bool
 }
 
 func NewBot(ctx context.Context) (*Bot, error) {
@@ -40,6 +41,15 @@ func NewBot(ctx context.Context) (*Bot, error) {
 			bot.State = DEV_STATE_ONLINE
 			sa = option.WithCredentialsFile("dev-firebase-config.json")
 		}
+
+		if len(args) > 2 {
+			demoFlag := args[2]
+
+			if demoFlag == "demo" {
+				bot.IsDemo = true
+			}
+		}
+
 	} else {
 		bot.State = DEV_STATE_LOCAL
 		sa = option.WithCredentialsFile("dev-firebase-config.json")
