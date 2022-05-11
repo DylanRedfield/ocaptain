@@ -292,13 +292,13 @@ func toOutsideRequest(twilReq MessageRequest) OutsideRequest {
 	var recipient *Recipient
 
 	if twilReq.Platform == FACEBOOK_MESSENGER_PLATFORM {
-		business, err = businessFromFacebookId(twilReq.To)
+		business, err = businessFromGeneralId(twilReq.To, FacebookMessengerId)
 		recipient, err = recipientFromContact(twilReq.From, business.Id, FACEBOOK_MESSENGER_PLATFORM)
 	} else if twilReq.Platform == TWILIO_WHATSAPP_PLATFORM {
-		business, err = businessFromWhatsapp(twilReq.To)
+		business, err = businessFromGeneralId(twilReq.To, Whatsapp)
 		recipient, err = recipientFromContact(twilReq.From, business.Id, TWILIO_WHATSAPP_PLATFORM)
 	} else {
-		business, err = businessFromPhone(twilReq.To)
+		business, err = businessFromGeneralId(twilReq.To, PhoneNumber)
 		recipient, err = recipientFromNumber(twilReq.From, business.Id)
 	}
 
@@ -311,12 +311,10 @@ func toOutsideRequest(twilReq MessageRequest) OutsideRequest {
 	return OutsideRequest{Recipient: recipient, Message: message, Business: business}
 }
 
-// TODO so replace hardcoded query target with string parameter to turn three identiical methods into one
-func businessFromFacebookId(facebookId string) (*Business, error) {
-	log.Println(facebookId)
+func businessFromGeneralId(id string, field string) (*Business, error) {
 	business := &Business{}
 
-	iter := bot.Client.Collection(Businesses).Where(FacebookMessengerId, "==", facebookId).Documents(bot.Ctx)
+	iter := bot.Client.Collection(Businesses).Where(field, "==", id).Documents(bot.Ctx)
 
 	for {
 		doc, err := iter.Next()
@@ -371,131 +369,10 @@ func businessFromFacebookId(facebookId string) (*Business, error) {
 	if business.Id == "" {
 		return business, errors.New("Business not found")
 	} else {
+		business.TwilioClient = TwilioClient{AccountSid: business.TwilioAccountSid, AuthToken: business.TwilioAuthToken}
+		business.FacebookMessengerClient = FacebookMessengerClient{PageAccessToken: business.FacebookMessengerPageAccessToken}
 		return business, nil
 	}
-
-}
-func businessFromWhatsapp(whatsappNumber string) (*Business, error) {
-	business := &Business{}
-
-	iter := bot.Client.Collection(Businesses).Where(Whatsapp, "==", whatsappNumber).Documents(bot.Ctx)
-
-	for {
-		doc, err := iter.Next()
-
-		if err == iterator.Done {
-			break
-		}
-
-		if err != nil {
-			log.Println(err)
-			// TODO handle error
-			break
-		}
-
-		err = doc.DataTo(business)
-
-		if err != nil {
-			log.Println(err)
-		}
-
-		business.Id = doc.Ref.ID
-
-		// Doesnt automatically unmarshall subcollections
-		subIter := bot.Client.Collection(Businesses).Doc(business.Id).Collection("employees").Documents(bot.Ctx)
-		employees := []Employee{}
-		for {
-			subDoc, err := subIter.Next()
-
-			if err == iterator.Done {
-				break
-			}
-			if err != nil {
-				return business, err
-			}
-
-			employee := Employee{}
-			err = subDoc.DataTo(&employee)
-
-			if err != nil {
-				return business, err
-			}
-
-			employee.Id = subDoc.Ref.ID
-
-			employees = append(employees, employee)
-		}
-		business.Employees = employees
-
-	}
-
-	if business.Id == "" {
-		return business, errors.New("Business not found")
-	} else {
-		return business, nil
-	}
-
-}
-func businessFromPhone(phoneNumber string) (*Business, error) {
-	business := &Business{}
-	log.Println(phoneNumber)
-	iter := bot.Client.Collection(Businesses).Where(PhoneNumber, "==", phoneNumber).Documents(bot.Ctx)
-
-	for {
-		doc, err := iter.Next()
-
-		if err == iterator.Done {
-			break
-		}
-
-		if err != nil {
-			log.Println(err)
-			// TODO handle error
-			break
-		}
-
-		err = doc.DataTo(business)
-
-		if err != nil {
-			log.Println(err)
-		}
-
-		business.Id = doc.Ref.ID
-
-		// Doesnt automatically unmarshall subcollections
-		subIter := bot.Client.Collection(Businesses).Doc(business.Id).Collection("employees").Documents(bot.Ctx)
-		employees := []Employee{}
-		for {
-			subDoc, err := subIter.Next()
-
-			if err == iterator.Done {
-				break
-			}
-			if err != nil {
-				return business, err
-			}
-
-			employee := Employee{}
-			err = subDoc.DataTo(&employee)
-
-			if err != nil {
-				return business, err
-			}
-
-			employee.Id = subDoc.Ref.ID
-
-			employees = append(employees, employee)
-		}
-		business.Employees = employees
-
-	}
-
-	if business.Id == "" {
-		return business, errors.New("Business not found")
-	} else {
-		return business, nil
-	}
-
 }
 
 // Takes in recipientId and returns recipient or error if none is found or there was an error retrieving data

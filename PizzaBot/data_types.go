@@ -14,13 +14,12 @@ import (
 )
 
 type Bot struct {
-	Client       *firestore.Client
-	Ctx          context.Context
-	TwilioClient TwilioClient
-	SwiftClient  SwiftClient
-	State        string
-	DemoCounter  int
-	IsDemo       bool
+	Client      *firestore.Client
+	Ctx         context.Context
+	SwiftClient SwiftClient
+	State       string
+	DemoCounter int
+	IsDemo      bool
 }
 
 func NewBot(ctx context.Context) (*Bot, error) {
@@ -69,16 +68,11 @@ func NewBot(ctx context.Context) (*Bot, error) {
 		return nil, err
 	}
 
-	twilioClient := TwilioClient{
-		AccountSid: "AC9dfbda388f3ee10353bbc001694f5c27",
-		AuthToken:  "e3429e06cc27740f1c859d2bfc9964ae"}
-
 	swiftClient := SwiftClient{
 		AccountKey: "8hjeuf40gqyFFkY1wnL7ikTba1zg3fEk"}
 
 	bot.Client = client
 	bot.Ctx = ctx
-	bot.TwilioClient = twilioClient
 	bot.SwiftClient = swiftClient
 	return &bot, nil
 }
@@ -165,6 +159,10 @@ type Business struct {
 	SmsNotifyEnabled                 bool                 `firestore:"smsNotifyEnabled"`
 	FacebookMessengerId              string               `firestore:"facebookMessengerId"`
 	FacebookMessengerPageAccessToken string               `firestore:"facebookMessengerPageAccessToken"`
+	TwilioAccountSid                 string               `firestore:"twilioAccountSid"`
+	TwilioAuthToken                  string               `firestore:"twilioAuthToken"`
+	TwilioClient                     TwilioClient
+	FacebookMessengerClient          FacebookMessengerClient
 }
 
 type OpenClose struct {

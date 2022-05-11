@@ -46,13 +46,13 @@ func (bot *Bot) HandleBusinessInput(reqObj BusinessRequest) BusinessResponse {
 
 	if reqObj.Recipient.Platform == FACEBOOK_MESSENGER_PLATFORM {
 		smsRequest.From = reqObj.Business.FacebookMessengerId
-		Send(&smsRequest)
+		reqObj.Business.FacebookMessengerClient.Send(&smsRequest)
 	} else if reqObj.Recipient.Platform == TWILIO_WHATSAPP_PLATFORM {
 		log.Println(reqObj.Business.Whatsapp)
 		smsRequest.From = reqObj.Business.Whatsapp
-		bot.TwilioClient.Send(&smsRequest)
+		reqObj.Business.TwilioClient.Send(&smsRequest)
 	} else if reqObj.Business.SmsPlatform == "TWILIO" {
-		bot.TwilioClient.Send(&smsRequest)
+		reqObj.Business.TwilioClient.Send(&smsRequest)
 	} else if reqObj.Business.SmsPlatform == "SWIFT" {
 		log.Println("Swift send")
 		bot.SwiftClient.Send(&smsRequest)
@@ -116,7 +116,7 @@ func (bot *Bot) notifyStaff(reqObj *OutsideRequest) {
 	}
 
 	bulkReq := &BulkMessageRequest{actives, reqObj.Message.Content}
-	bot.TwilioClient.SendBulk(bulkReq)
+	reqObj.Business.TwilioClient.SendBulk(bulkReq)
 }
 
 func (bot *Bot) sanderDemo(receivedMsg *OutsideRequest) {
@@ -151,7 +151,7 @@ func (bot *Bot) sanderDemo(receivedMsg *OutsideRequest) {
 		msgReq.From = receivedMsg.Business.PhoneNumber
 	}
 
-	bot.TwilioClient.Send(&msgReq)
+	receivedMsg.Business.TwilioClient.Send(&msgReq)
 
 	bot.saveMessage(receivedMsg.Business, receivedMsg.Recipient, &msg)
 }

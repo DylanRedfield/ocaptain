@@ -7,9 +7,12 @@ import (
 	"net/http"
 )
 
+type FacebookMessengerClient struct {
+	PageAccessToken string
+}
 type MessengerWebhook struct {
-	Entry []Entry `json:entry`
-	Object string `json:"object"`
+	Entry  []Entry `json:entry`
+	Object string  `json:"object"`
 }
 type Entry struct {
 	Messaging []FacebookMessengerReceiveMessage `json:"messaging"`
@@ -36,24 +39,25 @@ type FacebookMessage struct {
 	Text string `json:"text"`
 }
 
-func Send(req *MessageRequest) {
+func (client *FacebookMessengerClient) Send(req *MessageRequest) {
 	var reqObj FacebookMessengerSendMessage
 
 	reqObj.Recipient = FacebookRecipient{Id: req.To}
 	reqObj.Message = FacebookMessage{Text: req.Body}
 
-  log.Println(req.From)
-	bussiness, err := businessFromFacebookId(req.From)
+	body, err := json.Marshal(reqObj)
 
 	if err != nil {
 		log.Println(err)
 	}
 
-	body, err := json.Marshal(reqObj)
-
 	// TODO if using facebook messenger we need each business's access token
-	resp, err := http.Post("https://graph.facebook.com/v13.0/me/messages?access_token="+bussiness.FacebookMessengerPageAccessToken,
+	resp, err := http.Post("https://graph.facebook.com/v13.0/me/messages?access_token="+client.PageAccessToken,
 		"application/json", bytes.NewBuffer(body))
+
+	if err != nil {
+		log.Println(err)
+	}
 
 	defer resp.Body.Close()
 
