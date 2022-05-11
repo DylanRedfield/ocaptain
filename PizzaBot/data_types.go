@@ -14,13 +14,14 @@ import (
 )
 
 type Bot struct {
-	Client        *firestore.Client
-	Ctx           context.Context
-	SwiftClient   SwiftClient
-	State         string
-	DemoCounter   int
-	IsDemo        bool
-	BusinessCache map[string]*Business
+	Client         *firestore.Client
+	Ctx            context.Context
+	SwiftClient    SwiftClient
+	State          string
+	DemoCounter    int
+	IsDemo         bool
+	BusinessCache  map[string]*Business
+	RecipientCache map[string]*Recipient
 }
 
 func NewBot(ctx context.Context) (*Bot, error) {
@@ -28,6 +29,7 @@ func NewBot(ctx context.Context) (*Bot, error) {
 	args := os.Args
 
 	bot.BusinessCache = make(map[string]*Business)
+	bot.RecipientCache = make(map[string]*Recipient)
 
 	var sa option.ClientOption
 	if len(args) > 1 {
@@ -95,13 +97,14 @@ type BusinessResponse struct {
 }
 
 type Recipient struct {
-	Id            string   `firestore:"-"`
-	Name          string   `firestore:"name,omitempty"`
-	Address       string   `firestore:"name,omitempty"`
-	Contact       string   `firestore:"contact"`
-	Platform      Platform `firestore:"platform,omitempty"`
-	RecentMessage *Message `firestore:"recentMessage,omitempty"`
-	RecentOrderId string   `firestore:"recentOrderId,omitempty"`
+	Id              string   `firestore:"-"`
+	Name            string   `firestore:"name,omitempty"`
+	Address         string   `firestore:"name,omitempty"`
+	Contact         string   `firestore:"contact"`
+	Platform        Platform `firestore:"platform,omitempty"`
+	RecentMessage   *Message `firestore:"recentMessage,omitempty"`
+	RecentOrderId   string   `firestore:"recentOrderId,omitempty"`
+	TimeLastQueried time.Time
 }
 
 type Platform string

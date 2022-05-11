@@ -393,12 +393,18 @@ func businessFromGeneralId(id string, field string) (*Business, error) {
 
 // Takes in recipientId and returns recipient or error if none is found or there was an error retrieving data
 func recipientFromNumber(recipientNumber string, businessId string) (*Recipient, error) {
-
+	recipient := &Recipient{}
+	if val, contains := bot.RecipientCache[recipientNumber+businessId]; contains {
+		if time.Now().Sub(val.TimeLastQueried).Hours() < 2 {
+			recipient = val
+			recipient.TimeLastQueried = time.Now()
+			bot.RecipientCache[recipientNumber+businessId] = recipient
+			return recipient, nil
+		}
+	}
 	query := bot.Client.Collection(Businesses).Doc(businessId).Collection(Recipients).Where(Contact, "==", recipientNumber)
 
 	iter := query.Documents(bot.Ctx)
-
-	recipient := &Recipient{}
 
 	for {
 		doc, err := iter.Next()
@@ -429,6 +435,7 @@ func recipientFromNumber(recipientNumber string, businessId string) (*Recipient,
 		// No recipient found, so return error
 		return recipient, errors.New("No matching recipient founder")
 	} else {
+		bot.RecipientCache[recipientNumber+businessId] = recipient
 		recipient.Contact = recipientNumber
 		return recipient, nil
 	}
