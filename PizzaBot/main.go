@@ -379,7 +379,7 @@ func businessFromGeneralId(id string, field string) (*Business, error) {
 		return business, errors.New("Business not found")
 	} else {
 		business.TimeLastQueried = time.Now()
-		bot.BusinessCache[business.Id] = business
+		bot.BusinessCache[id] = business
 		business.TwilioClient = TwilioClient{AccountSid: business.TwilioAccountSid, AuthToken: business.TwilioAuthToken}
 		business.FacebookMessengerClient = FacebookMessengerClient{PageAccessToken: business.FacebookMessengerPageAccessToken}
 		return business, nil
