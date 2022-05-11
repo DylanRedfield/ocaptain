@@ -7,7 +7,6 @@ import (
 	"errors"
 	firebase "firebase.google.com/go"
 	"fmt"
-	"golang.org/x/crypto/acme/autocert"
 	"google.golang.org/api/iterator"
 	"google.golang.org/api/option"
 	"io/ioutil"
@@ -44,14 +43,14 @@ func main() {
 	mux.Handle("/ocaptain/sendAndSave", http.HandlerFunc(sendAndSave))
 	mux.Handle("/", http.HandlerFunc(businessInput))
 
-	domain := "redfieldautomation.com"
+	/*domain := "redfieldautomation.com"
 	certManager := autocert.Manager{
 		Prompt:     autocert.AcceptTOS,
 		HostPolicy: autocert.HostWhitelist(domain),
 		Cache:      autocert.DirCache("certs"),
 	}
 
-	/*if bot.State == PROD_STATE || bot.State == DEV_STATE_ONLINE {
+	if bot.State == PROD_STATE || bot.State == DEV_STATE_ONLINE {
 		tlsConfig := certManager.TLSConfig()
 		server := http.Server{
 			Addr:      ":443",
@@ -62,7 +61,7 @@ func main() {
 		log.Println(server.ListenAndServeTLS("", ""))
 		go http.ListenAndServe(":80", certManager.HTTPHandler(nil))
 	} else {*/
-	http.ListenAndServe(":80", certManager.HTTPHandler(nil))
+	http.ListenAndServe(":80", mux)
 	//}
 
 	jsonFile, err := os.Open("../env_values.json")
