@@ -14,17 +14,20 @@ import (
 )
 
 type Bot struct {
-	Client      *firestore.Client
-	Ctx         context.Context
-	SwiftClient SwiftClient
-	State       string
-	DemoCounter int
-	IsDemo      bool
+	Client        *firestore.Client
+	Ctx           context.Context
+	SwiftClient   SwiftClient
+	State         string
+	DemoCounter   int
+	IsDemo        bool
+	BusinessCache map[string]*Business
 }
 
 func NewBot(ctx context.Context) (*Bot, error) {
 	var bot Bot
 	args := os.Args
+
+	bot.BusinessCache = make(map[string]*Business)
 
 	var sa option.ClientOption
 	if len(args) > 1 {
@@ -163,6 +166,7 @@ type Business struct {
 	TwilioAuthToken                  string               `firestore:"twilioAuthToken"`
 	TwilioClient                     TwilioClient
 	FacebookMessengerClient          FacebookMessengerClient
+	TimeLastQueried                  time.Time
 }
 
 type OpenClose struct {

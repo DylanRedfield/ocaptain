@@ -314,6 +314,15 @@ func toOutsideRequest(twilReq MessageRequest) OutsideRequest {
 func businessFromGeneralId(id string, field string) (*Business, error) {
 	business := &Business{}
 
+	// Basic caching where we store a business for 24
+	// TODO add invalidation method
+	if val, contains := bot.BusinessCache[id]; contains {
+		if time.Now().Sub(val.TimeLastQueried).Hours() < 23 {
+			log.Println(time.Now().Sub(val.TimeLastQueried).Hours())
+			business = val
+		}
+	}
+
 	iter := bot.Client.Collection(Businesses).Where(field, "==", id).Documents(bot.Ctx)
 
 	for {
@@ -366,6 +375,7 @@ func businessFromGeneralId(id string, field string) (*Business, error) {
 
 	}
 
+	business.TimeLastQueried = time.Now()
 	if business.Id == "" {
 		return business, errors.New("Business not found")
 	} else {
