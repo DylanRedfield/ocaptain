@@ -142,6 +142,8 @@ func businessInput(w http.ResponseWriter, req *http.Request) {
 }
 
 func outsideTwilioWhatsappInput(w http.ResponseWriter, req *http.Request) {
+	log.Print("start")
+	log.Println(time.Now().String())
 
 	reqObj := MessageRequest{To: req.FormValue("To"), Body: req.FormValue("Body"),
 		From: req.FormValue("From"), Platform: TWILIO_WHATSAPP_PLATFORM}
