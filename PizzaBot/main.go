@@ -320,6 +320,11 @@ func businessFromGeneralId(id string, field string) (*Business, error) {
 		if time.Now().Sub(val.TimeLastQueried).Hours() < 23 {
 			log.Println(time.Now().Sub(val.TimeLastQueried).Hours())
 			business = val
+			business.TimeLastQueried = time.Now()
+			bot.BusinessCache[id] = business
+			business.TwilioClient = TwilioClient{AccountSid: business.TwilioAccountSid, AuthToken: business.TwilioAuthToken}
+			business.FacebookMessengerClient = FacebookMessengerClient{PageAccessToken: business.FacebookMessengerPageAccessToken}
+			return business, nil
 		}
 	}
 
