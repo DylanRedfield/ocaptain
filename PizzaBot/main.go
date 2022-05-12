@@ -38,8 +38,9 @@ func main() {
 	mux.Handle("/PizzaBot/businessInput", http.HandlerFunc(businessInput))
 	mux.Handle("/PizzaBot/outsideSmsInput", http.HandlerFunc(outsideSmsInput))
 	mux.Handle("/PizzaBot/sendSelf", http.HandlerFunc(sendSelf))
-	mux.Handle("/PizzaBot/outsideFacebookInput", http.HandlerFunc(verifyFacebook))
+	mux.Handle("/PizzaBot/outsideFacebookInput", http.HandlerFunc(outsideFacebookInput))
 	mux.Handle("/PizzaBot/outsideTwilioWhatsappInput", http.HandlerFunc(outsideTwilioWhatsappInput))
+	mux.Handle("/PizzaBot/outsideGoogleInput", http.HandlerFunc(verifyGoogle))
 	mux.Handle("/ocaptain", http.HandlerFunc(actionInput))
 	mux.Handle("/ocaptain/sendAndSave", http.HandlerFunc(sendAndSave))
 	mux.Handle("/", http.HandlerFunc(doNothing))
@@ -102,8 +103,13 @@ func test() {
 	fmt.Printf("%s", result.Results)
 }
 
+func verifyGoogle(w http.ResponseWriter, req *http.Request) {
+	// Receive post request with the secret
+	log.Println(req.FormValue("secret"))
+}
+
 func doNothing(w http.ResponseWriter, req *http.Request) {
-  log.Println("Do nothing")
+	log.Println("Do nothing")
 }
 func actionInput(w http.ResponseWriter, req *http.Request) {
 	body, err := ioutil.ReadAll(req.Body)
@@ -188,9 +194,9 @@ func outsideSmsInput(w http.ResponseWriter, req *http.Request) {
 }
 
 func verifyFacebook(w http.ResponseWriter, req *http.Request) {
-  log.Println("Verify facebook")
+	log.Println("Verify facebook")
 	challenge := req.URL.Query().Get("hub.challenge")
-  log.Println(challenge)
+	log.Println(challenge)
 
 	fmt.Fprintf(w, challenge)
 
@@ -215,14 +221,15 @@ func outsideFacebookInput(w http.ResponseWriter, req *http.Request) {
 	}
 	log.Println(wrapper.Object)
 
-	data := wrapper.Entry[0].Messaging[0]
+	for _, entry := range wrapper.Entry {
+		for _, msg := range entry.Messaging {
+			reqObj := MessageRequest{To: msg.Recipient.Id, From: msg.Sender.Id, Body: msg.Message.Text,
+				Platform: FACEBOOK_MESSENGER_PLATFORM}
+			outsideReq := toOutsideRequest(reqObj)
 
-	reqObj := MessageRequest{To: data.Recipient.Id, From: data.Sender.Id, Body: data.Message.Text,
-		Platform: FACEBOOK_MESSENGER_PLATFORM}
-
-	outsideReq := toOutsideRequest(reqObj)
-
-	bot.HandleOutsideInput(&outsideReq)
+			bot.HandleOutsideInput(&outsideReq)
+		}
+	}
 }
 
 func sendSelf(w http.ResponseWriter, req *http.Request) {
