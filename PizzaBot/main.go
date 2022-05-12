@@ -38,7 +38,7 @@ func main() {
 	mux.Handle("/PizzaBot/businessInput", http.HandlerFunc(businessInput))
 	mux.Handle("/PizzaBot/outsideSmsInput", http.HandlerFunc(outsideSmsInput))
 	mux.Handle("/PizzaBot/sendSelf", http.HandlerFunc(sendSelf))
-	mux.Handle("/PizzaBot/outsideFacebookInput", http.HandlerFunc(outsideFacebookInput))
+	mux.Handle("/PizzaBot/outsideFacebookInput", http.HandlerFunc(verifyFacebook))
 	mux.Handle("/PizzaBot/outsideTwilioWhatsappInput", http.HandlerFunc(outsideTwilioWhatsappInput))
 	mux.Handle("/ocaptain", http.HandlerFunc(actionInput))
 	mux.Handle("/ocaptain/sendAndSave", http.HandlerFunc(sendAndSave))
@@ -184,6 +184,12 @@ func outsideSmsInput(w http.ResponseWriter, req *http.Request) {
 	bot.HandleOutsideInput(&outsideReq)
 }
 
+func verifyFacebook(w http.ResponseWriter, req *http.Request) {
+	challenge := req.URL.Query().Get("hub.challenge")
+
+	fmt.Fprintf(w, challenge)
+
+}
 func outsideFacebookInput(w http.ResponseWriter, req *http.Request) {
 	// Params come in from GET URL.
 	// I can get them as a map, but not obj.
