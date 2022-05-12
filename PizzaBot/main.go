@@ -7,6 +7,7 @@ import (
 	"errors"
 	firebase "firebase.google.com/go"
 	"fmt"
+	"golang.org/x/crypto/acme/autocert"
 	"google.golang.org/api/iterator"
 	"google.golang.org/api/option"
 	"io/ioutil"
@@ -43,7 +44,12 @@ func main() {
 	mux.Handle("/ocaptain/sendAndSave", http.HandlerFunc(sendAndSave))
 	mux.Handle("/", http.HandlerFunc(businessInput))
 
-	/*domain := "redfieldautomation.com"
+	domain := ""
+	if bot.State == PROD_STATE {
+		domain = "redfieldautomation.com"
+	} else {
+		domain = "leshmoa.com"
+	}
 	certManager := autocert.Manager{
 		Prompt:     autocert.AcceptTOS,
 		HostPolicy: autocert.HostWhitelist(domain),
@@ -60,9 +66,14 @@ func main() {
 
 		log.Println(server.ListenAndServeTLS("", ""))
 		go http.ListenAndServe(":80", certManager.HTTPHandler(nil))
-	} else {*/
-	http.ListenAndServe(":80", mux)
-	//}
+	} else {
+		err := http.ListenAndServe(":80", certManager.HTTPHandler(nil))
+
+		if err != nil {
+			log.Println(err)
+		}
+
+	}
 
 	jsonFile, err := os.Open("../env_values.json")
 
