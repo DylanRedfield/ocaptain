@@ -117,8 +117,7 @@ func verifyGoogle(w http.ResponseWriter, req *http.Request) {
 		// TODO handle error
 	}
 
-	log.Println(reqObj["secret"])
-	log.Println(reqObj["clientToken"])
+	fmt.Fprintf(w, reqObj["secret"])
 }
 
 func doNothing(w http.ResponseWriter, req *http.Request) {
