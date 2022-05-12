@@ -42,7 +42,7 @@ func main() {
 	mux.Handle("/PizzaBot/outsideTwilioWhatsappInput", http.HandlerFunc(outsideTwilioWhatsappInput))
 	mux.Handle("/ocaptain", http.HandlerFunc(actionInput))
 	mux.Handle("/ocaptain/sendAndSave", http.HandlerFunc(sendAndSave))
-	mux.Handle("/", http.HandlerFunc(businessInput))
+	mux.Handle("/", http.HandlerFunc(doNothing))
 
 	domain := ""
 	if bot.State == PROD_STATE {
@@ -102,6 +102,9 @@ func test() {
 	fmt.Printf("%s", result.Results)
 }
 
+func doNothing(w http.ResponseWriter, req *http.Request) {
+  log.Println("Do nothing")
+}
 func actionInput(w http.ResponseWriter, req *http.Request) {
 	body, err := ioutil.ReadAll(req.Body)
 
@@ -185,7 +188,9 @@ func outsideSmsInput(w http.ResponseWriter, req *http.Request) {
 }
 
 func verifyFacebook(w http.ResponseWriter, req *http.Request) {
+  log.Println("Verify facebook")
 	challenge := req.URL.Query().Get("hub.challenge")
+  log.Println(challenge)
 
 	fmt.Fprintf(w, challenge)
 
