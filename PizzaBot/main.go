@@ -105,7 +105,10 @@ func test() {
 
 func verifyGoogle(w http.ResponseWriter, req *http.Request) {
 	// Receive post request with the secret
-	log.Println(req.FormValue("secret"))
+	req.ParseForm()
+	x := req.Form.Get("secret")
+	y := req.Form.Get("clientToken")
+	log.Println(x + y)
 }
 
 func doNothing(w http.ResponseWriter, req *http.Request) {
