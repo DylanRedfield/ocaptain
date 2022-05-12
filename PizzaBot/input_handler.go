@@ -99,8 +99,6 @@ func (bot *Bot) HandleOutsideInput(reqObj *OutsideRequest) OutsideResponse {
 		log.Println("Noitify Enabled")
 		bot.notifyStaff(reqObj)
 	}
-	log.Print("end")
-	log.Println(time.Now().String())
 	return OutsideResponse{}
 }
 
