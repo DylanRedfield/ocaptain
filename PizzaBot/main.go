@@ -105,10 +105,20 @@ func test() {
 
 func verifyGoogle(w http.ResponseWriter, req *http.Request) {
 	// Receive post request with the secret
-	req.ParseForm()
-	x := req.Form.Get("secret")
-	y := req.Form.Get("clientToken")
-	log.Println(x + y)
+	body, err := ioutil.ReadAll(req.Body)
+
+	if err != nil {
+		// TODO handle error
+	}
+
+	var reqObj map[string]string
+
+	if err := json.Unmarshal(body, &reqObj); err != nil {
+		// TODO handle error
+	}
+
+	log.Println(reqObj["secret"])
+	log.Println(reqObj["clientToken"])
 }
 
 func doNothing(w http.ResponseWriter, req *http.Request) {
