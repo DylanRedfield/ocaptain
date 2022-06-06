@@ -78,6 +78,7 @@ func (client *GoogleClient) Send(reqObj *MessageRequest) {
 
 	creds, err := google.CredentialsFromJSON(ctx, data,
 		"https://www.googleapis.com/auth/businessmessages")
+	log.Println(creds)
 
 	queryUrl := fmt.Sprintf("https://businessmessages.googleapis.com/v1/conversations/%s/messages", reqObj.To)
 
