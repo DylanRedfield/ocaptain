@@ -48,6 +48,7 @@ func (bot *Bot) HandleBusinessInput(reqObj BusinessRequest) BusinessResponse {
 		smsRequest.From = reqObj.Business.FacebookMessengerId
 		reqObj.Business.FacebookMessengerClient.Send(&smsRequest)
 	} else if reqObj.Recipient.Platform == TWILIO_WHATSAPP_PLATFORM {
+		// TODO make the client
 		log.Println(reqObj.Business.Whatsapp)
 		smsRequest.From = reqObj.Business.Whatsapp
 		reqObj.Business.TwilioClient.Send(&smsRequest)

@@ -169,6 +169,7 @@ func businessInput(w http.ResponseWriter, req *http.Request) {
 	if err := json.Unmarshal(body, &reqObj); err != nil {
 		// TODO handle error
 	}
+	reqObj.Business.TwilioClient = TwilioClient{AccountSid: reqObj.Business.TwilioAccountSid, AuthToken: reqObj.Business.TwilioAuthToken}
 
 	bot.HandleBusinessInput(reqObj)
 }
